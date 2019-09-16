@@ -33,7 +33,7 @@ void Dialog()
 	//Считывание введенной пользователем команды, использование std::getline обусловлено возможным наличием пробельных символов в считываемой строке 
 	std::getline(std::cin, ivar);
 
-	std::cout << "Choose output format:\n\t1)Console\n\n\t2)File (Default file is located along the path: D:/LAB1_SOURCE/OutputSource.txt)\n\t"
+	std::cout << "Choose output format:\n\t1)Console\n\n\t2)File (Default file is located along the path: C:/Users/denis/ADS-8304/Ptuhov/lab1/Tests/TestOutput.txt)\n\t"
 		"If you want to change file location, you have to enter path as second argument\n\t"
 		"Remember that debagging output will be saved with programm result\n";
 	std::getline(std::cin, ovar);
@@ -195,7 +195,7 @@ std::string bool_to_string(bool a)
 int main()
 {
 	std::cout << "Choose input format:\n\t1)Enter string\n\n\t2) Read from file (Default file is located along the path:"
-		"D:/LAB1_SOURCE/InputSource.txt)\n\tIf you want to change file location, you have to enter path as second argument\n\t"
+		"C:/Users/denis/ADS-8304/Ptuhov/lab1/Tests/TestFile.txt)\n\tIf you want to change file location, you have to enter path as second argument\n\t"
 		"Don't forget to change all \'\\\' to \'/\'\n";
 	//Чтение входной строки (использование getline обусловлено возможностью присутсвия пробелов во входной строке)
 	Dialog();
