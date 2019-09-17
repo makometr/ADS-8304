@@ -6,7 +6,6 @@
 
 #define SIZE 1000
 
-using namespace std;
 
 int GetRoot(int x, int* sets)  //для нахождения представителя, подняться вверх по родительским ссылкам до тех пор, пока не наткнемся на корень
 //для каждой вершины по пути от X к корню изменим предка на этого самого представителя
@@ -14,7 +13,7 @@ int GetRoot(int x, int* sets)  //для нахождения представи�
 	return (sets[x] == x) ? x : sets[x] = GetRoot(sets[x], sets);
 }
 
-void Union(int x, int y, int* sets, int* ranks)
+void UnionBranch(int x, int y, int* sets, int* ranks)
 {
     if ( (x = GetRoot(x, sets)) == (y = GetRoot(y, sets)) )
         return;
@@ -120,7 +119,7 @@ void PrintAllRelatives(string* people, int* peopleSets, int peopleCount)
 
 int main()
 {
-	string* people = new string[SIZE]; //список всех имен
+	string[] people = new string[SIZE]; //список всех имен
 	
 	int* peopleSets = new int[SIZE];  //массив, хранящий для каждой вершины дерева её непосредственного предка
 	int* peopleSetsRanks = new int[SIZE];  // для каждого дерева будет храниться верхняя граница его высоты
@@ -140,7 +139,7 @@ int main()
 
 	for (int i = 0; i < relationsCount; i++)  //объединить два множества, в которых лежат элементы X и Y, в одно новое
 	{
-		Union(parents[i], children[i], peopleSets, peopleSetsRanks);
+		UnionBranch(parents[i], children[i], peopleSets, peopleSetsRanks);
     }
     for (int i = 0; i < relationsCount; i++) //возвратить идентификатор множества, которому принадлежит элемент X
 	{
