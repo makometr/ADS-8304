@@ -1,4 +1,4 @@
-#include <iostream> // std::cin, std::cout, std::ostream
+﻿#include <iostream> // std::cin, std::cout, std::ostream
 #include <string> // std::string и сопутствующие функции
 #include <fstream> // std::ofsrteam
 
