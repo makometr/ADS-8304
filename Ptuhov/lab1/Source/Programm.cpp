@@ -1,4 +1,4 @@
-﻿#include <iostream> // std::cin, std::cout, std::ostream
+#include <iostream> // std::cin, std::cout, std::ostream
 #include <string> // std::string и сопутствующие функции
 #include <fstream> // std::ofsrteam
 
@@ -17,10 +17,6 @@ void call(std::string s, std::ostream& out);
 //Рекурсивная функция, осуществляющая проверку введенной пользователем строки
 bool check(std::string& terminate, std::ostream& out, size_t n = 0);
 
-//Функция преобразующая значение типа bool в значение типа std::string
-std::string bool_to_string(bool a);
-
-
 void Dialog()
 {
 	//of - output format
@@ -33,7 +29,7 @@ void Dialog()
 	//Считывание введенной пользователем команды, использование std::getline обусловлено возможным наличием пробельных символов в считываемой строке 
 	std::getline(std::cin, ivar);
 
-	std::cout << "Choose output format:\n\t1)Console\n\n\t2)File (Default file is located along the path: C:/Users/denis/ADS-8304/Ptuhov/lab1/Tests/TestOutput.txt)\n\t"
+	std::cout << "Choose output format:\n\t1)Console\n\n\t2)File (Default file is located along the path: D:/LAB1_SOURCE/OutputSource.txt)\n\t"
 		"If you want to change file location, you have to enter path as second argument\n\t"
 		"Remember that debagging output will be saved with programm result\n";
 	std::getline(std::cin, ovar);
@@ -139,8 +135,8 @@ bool check_strElements(std::string s)
 
 std::string make_path(std::string var, std::string default_path)
 {
+
 	std::string path;
-	std::string data_;
 
 	//запись полученного пути в переменную path
 	for (auto i = ++var.begin(); i != var.end(); i++)
@@ -155,8 +151,9 @@ std::string make_path(std::string var, std::string default_path)
 
 void call(std::string s, std::ostream& out)
 {
-	std::string message = "Entered string: " + s;
-	out << message + "\r\n" << "Result: " + bool_to_string(check(s, out)) << "\r\n";
+	bool ok = check(s, out);
+	out << "Entered string: " + s + "\r\n" + "Result: ";
+	out << std::boolalpha << ok << "\r\n";
 	out << "---------------------------------------------------------------------------------------------------\r\n";
 }
 
@@ -164,7 +161,7 @@ bool check(std::string& terminate, std::ostream& out, size_t n)
 {
 	//Отладочные выводы
 	out << "Value of the check-string after the next function call : " << terminate + "\r\n\r\n";
-	out << "Recursion depth: \r\n" << "------------------\r\n";
+	out << "Recursion depth: " << n << "\r\n------------------\r\n";
 
 	//Выход из рекурсии, если дальнейшая замена подстроки (B A A) на подстроку А бесполезно
 	if (terminate == "A")
@@ -187,15 +184,10 @@ bool check(std::string& terminate, std::ostream& out, size_t n)
 	return check(terminate, out, ++n);
 }
 
-std::string bool_to_string(bool a)
-{
-	return a ? "True" : "False";
-}
-
 int main()
 {
 	std::cout << "Choose input format:\n\t1)Enter string\n\n\t2) Read from file (Default file is located along the path:"
-		"C:/Users/denis/ADS-8304/Ptuhov/lab1/Tests/TestFile.txt)\n\tIf you want to change file location, you have to enter path as second argument\n\t"
+		"D:/LAB1_SOURCE/InputSource.txt)\n\tIf you want to change file location, you have to enter path as second argument\n\t"
 		"Don't forget to change all \'\\\' to \'/\'\n";
 	//Чтение входной строки (использование getline обусловлено возможностью присутсвия пробелов во входной строке)
 	Dialog();
