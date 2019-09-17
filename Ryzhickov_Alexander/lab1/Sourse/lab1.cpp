@@ -29,30 +29,47 @@ void work(string name);
 
 
 int main() {
-    ifstream fin;
-    fin.open("Tests/test.txt");
 
-    if (fin.is_open()) {
-        cout << "Reading from file:" << "\n";
+    int your_choose = 0;
 
-        int super_count = 0;
+    cout << "If you want to enter data from a file, enter \'1\'\n";
+    cout << "If you want to enter data manually, enter \'2\'\n";
 
-        while (!fin.eof()) {
+    cin >> your_choose;
 
-            super_count++;
+    if (your_choose==1) {
+        ifstream fin;
+        fin.open("Tests/test.txt");
 
-            string str;
-            getline(fin, str);
+        if (fin.is_open()) {
+            cout << "Reading from file:" << "\n";
 
-            cout << "test #" << super_count << " \"" + str + "\"" << "\n";
-            work(str);
+            int super_count = 0;
 
+            while (!fin.eof()) {
+
+                super_count++;
+
+                string str;
+                getline(fin, str);
+
+                cout << "test #" << super_count << " \"" + str + "\"" << "\n";
+                work(str);
+
+            }
+        } else {
+            cout << "File not opened";
         }
-    } else {
-        cout << "File not opened";
-    }
 
-    fin.close();
+        fin.close();
+    } else{
+        if(your_choose==2){
+            cout << "Enter data \n";
+            string str;
+            cin >> str;
+            work(str);
+        }
+    }
 
     return 0;
 }
