@@ -30,7 +30,7 @@ int f(int n){//функция из условия
 }
 
 int main(int argc,char* argv[]){
-	int n;
+	int n,k;
 	if(argc==1){
 		printf("Введите n: ");
 		if((scanf("%d",&n)==0)||(n<1)){
@@ -51,14 +51,23 @@ int main(int argc,char* argv[]){
 			printf("Incorrect file name\n");
 			return 0;
 			}
-		while(fscanf(file,"%d\n",&n)==1){
-			if(n>0)
-				printf("f(%d)=%d\n\n",n,f(n));
-			else
-				printf("%d is Incorrect n\n\n",n);
+		k=fscanf(file,"%d\n",&n);
+		char * str=(char*)calloc(100,sizeof(char));
+		while(k!=EOF){
+			if(k==1)
+				if(n>0)
+					printf("f(%d)=%d\n\n",n,f(n));
+				else
+					printf("%d is Incorrect n\n\n",n);
+			else{
+				fgets(str,99,file);
+				printf("%s^^^^ is Invalid format n\n\n",str);
+				}
+			k=fscanf(file,"%d\n",&n);
 			}
 		fclose(file);
 		free(path);
+		free(str);
 	}
 	return 0;
 }
