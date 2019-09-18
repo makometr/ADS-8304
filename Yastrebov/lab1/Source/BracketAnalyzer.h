@@ -2,7 +2,9 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
-#include <algorithm>
+#include <string>
+
+typedef std::string::iterator iter;
 
 class BracketAnalyzer
 {
@@ -10,17 +12,17 @@ public:
 	BracketAnalyzer();
 	~BracketAnalyzer();
 
-	std::vector<std::vector<char>> parameters; // множество строк, которые алфавиты
-	std::vector<std::vector<char>> text; // множество строк, которые надо проанализировать
+	std::vector<std::string> parameters;
+	std::vector<std::string> text;
 
-	void Analyze(const char* textfile,const char* parametersfile); // собсна функция-анализатор
+	void Analyze(const char* textfile,const char* parametersfile);
 
 private:
-	std::vector<std::vector<char>> GetTextData(const char* filename); // смотрит в файл, достает все что можно построчно
+	std::vector<std::string> GetTextData(const char* filename);
 
-	bool brackets(std::vector<char>::iterator, std::vector<char>::iterator); 
-	bool element(std::vector<char>::iterator);
-	bool list(std::vector<char>::iterator, std::vector<char>::iterator);
-	bool row(std::vector<char>::iterator, std::vector<char>::iterator); // 4 рекурсивных брата-акробата
+	bool brackets(iter&, iter&);
+	bool element(iter&);
+	bool list(iter&, iter&);
+	bool row(iter&, iter&);
 };
 

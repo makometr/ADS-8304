@@ -1,14 +1,14 @@
-﻿#include "BracketAnalyzer.h"
+﻿#include "pch.h"
+#include "BracketAnalyzer.h"
 
 
-int main(int argc, char* argv[]) // пользуемся аргументами cmd для тестирования
+int main(int argc, char* argv[])
 {
-	BracketAnalyzer analyzer; // создаем анализтор
-
+	BracketAnalyzer analyzer;
 	if (argc == 3)
 		analyzer.Analyze(argv[1],argv[2]);
 	else 
-		analyzer.Analyze("SourceString.txt", "ParameterChars.txt"); // если не передали конкретные тестовые файлы, ищет дефолтные
+		analyzer.Analyze("SourceString.txt", "ParameterChars.txt");
 
 	std::getchar();
 

@@ -1,2 +1,1 @@
-all:
-	lab1.exe Tests/SourceString.txt Tests/ParameterChars.txt
+lab1.exe Tests/SourceString.txt Tests/ParameterChars.txt
