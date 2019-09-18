@@ -21,12 +21,12 @@ std::vector<std::vector<char>> BracketAnalyzer::GetTextData(const char * filenam
 
 	std::ifstream input;
 
-	input.open(filename);
+	input.open(filename); //открываем файлик
 
 	if (!input) {
 		std::cout << "Couldn't open source file";
 		exit(1);
-	}
+	} //не открываем файлик
 
 	char tmp;
 
@@ -35,32 +35,33 @@ std::vector<std::vector<char>> BracketAnalyzer::GetTextData(const char * filenam
 		if (tmp!='\n')
 			textdata.back().push_back(tmp);
 		else {
-			textdata.push_back(tmp_vect);
+			textdata.push_back(tmp_vect); // строка кончилась - заводим новую
 		}
 	}
-	input.close();
+	input.close(); 
 
-	return textdata;
-}
+	return textdata; // возвращаем вектор char-векторов
+} 
 
 void BracketAnalyzer::Analyze(const char* textfile, const char* parametersfile)
 {
 	text = BracketAnalyzer::GetTextData(textfile);
-	parameters = BracketAnalyzer::GetTextData(parametersfile);
+	parameters = BracketAnalyzer::GetTextData(parametersfile); //Начинаем движение. Сначала достали анализируемые строки, потом достали параметры
 
-	while (text.size()) {
+	while (text.size()) { // пока есть что анализировать
 
 		std::vector<char>::iterator left = text.back().begin();
-		std::vector<char>::iterator right = text.back().end(); right--;
+		std::vector<char>::iterator right = text.back().end(); right--; //всем дальнейшим функциям передаем строку как два итератора 
+																		// - один указывает на начало, второй на конец
 
 		if (brackets(left, right)) {
-			std::cout << "This is a correct Bracket(T) sequence" << std::endl;
+			std::cout << "This is a correct Bracket(T) sequence" << std::endl; //самый внешний вызов
 		}
 		else {
-			std::cout << "This is NOT a correct Bracket(T) sequence" << std::endl;
+			std::cout << "This is NOT a correct Bracket(T) sequence" << std::endl; //   -//-
 		}
 
-		text.pop_back();
+		text.pop_back(); //проанализировали - убрали, идем дальше
 		parameters.pop_back();
 	}
 }
@@ -78,9 +79,9 @@ bool BracketAnalyzer::element(std::vector<char>::iterator left)
 
 bool BracketAnalyzer::list(std::vector<char>::iterator left, std::vector<char>::iterator right)
 {
-	return ((*left == 'N') && (left == right)) || ((*left == '[') && (*right == ']') && row(left + 1, right - 1));
+	return ((*left == 'N') && (left == right)) || ((*left == '[') && (*right == ']') && row(left + 1, right - 1)); 
 }
-
+//три функции выше совсем дословно повторяет условие задачи - взаимнорекурсивные определения
 bool BracketAnalyzer::row(std::vector<char>::iterator left, std::vector<char>::iterator right)
 {
 	bool result = true;
@@ -114,6 +115,8 @@ bool BracketAnalyzer::row(std::vector<char>::iterator left, std::vector<char>::i
 				return false;
 		}
 	}
-	
+	// если коротко - я знаю, что для меня true_обьект это набор разрешенных символов или true_объект в квадратных скобках
+	// поэтому я иду итеративно вправо по строке, смотря на каждый символ, пока не уткнусь в '[' . В этот момент ищу ей пару и отправляю 
+	// на анализ содержимое, если пара нашлась
 	return result;
 }
