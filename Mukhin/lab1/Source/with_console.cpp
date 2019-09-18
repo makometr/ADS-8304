@@ -1,26 +1,25 @@
-#include "iostream"
+#include <iostream>
 
 
-using namespace std;
 char s;
 bool rowBrackets();
 bool first_error = true;   // error retry check
 
 
 bool bracket() {
-    if (cin.peek() == 'A') {
-        cin.get(s);
-        if (cin.peek() == '\n')
+    if (std::cin.peek() == 'A') {
+        std::cin.get(s);
+        if (std::cin.peek() == '\n')
             return true;
-        else if (cin.peek() == '(') {
-            cin.get(s);
+        else if (std::cin.peek() == '(') {
+            std::cin.get(s);
             if (rowBrackets())
-                if (cin.peek() == ')') {
-                    cin.get(s);
+                if (std::cin.peek() == ')') {
+                    std::cin.get(s);
                     return true;
                 }
                 else if (first_error) {
-                    cout << "Нет закрывающей скобки" << endl;
+                    std::cout << "Нет закрывающей скобки" << std::endl;
                     first_error = false;
                 }
         }
@@ -28,7 +27,7 @@ bool bracket() {
             return true;
     }
     else if (first_error) {
-        cout << "Скобки должны начинаться с A" << endl;
+        std::cout << "Скобки должны начинаться с A" << std::endl;
         first_error = false;
     }
     return false;
@@ -37,14 +36,14 @@ bool bracket() {
 
 bool rowBrackets() {
     if (bracket()) {
-        if (cin.peek() == ';') {
-            cin.get(s);
+        if (std::cin.peek() == ';') {
+            std::cin.get(s);
             return rowBrackets();
         }
         return true;
     }
     else if (first_error) {
-        cout << "Это не ряд_скобок" << endl;
+        std::cout << "Это не ряд_скобок" << std::endl;
         first_error = false;
     }
     return false;
@@ -52,9 +51,9 @@ bool rowBrackets() {
 
 
 int main() {
-    cout << "Введите строку для проверки: ";
+    std::cout << "Введите строку для проверки: ";
     bool result = bracket();
-    cin.peek() == '\n' ? (result ? cout << "True" : cout << "False") : (first_error ? cout << "Лишние символы в конце" << endl << "False" : cout << "False");
-    cout << '\n';
+    std::cin.peek() == '\n' ? (result ? std::cout << "True" : std::cout << "False") : (first_error ? std::cout << "Лишние символы в конце" << std::endl << "False" : std::cout << "False");
+    std::cout << '\n';
     return 0;
 }
