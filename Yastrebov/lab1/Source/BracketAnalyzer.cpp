@@ -1,3 +1,4 @@
+
 #include "BracketAnalyzer.h"
 
 
@@ -10,9 +11,13 @@ BracketAnalyzer::~BracketAnalyzer()
 {
 }
 
-std::vector<char> BracketAnalyzer::GetTextData(const char * filename)
+std::vector<std::vector<char>> BracketAnalyzer::GetTextData(const char * filename)
 {
-	std::vector<char> textdata;
+	std::vector<std::vector<char>> textdata;
+
+	std::vector<char> tmp_vect;
+
+	textdata.push_back(tmp_vect);
 
 	std::ifstream input;
 
@@ -25,9 +30,14 @@ std::vector<char> BracketAnalyzer::GetTextData(const char * filename)
 
 	char tmp;
 
-	while (input >> tmp)
-		textdata.push_back(tmp);
-
+	while (input.get(tmp))
+	{
+		if (tmp!='\n')
+			textdata.back().push_back(tmp);
+		else {
+			textdata.push_back(tmp_vect);
+		}
+	}
 	input.close();
 
 	return textdata;
@@ -38,16 +48,20 @@ void BracketAnalyzer::Analyze(const char* textfile, const char* parametersfile)
 	text = BracketAnalyzer::GetTextData(textfile);
 	parameters = BracketAnalyzer::GetTextData(parametersfile);
 
-	std::vector<char>::iterator left = text.begin();
-	std::vector<char>::iterator right = text.end(); right--;
+	while (text.size()) {
 
-	if (brackets(left, right)) {
-		std::cout << "This is a correct Bracket(T) sequence";
-		exit(1);
-	}
-	else {
-		std::cout << "This is NOT a correct Bracket(T) sequence";
-		exit(1);
+		std::vector<char>::iterator left = text.back().begin();
+		std::vector<char>::iterator right = text.back().end(); right--;
+
+		if (brackets(left, right)) {
+			std::cout << "This is a correct Bracket(T) sequence" << std::endl;
+		}
+		else {
+			std::cout << "This is NOT a correct Bracket(T) sequence" << std::endl;
+		}
+
+		text.pop_back();
+		parameters.pop_back();
 	}
 }
 
@@ -59,7 +73,7 @@ bool BracketAnalyzer::brackets(std::vector<char>::iterator left, std::vector<cha
 
 bool BracketAnalyzer::element(std::vector<char>::iterator left)
 {
-	return (std::find(parameters.begin(), parameters.end(), *left) != parameters.end());
+	return (std::find(parameters.back().begin(), parameters.back().end(), *left) != parameters.back().end());
 }
 
 bool BracketAnalyzer::list(std::vector<char>::iterator left, std::vector<char>::iterator right)

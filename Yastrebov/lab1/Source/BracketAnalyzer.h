@@ -10,13 +10,13 @@ public:
 	BracketAnalyzer();
 	~BracketAnalyzer();
 
-	std::vector<char> parameters;
-	std::vector<char> text;
+	std::vector<std::vector<char>> parameters;
+	std::vector<std::vector<char>> text;
 
 	void Analyze(const char* textfile,const char* parametersfile);
 
 private:
-	std::vector<char> GetTextData(const char* filename);
+	std::vector<std::vector<char>> GetTextData(const char* filename);
 
 	bool brackets(std::vector<char>::iterator, std::vector<char>::iterator);
 	bool element(std::vector<char>::iterator);
