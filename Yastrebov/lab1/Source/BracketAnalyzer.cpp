@@ -55,9 +55,29 @@ void BracketAnalyzer::Analyze(const char* textfile, const char* parametersfile)
 																		// - один указывает на начало, второй на конец
 
 		if (brackets(left, right)) {
+			std::cout << "Analyzing string : ";
+			for (std::vector<char>::iterator i = left; i <= right; i++)
+				std::cout << *i;
+			std::cout << std::endl;
+
+			std::cout << "parameters : ";
+			for (auto i = parameters.back().begin(); i < parameters.back().end(); i++)
+				std::cout << *i;
+			std::cout << std::endl;
+
 			std::cout << "This is a correct Bracket(T) sequence" << std::endl; //самый внешний вызов
 		}
 		else {
+			std::cout << "Analyzing string : ";
+			for (std::vector<char>::iterator i = left; i <= right; i++)
+				std::cout << *i;
+			std::cout << std::endl;
+
+			std::cout << "parameters : ";
+			for (auto i = parameters.back().begin(); i < parameters.back().end(); i++)
+				std::cout << *i;
+			std::cout << std::endl;
+
 			std::cout << "This is NOT a correct Bracket(T) sequence" << std::endl; //   -//-
 		}
 
