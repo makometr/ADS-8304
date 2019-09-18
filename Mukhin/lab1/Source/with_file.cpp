@@ -4,8 +4,10 @@
 
 
 char s;
-static std::ifstream in("../Tests/tests.txt");
-static std::ofstream out("../Tests/out.txt");
+//static std::ifstream in("../Tests/tests.txt");
+//static std::ofstream out("../Tests/out.txt");
+static std::ifstream in("/home/mukhamux/CLionProjects/algoritms/lab1/Mukhin/lab1/Tests/tests.txt");
+static std::ofstream out("/home/mukhamux/CLionProjects/algoritms/lab1/Mukhin/lab1/Tests/out.txt");
 bool rowBrackets();
 bool first_error = true;
 
@@ -56,7 +58,6 @@ bool rowBrackets() {
 
 bool check_EL(bool result) {
     if (in.peek() == EOF || in.peek() == '\n') {
-        in.get(s);
         if (result)
             out << "True";
         else
@@ -68,6 +69,7 @@ bool check_EL(bool result) {
         else
             out << "False";
     }
+    in.get(s);
     out << "\n\n";
     first_error = true;
     while (s != '\n' && !in.eof())
