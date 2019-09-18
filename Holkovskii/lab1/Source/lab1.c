@@ -53,15 +53,16 @@ int main(int argc,char* argv[]){
 			}
 		k=fscanf(file,"%d\n",&n);
 		char * str=(char*)calloc(100,sizeof(char));
+		int number=1;
 		while(k!=EOF){
 			if(k==1)
 				if(n>0)
-					printf("f(%d)=%d\n\n",n,f(n));
+					printf("Test %d:\nInput - %d\nOutput - %d\n\n",number++,n,f(n));
 				else
-					printf("%d is Incorrect n\n\n",n);
+					printf("Test %d:\nInput - %d\nOutput - Invalid n\n\n",number++,n);
 			else{
 				fgets(str,99,file);
-				printf("%s^^^^ is Invalid format n\n\n",str);
+				printf("Test %d:\nInput - %sOutput - Invalid n\n\n",number++,str);
 				}
 			k=fscanf(file,"%d\n",&n);
 			}
