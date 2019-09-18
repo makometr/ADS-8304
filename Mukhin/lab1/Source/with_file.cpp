@@ -1,12 +1,11 @@
 #include <fstream>
 #include <cstring>
-#include "iostream"
+#include <iostream>
 
 
-using namespace std;
 char s;
-ifstream in("/home/mukhamux/CLionProjects/algoritms/lab1/Mukhin/lab1/Tests/tests.txt");
-ofstream out("/home/mukhamux/CLionProjects/algoritms/lab1/Mukhin/lab1/Tests/out.txt");
+static std::ifstream in("../Tests/tests.txt");
+static std::ofstream out("../Tests/out.txt");
 bool rowBrackets();
 bool first_error = true;
 
@@ -24,7 +23,7 @@ bool bracket() {
                     return true;
                 }
                 else if (first_error) {
-                    out << "Нет закрывающей скобки" << endl;
+                    out << "Нет закрывающей скобки" << std::endl;
                     first_error = false;
                 }
         }
@@ -32,7 +31,7 @@ bool bracket() {
             return true;
     }
     else if (first_error) {
-        out << "Скобки должны начинаться с A" << endl;
+        out << "Скобки должны начинаться с A" << std::endl;
         first_error = false;
     }
     return false;
@@ -48,7 +47,7 @@ bool rowBrackets() {
         return true;
     }
     else if (first_error) {
-        out << "Это не ряд_скобок" << endl;
+        out << "Это не ряд_скобок" << std::endl;
         first_error = false;
     }
     return false;
@@ -65,7 +64,7 @@ bool check_EL(bool result) {
     }
     else {
         if (first_error)
-            out << "Лишние символы в конце" << endl << "False";
+            out << "Лишние символы в конце" << std::endl << "False";
         else
             out << "False";
     }
@@ -80,22 +79,21 @@ int main() {
     char* k = (char*)calloc(150, sizeof(char));
     while (!in.eof()) {
         in.getline(k, 151);
-        out << "Данные файла: " << k << endl;
+        out << "Данные файла: " << k << std::endl;
         if (strlen(k) == 0 && in.peek() == EOF) {    // if last line is \n
             in.get(s);
             check_EL(false);
             break;
         }
         if (in.eof())                                // if last line without \n
-            in.seekg(-strlen(k), ios::cur);
+            in.seekg(-strlen(k), std::ios::cur);
         else                                         //no last line
-            in.seekg(-strlen(k) - 1, ios::cur);
+            in.seekg(-strlen(k) - 1, std::ios::cur);
         bool result = bracket();
         check_EL(result);
     }
     in.close();
     out.close();
     free(k);
-    cout << "Done, output in out.txt.\n";
     return 0;
 }
