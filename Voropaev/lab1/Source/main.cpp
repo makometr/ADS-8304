@@ -46,38 +46,31 @@ void check(std::string& input)// input - строка,вводимая полз�
     }
 }
 
-
+bool check_string(std::string str){
+	for (int i = 0; i < str.size(); i++) {
+                if (str[i] != 'A' && str[i] != 'B' && str[i] != '(' && str[i] != ')' && str[i] != '[' && str[i] != ']' && str[i] != '\n')
+					return false;	
+	}
+	return true;
+}
 
 int main(int argc, char* argv[])
 {
 
     std::string s;
     if (argc > 1) {
-        std::string path = "Test/";
+        std::string path;
+		std::cout << "Enter the path to the folder with tests" << std::endl; 
+		std::cin >> path;
         path += argv[1];
-        int flag = 0; //Flag to check the entered string(1 - true, 2 - false)
+		std::cout << "Path: " + path << std::endl;
         std::ifstream str(path);
-        while (std::getline(str, s)) {
-			flag = 1;
-            //удаление символа конца строки
-			/*size_t ptr = s.find("\n", s.length() - 2);
-			if(ptr != std::string::npos){
-				s.erase(s.end() - 1);
-			}*/
+        while (std::getline(str, s)){
 			
             s.erase(s.end() - 1);
 			
-            //Checking for invalid symbols
-            for (int i = 0; i < s.size(); i++) {
-                if (s[i] != 'A' && s[i] != 'B' && s[i] != '(' && s[i] != ')' && s[i] != '[' && s[i] != ']' && s[i] != '\n'){
-                    flag = 0;
-					break;
-				}
-            }
-			
-
-
-            if (!flag) {
+            //Checking for invalid symbols	
+            if (!check_string(s)){
                 std::cout << "Entered string: " + s + " contains invalid symbols\n#########################" << std::endl;
 
                 continue;
@@ -90,11 +83,9 @@ int main(int argc, char* argv[])
         std::cout << "Enter string: " << std::endl;;
         std::cin >> s;
 
-        for (int i = 0; i < s.size(); i++) {
-            if (s[i] != 'A' && s[i] != 'B' && s[i] != '(' && s[i] != ')' && s[i] != ' ' && s[i] != '[' && s[i] != ']') {
+        if(!check_string(s)){
                 std::cout << "Entered string: " + s + " contains invalid symbols\n" << std::endl;
                 return 0;
-            }
         }
 		
 		check(s);
