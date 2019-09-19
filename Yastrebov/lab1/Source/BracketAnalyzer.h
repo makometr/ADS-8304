@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 typedef std::string::iterator iter;
 
