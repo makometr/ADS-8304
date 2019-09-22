@@ -10,8 +10,8 @@ typedef std::string::iterator iter;
 class BracketAnalyzer
 {
 public:
-	BracketAnalyzer();
-	~BracketAnalyzer();
+	BracketAnalyzer() = default;
+	~BracketAnalyzer() = default;
 
 	std::vector<std::string> parameters;
 	std::vector<std::string> text;
