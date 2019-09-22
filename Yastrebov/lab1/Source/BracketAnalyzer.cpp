@@ -1,18 +1,9 @@
 #include "BracketAnalyzer.h"
 
 
-BracketAnalyzer::BracketAnalyzer()
-{
-}
-
-
-BracketAnalyzer::~BracketAnalyzer()
-{
-}
-
 std::vector<std::string> BracketAnalyzer::GetTextData(const char * filename)
 {
-	std::vector<std::string> textdata(1);
+	std::vector<std::string> textdata;
 
 	std::ifstream input;
 
@@ -24,15 +15,20 @@ std::vector<std::string> BracketAnalyzer::GetTextData(const char * filename)
 	}
 
 	char tmp;
+	std::string processed_string = "";
 
 	while (input.get(tmp))
 	{
 		if (tmp != '\n')
-			textdata.back() += tmp;
+			processed_string += tmp;
 		else {
-			textdata.resize(textdata.size() + 1);
+			textdata.push_back(processed_string);
+			processed_string = "";
 		}
 	}
+
+	textdata.push_back(processed_string);
+
 	input.close();
 
 	return textdata;
@@ -46,13 +42,17 @@ void BracketAnalyzer::Analyze(const char* textfile, const char* parametersfile)
 	while (text.size() && text.back().size() && parameters.back().size()) {
 
 		iter left = text.back().begin();
-		iter right = text.back().end(); right--;
+		iter right = text.back().end(); 
+		right--;
 
-		if (brackets(left, right)) {
-			std::cout << "This is a correct Bracket(T) sequence" << std::endl;
+		std::cout << "Processed string : " << text.back() << std::endl
+			<< "Parameters : " << parameters.back() << std::endl;
+
+		if (isbrackets(left, right)) {
+			std::cout << "This is a correct Bracket(T) sequence\n________" << std::endl;
 		}
 		else {
-			std::cout << "This is NOT a correct Bracket(T) sequence" << std::endl;
+			std::cout << "This is NOT a correct Bracket(T) sequence\n________" << std::endl;
 		}
 
 		text.pop_back();
@@ -60,29 +60,29 @@ void BracketAnalyzer::Analyze(const char* textfile, const char* parametersfile)
 	}
 }
 
-bool BracketAnalyzer::brackets(iter& left, iter& right)
+bool BracketAnalyzer::isbrackets(iter& left, iter& right)
 {
-	return (element(left) && (left == right)) || list(left, right);
+	return (iselement(left) && (left == right)) || islist(left, right);
 
 }
 
-bool BracketAnalyzer::element(iter& left)
+bool BracketAnalyzer::iselement(iter& left)
 {
 	return (std::find(parameters.back().begin(), parameters.back().end(), *left) != parameters.back().end());
 }
 
-bool BracketAnalyzer::list(iter& left, iter& right)
+bool BracketAnalyzer::islist(iter& left, iter& right)
 {
-	return ((*left == 'N') && (left == right)) || ((*left == '[') && (*right == ']') && row(++left, --right));
+	return ((*left == 'N') && (left == right)) || ((*left == '[') && (*right == ']') && isrow(++left, --right));
 }
 
-bool BracketAnalyzer::row(iter& left, iter& right)
+bool BracketAnalyzer::isrow(iter& left, iter& right)
 {
 	bool result = true;
 
 	while (left != right + 1) {
 		if (*left != '[') {
-			result = result && brackets(left, left);
+			result = result && isbrackets(left, left);
 			left++;
 		}
 
@@ -99,7 +99,7 @@ bool BracketAnalyzer::row(iter& left, iter& right)
 					cnt--;
 
 				if (!cnt) {
-					result = result && row(++left, --tmp_iter);
+					result = result && isrow(++left, --tmp_iter);
 					left = tmp_iter + 2;
 					break;
 				}
