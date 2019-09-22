@@ -72,11 +72,11 @@ void MainWindow::on_compare_pushButton_clicked()
     }
 
     //создание списков, проверка на корректность
-    MyList firstList;
-    MyList secondList;
+    MyList::MyListP firstList(new MyList);
+    MyList::MyListP secondList(new MyList);
 
-    if (firstList.buildList(firstStr) &&
-            secondList.buildList(secondStr)) {
+    if (MyList::buildList(firstList, firstStr) &&
+            MyList::buildList(secondList, secondStr)) {
         qDebug() << "Строки корректны, списки созданы";
     }
     else {
@@ -90,7 +90,7 @@ void MainWindow::on_compare_pushButton_clicked()
     qDebug() << "Второй список:" << secondList;
 
     //сравнение списков
-    if (MyList::compareList(&firstList, &secondList)) {
+    if (MyList::compareList(firstList, secondList)) {
         qDebug() << "Списки структурно идентичны.";
         QMessageBox::information(this, "Result", "Списки структурно идентичны.");
     }
@@ -137,11 +137,11 @@ void MainWindow::on_test_pushButton_clicked()
             firstStr = in->readLine().toStdString();
             secondStr = in->readLine().toStdString();
 
-            MyList firstList;
-            MyList secondList;
+            MyList::MyListP firstList(new MyList);
+            MyList::MyListP secondList(new MyList);
 
-            if (firstList.buildList(firstStr) &&
-                    secondList.buildList(secondStr)) {
+            if (MyList::buildList(firstList, firstStr) &&
+                MyList::buildList(secondList, secondStr)) {
                 qDebug() << "Строки корректны, списки созданы";
             }
             else {
@@ -154,7 +154,7 @@ void MainWindow::on_test_pushButton_clicked()
             qDebug() << "Второй список:" << secondList;
 
             //сравнение списков
-            if (MyList::compareList(&firstList, &secondList)) {
+            if (MyList::compareList(firstList, secondList)) {
                 qDebug() << "_Списки структурно идентичны._";
             }
             else {
