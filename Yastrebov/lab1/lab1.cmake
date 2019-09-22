@@ -1,6 +1,5 @@
 all: Source/Analyzer.o Source/BracketAnalyzer.o
 	g++ -o lab1 Source/Analyzer.o Source/BracketAnalyzer.o
-	pause
 
 Analyzer.o: Source/Analyzer.cpp
 	g++ -c Source/Analyzer.cpp
