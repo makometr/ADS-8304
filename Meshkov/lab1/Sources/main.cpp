@@ -7,7 +7,7 @@ using namespace std;
 
 static bool isDebug = true;
 
-string f(string a, unsigned indent = 0)
+string f(const string &a, unsigned indent = 0)
 {
     auto getIndent = [indent] {
         string indentStr;
@@ -34,7 +34,7 @@ string f(string a, unsigned indent = 0)
     }
     else {
         auto right = a.substr(p + 1);
-        auto result = f(a.substr(p + 1), indent + 1) + a.substr(0, p);
+        auto result = f(right, indent + 1) + left;
         if (isDebug) {
             cout << getIndent() << "│ +" << endl;
             cout << getIndent() << "│ " << left << endl;
@@ -45,6 +45,7 @@ string f(string a, unsigned indent = 0)
 }
 
 void launchTests() {
+    auto oldIsDebug = isDebug;
     isDebug = false;
     ifstream fin("Tests/test");
     if (fin.is_open()) {
@@ -67,7 +68,7 @@ void launchTests() {
     else {
         cerr << "The test file is not found.";
     }
-    isDebug = true;
+    isDebug = oldIsDebug;
 }
 
 int main(int argc, char** argv)
