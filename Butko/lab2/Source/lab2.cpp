@@ -5,28 +5,17 @@
 #include <vector>
 
 struct Node {
-    int N;
-    int R;
-    int L;
-    int H;
-    int M;
-    bool balance;
-    bool b_check;
-    Node *prev;
-    Node *left;
-    Node *right;
+    int N, R, L, H, M;
+    bool balance, b_check;
+    Node *prev, *left, *right;
 };
 
-
 void init(int n, int l, int r, Node *&bin) {
-    bin->left = nullptr;
-    bin->right = nullptr;
-    bin->prev = nullptr;
+    bin->left = bin->right = bin->prev = nullptr;
     bin->N = n;
     bin->L = l;
     bin->R = r;
-    bin->M = 0;
-    bin->H = 0;
+    bin->M = bin->H = 0;
     bin->b_check = false;
     std::cout << n << std::endl;
 }
@@ -43,14 +32,11 @@ int add(int n, int l, int r, int m, int h, Node *&bin) {
     tmp->L = l;
     tmp->M = m;
     tmp->H = h;
-    tmp->right = nullptr;
-    tmp->left = nullptr;
+    tmp->right = tmp->left = nullptr;
     tmp->balance = true;
-
-    std::cout << "TMP->N = " << tmp->N << std::endl;
+    /*std::cout << "TMP->N = " << tmp->N << std::endl;
     std::cout << "BIN->L = " << bin->L << std::endl;
-    std::cout << "BIN->R = " << bin->R << std::endl;
-
+    std::cout << "BIN->R = " << bin->R << std::endl;*/
     if (bin->L == tmp->N) {
         tmp->prev = bin;
         std::cout << "left move" << std::endl;
@@ -84,13 +70,12 @@ bool balance(Node *&bin) {
         bin = bin->right;
         balance(bin);
     } else {
-        bin->left->b_check = true;
-        bin->right->b_check = true;
+        bin->left->b_check = bin->right->b_check = true;
         int IL = bin->left->H * bin->left->M;
-        std::cout << "NL: " << bin->left->N << " IL = " << IL << " ML = " << bin->left->M << std::endl;
         int IR = bin->right->H * bin->right->M;
-        std::cout << "NR: " << bin->right->N << " IR = " << IR << " MR = " << bin->right->M << std::endl;
         bin->M = bin->left->M + bin->right->M;
+        std::cout << "NL: " << bin->left->N << " IL = " << IL << " ML = " << bin->left->M << std::endl;
+        std::cout << "NR: " << bin->right->N << " IR = " << IR << " MR = " << bin->right->M << std::endl;
         std::cout << "M = " << bin->M << std::endl;
         if (IL == IR && bin->right->balance && bin->left->balance) {
             bin->balance = true;
@@ -114,7 +99,6 @@ int fromFile(std::string path) {
     }
     std::ifstream file;
     file.open(file_name);
-
     if (!file.is_open()) {
         std::cout << "ERROR: File is not open" << std::endl;
         return 0;
@@ -126,37 +110,41 @@ int fromFile(std::string path) {
         std::cout << "ERROR: File is not open" << std::endl;
         return 0;
     }
-    std::string str, word;
+    std::string str, numb;
     Node *bin = new Node;
     int counter = 0;
     while (!file.eof()) {
         getline(file, str);
-        std::cout << str << std::endl;
-        std::istringstream iss(str);
-        std::vector<int> array;
-        while (iss >> word) array.push_back(std::stoi(word));
-        for (int i : array) std::cout << i;
-        std::cout << std::endl;
-        counter++;
-        if (array[0] == 0) {
-            init(array[0], array[1], array[2], bin);
-        }
-        else if (array.size() == 5) {
-            add(array[0], array[1], array[2], array[3], array[4], bin);
-        }
-        else {
-            std::cout << "ERROR: Wrong data!" << std::endl;
-            return 0;
-        }
-        log << str << std::endl;
+        counter ++;
     }
     if ((counter - 1) % 2 != 0) {
         std::cout << "ERROR: Wrong hierarchical list!" << std::endl;
         return 0;
     }
+    file.close();
+    file.open(file_name);
+    while (!file.eof()) {
+        getline(file, str);
+        std::cout << str << std::endl;
+        std::istringstream iss(str);
+        std::vector<int> array;
+        while (iss >> numb) array.push_back(std::stoi(numb));
+        for (int i : array) std::cout << i;
+        std::cout << std::endl;
+        if (array[0] == 0) {
+            init(array[0], array[1], array[2], bin);
+        } else if (array.size() == 5) {
+            add(array[0], array[1], array[2], array[3], array[4], bin);
+        } else {
+            std::cout << "ERROR: Wrong data!" << std::endl;
+            return 0;
+        }
+        log << str << std::endl;
+    }
     bin = (Node *) back(bin);
-    if (balance(bin))  log << "BALANCED" << std::endl;
-    else  log << "NOT BALANCED" << std::endl;
+    log << std::endl;
+    if (balance(bin)) log << "BALANCED" << std::endl;
+    else log << "NOT BALANCED" << std::endl;
     log.close();
     return 0;
 }
