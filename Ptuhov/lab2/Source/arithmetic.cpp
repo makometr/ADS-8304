@@ -61,13 +61,13 @@ int Arithmetic::CheckBrackets()
 }
 
 //добавление новой пары ключ/значение в словарь
-void Arithmetic::UpdateMap(const std::string key, int value)
+void Arithmetic::UpdateMap(const std::string& key, int value)
 {
 	dict_[key] = value;
 }
 
 //проверка на нахождение переданного аргумента в словаре
-bool Arithmetic::InMap(const std::string value)
+bool Arithmetic::InMap(const std::string& value)
 {
 	return dict_.find(value) != dict_.end();
 }

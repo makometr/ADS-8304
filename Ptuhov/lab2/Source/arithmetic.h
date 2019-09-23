@@ -30,8 +30,8 @@ class Arithmetic
 {
 public:
 	Arithmetic() = default;
-	void SetStringValue(std::string const new_data_);
-	void UpdateMap(std::string const key, int const value);
+	void SetStringValue(const std::string& new_data_);
+	void UpdateMap(const std::string& key, int const value);
 	std::string GetStringValue();
 	int CheckBrackets();
 	bool ExtractVariableValues(std::string value, std::ostream& out);
