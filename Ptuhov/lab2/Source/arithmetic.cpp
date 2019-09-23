@@ -8,7 +8,7 @@ std::string OutputDialog();
 std::string MakePath(std::string& s, const std::string default_path);
 
 //вызов функций обработки строки
-void CallAndCheck(StringPair data_, std::ostream& out);
+void Call(StringPair data_, std::ostream& out);
 
 //спуск вниз по списку или получение значения текущего атома
 int Node::evaluate()
@@ -29,6 +29,7 @@ int Node::evaluate()
 	}
 	else
 		return std::get<int>(value);
+	return 0;
 }
 
 void Arithmetic::SetStringValue(const std::string new_data)
@@ -82,7 +83,8 @@ bool Arithmetic::RemakePowerToInt()
 
 	//если подстрока все-таки была найдена, то осуществляется запись значения вида power(..., ...) в переменную PowerData
 	size_t CurrentInd = PowerStartInd;
-	while (data_[++CurrentInd] != ')') {}
+	while (data_[CurrentInd] != ')') 
+		CurrentInd++;
 
 	size_t PowerEndInd = ++CurrentInd;
 	std::string PowerData(data_.begin() + PowerStartInd, data_.begin() + PowerEndInd);
@@ -151,70 +153,85 @@ IntBoolPair Arithmetic::CheckVariable(std::string& VariableName)
 }
 
 //ввод данных в список
-bool Arithmetic::ListFormation(std::shared_ptr<Node>& nd, const std::string s, std::ostream& out)
+bool Arithmetic::ListFormation(std::shared_ptr<Node>& currentHead, const std::string currentBracketValue, std::ostream& out)
 {
-	out << "Next processed brackest value: " + s + "\r\n";
+
+	out << "Next processed brackest value: " + currentBracketValue + "\r\n";
 	size_t ind = 0;
 
-	while (ind < s.size() && s[ind] == '(' || s[ind] == ' ') 
+	//считывание операции
+	while (ind < currentBracketValue.size() && (currentBracketValue[ind] == '(' || currentBracketValue[ind] == ' ')) 
 		ind++;
 
-
-	if ((s[ind] != '+' && s[ind + 1] == ' ') && s[ind] != '*' && (s[ind] != '-' && s[ind + 1] == ' '))
+	//проверка ее на корректность
+	if ((currentBracketValue[ind] != '+' && currentBracketValue[ind + 1] == ' ') && 
+		currentBracketValue[ind] != '*' && 
+		(currentBracketValue[ind] != '-' && currentBracketValue[ind + 1] == ' '))
 		return false;
 
+	//создание первого аргумента для оператора
 	auto FirstOperatorArg = std::make_shared<Node>();
-	nd->value = s[ind];
+	currentHead->value = currentBracketValue[ind];
 
+	//переход к следующему элементу
 	ind++;
-	while (ind < s.size() && s[ind] == ' ')  
+	while (ind < currentBracketValue.size() && currentBracketValue[ind] == ' ')  
 		ind++;
 
-	if (s[ind] == '(')
+	//если аргументом оказалось еще одно выражение
+	if (currentBracketValue[ind] == '(')
 	{
-		bool check = ListFormation(FirstOperatorArg, ExtractBracketsValue(s, &ind), out);
+		bool check = ListFormation(FirstOperatorArg, ExtractBracketsValue(currentBracketValue, &ind), out);
 		if (!check)
 			return false;
 	}
+	// если аргументом оказалось что-то похожее на число
 	else
 	{
-		IntBoolPair result = ExtractValueForListFormation(s, &ind);
+		IntBoolPair result = ExtractValueForListFormation(currentBracketValue, &ind);
 		if (!result.second)
 			return false;
 
 		FirstOperatorArg->value = result.first;
 	}
 
-	while (ind < s.size() && s[ind] == ' ') { ind++; }
+	//переход ко второму аргументу
+	while (ind < currentBracketValue.size() && currentBracketValue[ind] == ' ') 
+		ind++; 
 
-	if (s[ind] == ')')
+	//встретили закрывающую скобку - выражение закончено, а значит операция унарная
+	if (currentBracketValue[ind] == ')')
 	{
-		if (std::get<char>(nd->value) == '-')
+		if (std::get<char>(currentHead->value) == '-')
 		{
-			nd->arguments = FirstOperatorArg;
+			currentHead->arguments = FirstOperatorArg;
 			return true;
 		}
 		else
 			return false;
 	}
 
+	//создание второго аргумента для оператора
 	auto SecondOperatorArg = std::make_shared<Node>();
 
-	if (s[ind] == '(')
+	//если вторым аргументом оказалось другое выражение
+	if (currentBracketValue[ind] == '(')
 	{
-		bool check = ListFormation(SecondOperatorArg, ExtractBracketsValue(s, &ind), out);
+		bool check = ListFormation(SecondOperatorArg, ExtractBracketsValue(currentBracketValue, &ind), out);
 		if (!check)
 			return false;
 	}
+	//если вторым аргументом оказалось что-то похожее на число
 	else
 	{
-		IntBoolPair result = ExtractValueForListFormation(s, &ind);
+		IntBoolPair result = ExtractValueForListFormation(currentBracketValue, &ind);
 		if (!result.second)
 			return false;
 
 		SecondOperatorArg->value = result.first;
 	}
-	nd->arguments = std::make_pair(FirstOperatorArg, SecondOperatorArg);
+	//в случае успешного составления обоих аргументов прикрепляем их к нашей операции
+	currentHead->arguments = std::make_pair(FirstOperatorArg, SecondOperatorArg);
 
 	return true;
 }
@@ -301,10 +318,8 @@ bool Arithmetic::ExtractVariableValues(std::string value, std::ostream& out)
 
 	//проверка на коллизии
 	if (InMap(VariableName))
-	{
-		out << "Incorrect data! One variable with two values!\r\n";
-		return 0;
-	}
+		return 2;
+
 	ind++;
 
 	//запись значения переменной 
@@ -361,7 +376,7 @@ std::string MakePath(std::string& s, const std::string default_path)
 	return path;
 }
 
-void CallAndCheck(StringPair data_, std::ostream& out)
+void Call(StringPair data_, std::ostream& out)
 {
 	Arithmetic arithmetic;
 
@@ -396,8 +411,14 @@ void CallAndCheck(StringPair data_, std::ostream& out)
 	}
 
 	//Сопоставление именам переменных их значений
-	if (!arithmetic.ExtractVariableValues(VariableList, out))
+	int check = arithmetic.ExtractVariableValues(VariableList, out);
+	if (!check)
 		return;
+	if (check == 2)
+	{
+		out << "Error - one variable with two values!\n";
+		return;
+	}
 
 	//печать словаря если он не пуст
 	if (VariableList != "()")
@@ -496,7 +517,7 @@ int main(int argc, char** argv)
 		std::ostream& out = (of) ? outf : std::cout;
 
 		for (size_t i = 0; i < FileStrings.size(); i += 2)
-			CallAndCheck(std::make_pair(FileStrings[i], FileStrings[i + 1]), out);
+			Call(std::make_pair(FileStrings[i], FileStrings[i + 1]), out);
 
 		return 0;
 	}
@@ -544,7 +565,7 @@ int main(int argc, char** argv)
 		std::getline(std::cin, data_.first);
 		std::getline(std::cin, data_.second);
 
-		CallAndCheck(data_, out);
+		Call(data_, out);
 		break;
 	case '2':
 	{
@@ -572,7 +593,7 @@ int main(int argc, char** argv)
 		}
 
 		for (size_t i = 0; i < FileStrings.size(); i += 2)
-			CallAndCheck(std::make_pair(FileStrings[i], FileStrings[i + 1]), out);
+			Call(std::make_pair(FileStrings[i], FileStrings[i + 1]), out);
 		break;
 	}
 	default:
