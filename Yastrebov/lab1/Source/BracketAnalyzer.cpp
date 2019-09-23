@@ -36,6 +36,8 @@ std::vector<std::string> BracketAnalyzer::GetTextData(const char * filename)
 
 void BracketAnalyzer::Analyze(const char* textfile, const char* parametersfile)
 {
+	int test_cnt = 1;
+	
 	text = BracketAnalyzer::GetTextData(textfile);
 	parameters = BracketAnalyzer::GetTextData(parametersfile);
 
@@ -44,7 +46,8 @@ void BracketAnalyzer::Analyze(const char* textfile, const char* parametersfile)
 		iter left = text.back().begin();
 		iter right = text.back().end(); 
 		right--;
-
+		
+		std::cout << "Test #" << test_cnt++ << std::endl;
 		std::cout << "Processed string : " << text.back() << std::endl
 			<< "Parameters : " << parameters.back() << std::endl;
 
