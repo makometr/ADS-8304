@@ -22,7 +22,7 @@ string f(string_view str, unsigned indent = 0)
     if (isDebug)
         cout << getIndent() << "f(" << str << "):" << endl;
 
-    auto p = str.find("/");
+    auto p = str.find('/');
 
     if (p == string::npos) {
         if (isDebug) {
