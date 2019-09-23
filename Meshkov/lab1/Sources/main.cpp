@@ -7,7 +7,7 @@ using namespace std;
 
 static bool isDebug = true;
 
-string f(const string &a, unsigned indent = 0)
+string f(string_view str, unsigned indent = 0)
 {
     auto getIndent = [indent] {
         string indentStr;
@@ -15,26 +15,26 @@ string f(const string &a, unsigned indent = 0)
             indentStr += "│ ";
         return indentStr;
     };
-    auto showResult = [getIndent](string result) {
+    auto showResult = [getIndent](string_view result) {
         cout << getIndent() << "└ = " << result << endl;
     };
 
     if (isDebug)
-        cout << getIndent() << "f(" << a << "):" << endl;
+        cout << getIndent() << "f(" << str << "):" << endl;
 
-    auto p = a.find("/");
-    auto left = a.substr(0, p);
+    auto p = str.find("/");
 
     if (p == string::npos) {
         if (isDebug) {
-            cout << getIndent() << "│ " << left << endl;
-            showResult(a);
+            cout << getIndent() << "│ " << str << endl;
+            showResult(str);
         }
-        return a;
+        return string(str);
     }
     else {
-        auto right = a.substr(p + 1);
-        auto result = f(right, indent + 1) + left;
+        auto left = str.substr(0, p);
+        auto right = str.substr(p + 1);
+        auto result = f(right, indent + 1) + string(left);
         if (isDebug) {
             cout << getIndent() << "│ +" << endl;
             cout << getIndent() << "│ " << left << endl;
