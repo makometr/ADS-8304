@@ -130,7 +130,7 @@ Sequence<long long> computePhi(Sequence<long long unsigned> &sequence)
     {
         if(PRINT_RECURSION_INFORMATION)
             cout << std::string(depth - 1, ' ') << "| sole element case" << endl;
-        result.append(-(long long)sequence[0]);
+        result.append(-static_cast<long long>(sequence[0]));
     }
     else
     {
