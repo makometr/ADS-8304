@@ -30,7 +30,7 @@ class Arithmetic
 {
 public:
 	Arithmetic() = default;
-	void SetStringValue(const std::string& new_data_);
+	void SetStringValue(const std::string& new_data);
 	void UpdateMap(const std::string& key, int const value);
 	std::string GetStringValue();
 	int CheckBrackets();
