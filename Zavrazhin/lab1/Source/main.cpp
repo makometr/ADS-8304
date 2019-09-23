@@ -17,8 +17,6 @@ template<class T>
 class Sequence
 {
 public:
-    std::vector<T> vector;
-
     // overload assignment operator
     Sequence<T> &operator=(const Sequence<T> &sequence)
     {
@@ -45,7 +43,7 @@ public:
         return *this;
     }
 
-    // parameter packs are used to concisely append to a sequence, as in line 169
+    // parameter packs are used to concisely append to a sequence, as in line 170
     template<typename... Ts>
     Sequence<T> &append(T elem, Ts...elems)
     {
@@ -114,6 +112,9 @@ public:
         }
         return  result + "}";
     }
+
+private:
+    std::vector<T> vector;
 };
 
 
