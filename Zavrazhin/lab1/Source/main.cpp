@@ -9,9 +9,7 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-constexpr size_t INITIAL_SEQUENCE_CAPACITY = 10;
 constexpr bool PRINT_RECURSION_INFORMATION = true;
-
 
 template<class T>
 class Sequence
@@ -58,19 +56,6 @@ public:
         this->append(elems1);
         this->append(elems2...);
         return *this;
-    }
-
-    //overload the costructor to construct a sequence with provided elements
-    Sequence(){}
-
-    Sequence(T elem)
-    {
-        this->append(elem);
-    }
-
-    Sequence(const Sequence<T> &elems)
-    {
-        this->append(elems);
     }
 
     // some convenient member functions
