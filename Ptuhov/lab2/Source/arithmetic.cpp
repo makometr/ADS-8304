@@ -7,7 +7,7 @@ std::string InputDialog();
 std::string OutputDialog();
 
 //функция создает путь или если он не был передан заменяет его дефолтным
-std::string MakePath(std::string s, std::string const default_path);
+std::string MakePath(std::string s, const std::string default_path);
 
 //вызов функций обработки строки
 void CallAndCheck(StringPair data_, std::ostream& out);
@@ -34,7 +34,7 @@ int Node::evaluate()
 }
 
 //изменение значения хранящегося в классе arithmetic
-void Arithmetic::SetStringValue(std::string const new_data_)
+void Arithmetic::SetStringValue(const std::string new_data_)
 {
 	data_ = new_data_;
 }
@@ -158,7 +158,7 @@ IntBoolPair Arithmetic::PowerHelper(std::string VariableName)
 }
 
 //ввод данных в список
-bool Arithmetic::ListFormation(std::shared_ptr<Node> nd, const std::string s, std::ostream& out)
+bool Arithmetic::ListFormation(std::shared_ptr<Node>& nd, const std::string s, std::ostream& out)
 {
 	out << "Next processed brackest value: " + s + "\r\n";
 	size_t ind = 0, f;
@@ -347,7 +347,7 @@ std::string OutputDialog()
 	return ovar;
 }
 
-std::string MakePath(std::string s, std::string const default_path)
+std::string MakePath(std::string s, const std::string default_path)
 {
 	//Составление пути
 	std::string path;
