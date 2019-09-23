@@ -230,7 +230,7 @@ IntBoolPair Arithmetic::ExtractValueForListFormation(const std::string& s, size_
 	std::string tmp = "";
 
 	//считывание значения в переменную tmp
-	while (ind < s.size() && s[ind] != ' ' && s[ind] != ')')
+	while (ind < s.size() && s[ind] != ' ' && s[ind] != ')' && s[ind] != ')')
 	{
 		tmp += s[ind];
 		ind++;
