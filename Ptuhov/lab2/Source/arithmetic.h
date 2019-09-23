@@ -14,15 +14,15 @@
 
 using StringPair = std::pair<std::string, std::string>;
 using IntBoolPair = std::pair<int, bool>;
-using NodePair = std::pair<struct Node*, struct Node*>;
 using Node = struct Node;
+using NodePair = std::pair<std::shared_ptr<Node>, std::shared_ptr<Node>>;
 
 struct Node {
 	Node() = default;
 	int evaluate();
 
 	//храним или пару следующих элементов для бинарного вызова, или следущий элемент для унарного
-	std::variant<NodePair, Node*> arguments;
+	std::variant<NodePair, std::shared_ptr<Node>> arguments;
 	//храним или число - значение атома, или значение операции
 	std::variant<int, char> value;
 };
@@ -38,7 +38,7 @@ public:
 	bool ExtractVariableValues(std::string value, std::ostream& out);
 	bool InMap(const std::string value);
 	bool RemakePowerToInt();
-	bool ListFormation(Node* nd, std::string const s, std::ostream& out);
+	bool ListFormation(std::shared_ptr<Node> nd, std::string const s, std::ostream& out);
 	IntBoolPair ExtractValueForListFormation(const std::string& s, size_t& ind);
 	std::string ExtractBracketsValue(const std::string& s, size_t& ind);
 	void print_dict(std::ostream& out);
