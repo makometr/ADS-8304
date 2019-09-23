@@ -1,163 +1,196 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <string>
 #include <vector>
 
-struct Node {
-    int N, R, L, H, M;
-    bool balance, b_check;
-    Node *prev, *left, *right;
+struct BinaryScales {
+    BinaryScales(int atomNumber_, int atomLeftNumber_, int atomRightNumber_, int atomArmLength_, int atomKey_) :
+            atomNumber(atomNumber_), atomLeftNumber(atomLeftNumber_), atomRightNumber(atomRightNumber_), atomArmLength(atomArmLength_), atomKey(atomKey_),
+            isBalanced(true), isChecked(false), prevAtom(nullptr), leftAtom(nullptr), rightAtom(nullptr){};
+    int atomNumber,
+        atomRightNumber,
+        atomLeftNumber,
+        atomArmLength,
+        atomKey;
+    bool isBalanced, isChecked;
+   BinaryScales *prevAtom, *leftAtom, *rightAtom;
 };
 
-void init(int n, int l, int r, Node *&bin) {
-    bin->left = bin->right = bin->prev = nullptr;
-    bin->N = n;
-    bin->L = l;
-    bin->R = r;
-    bin->M = bin->H = 0;
-    bin->b_check = false;
-    std::cout << n << std::endl;
-}
-
-void *back(Node *&bin) {
-    if (bin->N == 0) return bin;
-    else (back(bin->prev));
-}
-
-int add(int n, int l, int r, int m, int h, Node *&bin) {
-    Node *tmp = new Node;
-    tmp->N = n;
-    tmp->R = r;
-    tmp->L = l;
-    tmp->M = m;
-    tmp->H = h;
-    tmp->right = tmp->left = nullptr;
-    tmp->balance = true;
-    /*std::cout << "TMP->N = " << tmp->N << std::endl;
-    std::cout << "BIN->L = " << bin->L << std::endl;
-    std::cout << "BIN->R = " << bin->R << std::endl;*/
-    if (bin->L == tmp->N) {
-        tmp->prev = bin;
-        std::cout << "left move" << std::endl;
-        std::cout << std::endl;
-        bin->left = tmp;
-        bin = bin->left;
-        return 0;
-    } else if (bin->R == tmp->N) {
-        tmp->prev = bin;
-        std::cout << "right move" << std::endl;
-        std::cout << std::endl;
-        bin->right = tmp;
-        bin = bin->right;
-        return 0;
-    } else {
-        bin = bin->prev;
-        std::cout << "need to back" << std::endl;
-        std::cout << std::endl;
-        add(n, l, r, m, h, bin);
-        return 0;
+bool balance(BinaryScales *&binaryScales) {
+    if (binaryScales->leftAtom->leftAtom != nullptr && !binaryScales->leftAtom->isChecked) {
+        binaryScales =  binaryScales->leftAtom;
+        balance(binaryScales);
+    }
+    else if (binaryScales->rightAtom->rightAtom != nullptr && !binaryScales->rightAtom->isChecked) {
+        binaryScales = binaryScales->rightAtom;
+        balance(binaryScales);
+    }
+    else{
+        binaryScales->leftAtom->isChecked = binaryScales->rightAtom->isChecked = true;
+        int torqueLeft = binaryScales->leftAtom->atomArmLength * binaryScales->leftAtom->atomKey;
+        int torqueRight = binaryScales->rightAtom->atomArmLength * binaryScales->rightAtom->atomKey;
+        binaryScales->atomKey = binaryScales->leftAtom->atomKey + binaryScales->rightAtom->atomKey;
+        binaryScales->isBalanced = torqueLeft == torqueRight && binaryScales->rightAtom->isBalanced && binaryScales->leftAtom->isBalanced;
+        binaryScales->isChecked = true;
+        if (binaryScales->atomNumber == 0 && binaryScales->leftAtom->isChecked && binaryScales->rightAtom->isChecked) return binaryScales->isBalanced;
+        binaryScales = binaryScales->prevAtom;
+        balance(binaryScales);
     }
 }
 
-bool balance(Node *&bin) {
-    if (bin->left->left != nullptr && !bin->left->b_check) {
-        std::cout << "from: " << bin->N << " to:" << bin->left->N << std::endl;
-        bin = bin->left;
-        balance(bin);
-    } else if (bin->right->right != nullptr && !bin->right->b_check) {
-        std::cout << "from: " << bin->N << " to:" << bin->right->N << std::endl;
-        bin = bin->right;
-        balance(bin);
-    } else {
-        bin->left->b_check = bin->right->b_check = true;
-        int IL = bin->left->H * bin->left->M;
-        int IR = bin->right->H * bin->right->M;
-        bin->M = bin->left->M + bin->right->M;
-        std::cout << "NL: " << bin->left->N << " IL = " << IL << " ML = " << bin->left->M << std::endl;
-        std::cout << "NR: " << bin->right->N << " IR = " << IR << " MR = " << bin->right->M << std::endl;
-        std::cout << "M = " << bin->M << std::endl;
-        if (IL == IR && bin->right->balance && bin->left->balance) {
-            bin->balance = true;
-            std::cout << IL << "=" << IR << std::endl;
-        } else {
-            bin->balance = false;
-            std::cout << IL << "!=" << IR << std::endl;
+auto backToZeroAtom(BinaryScales *&binaryScales){
+    if (binaryScales->atomNumber == 0) return binaryScales;
+    else {
+        binaryScales = binaryScales->prevAtom;
+        backToZeroAtom(binaryScales);
+    }
+}
+
+int printDepth(BinaryScales *&binaryScales, int i){
+    if(binaryScales->leftAtom == nullptr && binaryScales->rightAtom == nullptr){
+        for(int j=0;j<i;j++) std::cout <<"-";
+        std::cout<<binaryScales->atomNumber<<std::endl;
+        return 0;
+    }
+    for(int j=0;j<i;j++) std::cout <<"-";
+    std::cout<<binaryScales->atomNumber<<std::endl;
+    i++;
+    printDepth(binaryScales->leftAtom, i);
+    printDepth(binaryScales->rightAtom, i);
+}
+
+int deleteAtoms(BinaryScales *&binaryScales){
+    if(binaryScales->leftAtom == nullptr && binaryScales->rightAtom == nullptr) {
+        delete binaryScales;
+        return 0;
+    }
+    deleteAtoms(binaryScales->leftAtom);
+    deleteAtoms(binaryScales->rightAtom);
+    delete binaryScales;
+}
+
+int addAtom(int atomNumber, int atomLeftNumber, int atomRightNumber, int atomArmLenght, int atomKey,  BinaryScales *&binaryScales) {
+    auto *tmpBinaryScales = new BinaryScales{atomNumber, atomLeftNumber, atomRightNumber, atomArmLenght, atomKey};
+    if (binaryScales->atomLeftNumber == tmpBinaryScales->atomNumber) {
+        tmpBinaryScales->prevAtom = binaryScales;
+        std::cout << "pointer left" << std::endl;
+        std::cout << "pointer on atom # " << tmpBinaryScales->atomNumber << std::endl;
+        std::cout << std::endl;
+        binaryScales->leftAtom = tmpBinaryScales;
+        binaryScales = binaryScales->leftAtom;
+        return 0;
+    }
+    else if (binaryScales->atomRightNumber == tmpBinaryScales->atomNumber) {
+        tmpBinaryScales->prevAtom = binaryScales;
+        std::cout << "pointer right" << std::endl;
+        std::cout << "pointer on atom # " << tmpBinaryScales->atomNumber << std::endl;
+        std::cout << std::endl;
+        binaryScales->rightAtom = tmpBinaryScales;
+        binaryScales = binaryScales->rightAtom;
+        return 0;
+    }
+    else {
+        binaryScales = binaryScales->prevAtom;
+        if (binaryScales->prevAtom == nullptr && (binaryScales->atomLeftNumber != tmpBinaryScales->atomNumber && binaryScales->atomRightNumber != tmpBinaryScales->atomNumber)){
+            std::cout << "error: incorrect data order" << std::endl;
+            return 1;
         }
-        bin->b_check = true;
-        if (bin->N == 0 && bin->left->b_check && bin->right->b_check) return bin->balance;
-        bin = bin->prev;
-        balance(bin);
-    }
-}
-
-int fromFile(std::string path) {
-    std::string file_name = path, log_file;
-    if (path.size() == 1) {
-        std::cout << " Enter test-file location: " << std::endl;
-        std::cin >> file_name;
-    }
-    std::ifstream file;
-    file.open(file_name);
-    if (!file.is_open()) {
-        std::cout << "ERROR: File is not open" << std::endl;
-        return 0;
-    }
-    std::cout << " Enter where to save results (location with <name>.txt): " << std::endl;
-    std::cin >> log_file;
-    std::ofstream log(log_file);
-    if (!log.is_open()) {
-        std::cout << "ERROR: File is not open" << std::endl;
-        return 0;
-    }
-    std::string str, numb;
-    Node *bin = new Node;
-    int counter = 0;
-    while (!file.eof()) {
-        getline(file, str);
-        counter ++;
-    }
-    if ((counter - 1) % 2 != 0) {
-        std::cout << "ERROR: Wrong hierarchical list!" << std::endl;
-        return 0;
-    }
-    file.close();
-    file.open(file_name);
-    while (!file.eof()) {
-        getline(file, str);
-        std::cout << str << std::endl;
-        std::istringstream iss(str);
-        std::vector<int> array;
-        while (iss >> numb) array.push_back(std::stoi(numb));
-        for (int i : array) std::cout << i;
+        std::cout << "pointer back" << std::endl;
+        std::cout << "pointer on atom # " << binaryScales->atomNumber << std::endl;
         std::cout << std::endl;
-        if (array[0] == 0) {
-            init(array[0], array[1], array[2], bin);
-        } else if (array.size() == 5) {
-            add(array[0], array[1], array[2], array[3], array[4], bin);
-        } else {
-            std::cout << "ERROR: Wrong data!" << std::endl;
-            return 0;
-        }
-        log << str << std::endl;
+        addAtom(atomNumber, atomLeftNumber, atomRightNumber, atomArmLenght, atomKey, binaryScales);
     }
-    bin = (Node *) back(bin);
-    log << std::endl;
-    if (balance(bin)) log << "BALANCED" << std::endl;
-    else log << "NOT BALANCED" << std::endl;
-    log.close();
     return 0;
 }
 
-int main(int argc, char *argv[]) {
-    std::ifstream input;
-    if (argc > 1) {
-        std::string path = "Tests/";
-        path += argv[1];
-        std::cout << path << std::endl;
-        fromFile(path);
-    } else if (argc == 1) {
-        fromFile(" ");
+bool checkAtomData(std::vector<int>& dataAtom){
+    std::cout << dataAtom[0] << std::endl;
+    bool check = true;
+    if (dataAtom[0] != 0 && dataAtom.size() == 3) {
+        std::cout << "error: wrong zero atom data" << std::endl;
+        check = false;
     }
+    else if (dataAtom.size()!= 3 && dataAtom.size()!=5){
+        std::cout << "error: incomplete data" << std::endl;
+        check = false;
+    }
+    else if ((dataAtom[1] == 0 && dataAtom[2] != 0) || (dataAtom[2] == 0 && dataAtom[1] != 0)) {
+        std::cout << "error: breaking ties" << std::endl;
+        check = false;
+    }
+    else if (dataAtom[1] == 0 && dataAtom[2] == 0 &&  dataAtom[4] <= 0 && dataAtom[0] != 0) {
+        std::cout << "error: zero load weight" << std::endl;
+        check = false;
+    }
+    else if (dataAtom[3] <= 0 && dataAtom[0] != 0) {
+        std::cout << "error: zero arm length" << std::endl;
+        check = false;
+    }
+    return check;
+}
+
+int main() {
+    std::string testFileName, resultFileName, line, number;
+    std::cout << " Enter test-file location: " << std::endl;
+    std::cin >> testFileName;
+    std::ifstream testFile;
+    testFile.open(testFileName);
+    if (!testFile.is_open()) {
+        std::cout << "error: test file is not open" << std::endl;
+        return 0;
+    }
+    std::cout << " Enter where to save results (location with <name>.txt): " << std::endl;
+    std::cin >> resultFileName;
+    std::ofstream resultFile(resultFileName);
+    if (!resultFile.is_open()) {
+        std::cout << "error: result file is not open" << std::endl;
+        return 0;
+    }
+    int lineCounter = 0;
+    while (!testFile.eof()) {
+        getline(testFile, line);
+        lineCounter ++;
+    }
+    if ((lineCounter - 1) % 2 != 0) {
+        std::cout << "error: wrong hierarchical list!" << std::endl;
+        return 0;
+    }
+    testFile.close();
+    testFile.open(testFileName);
+    getline(testFile, line);
+    std::istringstream issZero(line);
+    std::vector<int> dataAtomZero;
+    dataAtomZero.clear();
+    while (issZero >> number)
+        dataAtomZero.push_back(std::stoi(number));
+    if (!checkAtomData(dataAtomZero)) return 0;
+    auto *binaryScales = new BinaryScales{dataAtomZero[0], dataAtomZero[1], dataAtomZero[2], 0, 0};
+    while (!testFile.eof()) {
+        getline(testFile, line);
+        std::istringstream iss(line);
+        std::vector<int> dataAtom;
+        while (iss >> number)
+            dataAtom.push_back(std::stoi(number));
+        if (!checkAtomData(dataAtom)) return 0;
+        else {
+            addAtom(dataAtom[0], dataAtom[1], dataAtom[2], dataAtom[3], dataAtom[4], binaryScales);
+         }
+        resultFile << line << std::endl;
+    }
+    backToZeroAtom(binaryScales);
+    if (balance(binaryScales)){
+        std::cout << "balanced" << std::endl;
+        resultFile << "balanced" << std::endl;
+    }
+    else{
+        std::cout << "not balanced" << std::endl;
+        resultFile << "not balanced" << std::endl;
+    }
+    std::cout << std::endl;
+    std::cout << "depth of atoms" << std::endl;
+    printDepth(binaryScales, 0);
+    backToZeroAtom(binaryScales);
+    deleteAtoms(binaryScales);
+    resultFile.close();
     return 0;
 }
