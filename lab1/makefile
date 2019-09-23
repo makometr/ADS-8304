@@ -1,2 +1,2 @@
 #!/bin/bash
-g++ Source/lr1.cpp -o lab1
+g++ -std=c++11 Source/lr1.cpp -o lr1
