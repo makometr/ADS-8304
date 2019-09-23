@@ -8,7 +8,7 @@ std::string OutputDialog();
 std::string MakePath(std::string& s, const std::string default_path);
 
 //вызов функций обработки строки
-void Call(StringPair data_, std::ostream& out);
+bool Check(StringPair data_, std::ostream& out, std::shared_ptr<Node>& nd);
 
 //спуск вниз по списку или получение значения текущего атома
 int Node::evaluate()
@@ -32,7 +32,7 @@ int Node::evaluate()
 	return 0;
 }
 
-void Arithmetic::SetStringValue(const std::string new_data)
+void Arithmetic::SetStringValue(const std::string& new_data)
 {
 	data_ = new_data;
 }
@@ -83,7 +83,7 @@ bool Arithmetic::RemakePowerToInt()
 
 	//если подстрока все-таки была найдена, то осуществляется запись значения вида power(..., ...) в переменную PowerData
 	size_t CurrentInd = PowerStartInd;
-	while (data_[CurrentInd] != ')') 
+	while (data_[CurrentInd] != ')')
 		CurrentInd++;
 
 	size_t PowerEndInd = ++CurrentInd;
@@ -153,19 +153,19 @@ IntBoolPair Arithmetic::CheckVariable(std::string& VariableName)
 }
 
 //ввод данных в список
-bool Arithmetic::ListFormation(std::shared_ptr<Node>& currentHead, const std::string currentBracketValue, std::ostream& out)
+bool Arithmetic::ListFormation(std::shared_ptr<Node>& currentHead, const std::string& currentBracketValue, std::ostream& out)
 {
 
 	out << "Next processed brackest value: " + currentBracketValue + "\r\n";
 	size_t ind = 0;
 
 	//считывание операции
-	while (ind < currentBracketValue.size() && (currentBracketValue[ind] == '(' || currentBracketValue[ind] == ' ')) 
+	while (ind < currentBracketValue.size() && (currentBracketValue[ind] == '(' || currentBracketValue[ind] == ' '))
 		ind++;
 
 	//проверка ее на корректность
-	if ((currentBracketValue[ind] != '+' && currentBracketValue[ind + 1] == ' ') && 
-		currentBracketValue[ind] != '*' && 
+	if ((currentBracketValue[ind] != '+' && currentBracketValue[ind + 1] == ' ') &&
+		currentBracketValue[ind] != '*' &&
 		(currentBracketValue[ind] != '-' && currentBracketValue[ind + 1] == ' '))
 		return false;
 
@@ -175,7 +175,7 @@ bool Arithmetic::ListFormation(std::shared_ptr<Node>& currentHead, const std::st
 
 	//переход к следующему элементу
 	ind++;
-	while (ind < currentBracketValue.size() && currentBracketValue[ind] == ' ')  
+	while (ind < currentBracketValue.size() && currentBracketValue[ind] == ' ')
 		ind++;
 
 	//если аргументом оказалось еще одно выражение
@@ -196,8 +196,8 @@ bool Arithmetic::ListFormation(std::shared_ptr<Node>& currentHead, const std::st
 	}
 
 	//переход ко второму аргументу
-	while (ind < currentBracketValue.size() && currentBracketValue[ind] == ' ') 
-		ind++; 
+	while (ind < currentBracketValue.size() && currentBracketValue[ind] == ' ')
+		ind++;
 
 	//встретили закрывающую скобку - выражение закончено, а значит операция унарная
 	if (currentBracketValue[ind] == ')')
@@ -232,7 +232,6 @@ bool Arithmetic::ListFormation(std::shared_ptr<Node>& currentHead, const std::st
 	}
 	//в случае успешного составления обоих аргументов прикрепляем их к нашей операции
 	currentHead->arguments = std::make_pair(FirstOperatorArg, SecondOperatorArg);
-
 	return true;
 }
 
@@ -304,7 +303,7 @@ void Arithmetic::operator<<(std::ostream& out)
 }
 
 //распаковка значений переменных
-bool Arithmetic::ExtractVariableValues(std::string value, std::ostream& out)
+bool Arithmetic::ExtractVariableValues(std::string& value, std::ostream& out)
 {
 	//выход из рекурсии
 	if (value == "()")
@@ -376,12 +375,12 @@ std::string MakePath(std::string& s, const std::string default_path)
 	return path;
 }
 
-void Call(StringPair data_, std::ostream& out)
+bool Check(StringPair data_, std::ostream& out, std::shared_ptr<Node>& nd)
 {
 	Arithmetic arithmetic;
 
-	std::string VariableList = data_.second, 
-				Expression = data_.first;
+	std::string VariableList = data_.second,
+		Expression = data_.first;
 
 	//печать входных данных
 	out << "\nEntered string: " + Expression + ", Entered variable list: ";
@@ -400,24 +399,24 @@ void Call(StringPair data_, std::ostream& out)
 	if (CheckResult)
 	{
 		out << ((CheckResult > 0) ? "Oops, you forgot about close bracket(s)\r\n\r\n" : "Oops you forgot about open bracket(s)\r\n\r\n");
-		return;
+		return false;
 	}
 
 	//Проверка на корректность полученного списка переменных/значений
 	if (VariableList != "()" && !std::regex_match(VariableList.c_str(), regular))
 	{
 		out << "Incorrect variable list!\r\n\r\n";
-		return;
+		return false;
 	}
 
 	//Сопоставление именам переменных их значений
 	int check = arithmetic.ExtractVariableValues(VariableList, out);
 	if (!check)
-		return;
+		return 0;
 	if (check == 2)
 	{
 		out << "Error - one variable with two values!\n";
-		return;
+		return false;
 	}
 
 	//печать словаря если он не пуст
@@ -431,26 +430,25 @@ void Call(StringPair data_, std::ostream& out)
 	if (!arithmetic.RemakePowerToInt())
 	{
 		out << "Incorrect power option!\r\n\r\n";
-		return;
+		return false;
 	}
 	out << "String version after remake power to int: " + arithmetic.GetStringValue() + "\r\n";
-
-	auto nd = std::make_shared<Node>();
 
 	if (!arithmetic.ListFormation(nd, arithmetic.GetStringValue(), out))
 	{
 		out << "Incorrect expression!\r\n\r\n";
-		return;
+		return false;
 	}
-	out << "Result: " << nd->evaluate() << "\r\n";
-	out << "-----------------------------------------------------------------------------------\r\n\r\n";
 
+	return true;
 }
 
 int main(int argc, char** argv)
 {
 	//data_ - пара строк: первая - выражение, вторая - список с переменными и их значениями, iovar - input/outpur variant
 	StringPair data_, iovar;
+
+	auto nd = std::make_shared<Node>();
 
 	//Для удобного запуска тестов на другом пк
 	if (argc > 1)
@@ -517,7 +515,13 @@ int main(int argc, char** argv)
 		std::ostream& out = (of) ? outf : std::cout;
 
 		for (size_t i = 0; i < FileStrings.size(); i += 2)
-			Call(std::make_pair(FileStrings[i], FileStrings[i + 1]), out);
+		{
+			if (Check(std::make_pair(FileStrings[i], FileStrings[i + 1]), out, nd))
+			{
+				out << "Result: " << nd->evaluate() << "\r\n";
+				out << "-----------------------------------------------------------------------------------\r\n\r\n";
+			}
+		}
 
 		return 0;
 	}
@@ -565,7 +569,10 @@ int main(int argc, char** argv)
 		std::getline(std::cin, data_.first);
 		std::getline(std::cin, data_.second);
 
-		Call(data_, out);
+		Check(data_, out, nd);
+
+		out << "Result: " << nd->evaluate() << "\r\n";
+		out << "-----------------------------------------------------------------------------------\r\n\r\n";
 		break;
 	case '2':
 	{
@@ -593,7 +600,13 @@ int main(int argc, char** argv)
 		}
 
 		for (size_t i = 0; i < FileStrings.size(); i += 2)
-			Call(std::make_pair(FileStrings[i], FileStrings[i + 1]), out);
+		{
+			if (Check(std::make_pair(FileStrings[i], FileStrings[i + 1]), out, nd))
+			{
+				out << "Result: " << nd->evaluate() << "\r\n";
+				out << "-----------------------------------------------------------------------------------\r\n\r\n";
+			}
+		}
 		break;
 	}
 	default:

@@ -34,15 +34,14 @@ public:
 	void UpdateMap(const std::string& key, int const value);
 	std::string GetStringValue();
 	int CheckBrackets();
-	bool ExtractVariableValues(std::string value, std::ostream& out);
-	bool InMap(const std::string value);
+	bool ExtractVariableValues(std::string& value, std::ostream& out);
+	bool InMap(const std::string& value);
 	bool RemakePowerToInt();
-	bool ListFormation(std::shared_ptr<Node>& nd, std::string const s, std::ostream& out);
+	bool ListFormation(std::shared_ptr<Node>& nd, const std::string& s, std::ostream& out);
 	IntBoolPair ExtractValueForListFormation(const std::string& s, size_t* ind);
 	std::string ExtractBracketsValue(const std::string& s, size_t* ind);
 	void operator<<(std::ostream& out);
 
-	
 private:
 	IntBoolPair CheckVariable(std::string& VariableName);
 
