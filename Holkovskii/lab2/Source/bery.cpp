@@ -122,46 +122,67 @@ void mkNode(Node* & point, const std::string & str, const std::map<std::string,b
 	point->argv = std::make_pair(arg1, arg2);//сохранение дочерних узлов в родительском
 }
 
+std::map<std::string, bool>* mkDict(std::istream& in)
+{
+	std::map<std::string, bool>* dict = new std::map<std::string, bool>();
+	std::string s, key = "";
+	std::getline(in,s);
+	long long val;
+	if(s.size()<2)
+	{
+		std::cout << "Wrong format dictionary" << std::endl;
+		return 0;
+	}
+	s.erase(s.begin());
+	s.erase(s.end()-1);
+	int tmp = 0;
+	for(size_t i = 0; i < s.size(); ++i)
+		if (s[i] == '(')
+			tmp++;
+	for(int i = 0; i < tmp; ++i)
+	{
+		int k = 1;
+		std::string tmp_s = "";
+		while(s[k] != ' ')
+			tmp_s += s[k++];
+		k++;
+		key = tmp_s;
+		tmp_s = "";
+		while(s[k] != ')')
+			tmp_s += s[k++];
+		try
+		{
+			val = stoll(tmp_s);
+		}
+		catch(std::invalid_argument)
+		{
+			std::cout << "Something wrong with dict!" << std::endl;
+			return 0;
+		}
+		catch(std::out_of_range)
+		{
+			std::cout << "So long for me!" << std::endl;
+			return 0;
+		}
+		dict->insert({key, val});
+		s.erase(0, ++k);
+	}
+	return dict;
+}
+
 int main(int argc, char* argv[]){
 	if(argc == 1)
 	{
-		std::map<std::string,bool> dict;
-		std::string s, key = "";
-		int val;
 		std::cout << "Введите список значений переменных" << std::endl;
-		std::getline(std::cin, s);
-		if(s.size()<2)
-		{
-			std::cout << "Wrong format dictionary" << std::endl;
-			return 0;
-		}
-		s.erase(s.begin());
-		s.erase(s.end()-1);
-		int tmp = 0;
-		for(size_t i = 0; i < s.size(); ++i)
-			if (s[i] == '(')
-				tmp++;
-		for(int i = 0; i < tmp; ++i)
-		{
-			int k = 1;
-			std::string tmp_s = "";
-			while(s[k] != ' ')
-				tmp_s += s[k++];
-			k++;
-			key = tmp_s;
-			tmp_s = "";
-			while(s[k] != ')')
-				tmp_s += s[k++];
-			val = stoi(tmp_s);
-			dict.insert({key, val});
-			s.erase(0, ++k);
-		}
+		std::map<std::string, bool>* dict = mkDict(std::cin);
 		std::cout << "Введите выражение" << std::endl;
+		std::string s;
 		std::getline(std::cin, s);
 		Node* point = new Node;
-		mkNode(point, s, dict);
+		mkNode(point, s, *dict);
 		std::cout << point->evaluate() << std::endl;
 		delete point;
+		delete dict;
 	}
 	else
 	{
@@ -175,44 +196,18 @@ int main(int argc, char* argv[]){
 			std::cout << argv[1] << "is empty File" << std::endl;
 			return 0;
 		}
-		std::map<std::string,bool> dict;
-		std::string s, key="";
-                int val;
-                std::getline(in, s);
-		if(s.size()<2)
-		{
-			std::cout << "Wrong format dictionary" << std::endl;
-			return 0;
-		}
-                s.erase(s.begin());
-                s.erase(s.end()-1);
-                int tmp = 0;
-                for(size_t i = 0; i < s.size(); ++i)
-                        if (s[i] == '(')
-                                tmp++;
-                for(int i = 0; i < tmp; ++i)
-                {
-                        int k = 1;
-                        std::string tmp_s = "";
-                        while(s[k] != ' ')
-                                tmp_s += s[k++];
-                        k++;                                                                                                                                                                                                               key=tmp_s;
-                        tmp_s = "";
-                        while(s[k] != ')')
-                                tmp_s += s[k++];
-                        val = stoi(tmp_s);
-                        dict.insert({key, val});
-                        s.erase(0, ++k);
-                }
+		std::map<std::string,bool>* dict = mkDict(in);
+		std::string s;
 		std::getline(in, s);
 		Node* point = new Node;
 		std::cout<<"Для значений: "<<std::endl;
-		for(auto tr = dict.begin();tr != dict.end(); ++tr)
+		for(auto tr = dict->begin();tr != dict->end(); ++tr)
 			std::cout << tr->first << " : " << tr->second << std::endl;
 		std::cout << "И для выражения: " << s << std::endl;
-		mkNode(point, s, dict);
+		mkNode(point, s, *dict);
 		std::cout << "Ответ: " << point->evaluate() << std::endl;
 		delete point;
+		delete dict;
 	}
 	return 0;
 }
