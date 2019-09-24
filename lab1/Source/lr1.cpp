@@ -121,24 +121,27 @@ void RecF(vector<int>& vectorin, string* vectorout, int ident, int length) {
 
 
 
-int is_alldigits(vector<string> is_digits){//проверяет все ли числа в строке
+int is_alldigits(vector<string> is_digits){//передае вектор из чисел
 
-	//istringstream ss{ is_digits };
-      	//vector<string> istr_digit;
-      	//istr_digit.assign(istream_iterator<string>{s1},{});
+	vector <string> :: iterator it1= is_digits.begin();
 	int flag = 1;
-      	for(int i = 0; i < is_digits.size(); i++)//0 если не число
-        	if(is_digits[i][0] != '-'){
-                	for(int j = 0; j < is_digits[i].length(); j++)
-                        	if(isdigit(is_digits[i][j]) == 0)
-                                	flag = 0;
-                }
-       		else{
-                        for(int j = 1; j < is_digits[i].length(); j++)
-                        	if(isdigit(is_digits[i][j]) == 0)
-                                        flag = 0;
-                }
-	
+      	
+	while(it1 != is_digits.end() ){
+
+		string::iterator it2 = (*it1).begin();
+
+		if(*it2 == '-')
+			it2++;
+
+		while(it2 != (*it1).end() && isdigit(*it2) ) ++it2;
+		
+		if(it2 != (*it1).end()){
+			flag = 0;
+			break;
+		}
+				
+		it1++;
+	}
 	return flag;
 
 }
@@ -189,19 +192,20 @@ int main() {
 
 					cout<<"Данные во вновь обрабатываемой строке введены некорректно"<<endl;
 					fout<<"Данные во вновь обрабатываемой строке введены некорректно";
-
-					break;
+					fout<<"\n";
+				//	break;
 				}
-
-				istringstream s2{ str };
-				vector<int> vector_inp;
-				vector_inp.assign(istream_iterator<int>{s2}, {});//istream_iterator описывает обЪект итератора ввода, assign в классе vector  обобщенная функция
-				RecF(vector_inp, &vector_out, ident, vector_inp.size());
-				cout << vector_out << endl;
-				fout<<vector_out;
-				fout<<"\n";
+				else{
+					istringstream s2{ str };
+					vector<int> vector_inp;
+					vector_inp.assign(istream_iterator<int>{s2}, {});//istream_iterator описывает обЪект итератора ввода, assign в классе vector  обобщенная функция
+					RecF(vector_inp, &vector_out, ident, vector_inp.size());
+					cout << vector_out << endl;
+					fout<<vector_out;
+					fout<<"\n";
 				
-				vector_out = "";
+					vector_out = "";
+				}
 		
 			}
 			
@@ -238,19 +242,21 @@ int main() {
                                         cout<<"Данные во вновь обрабатываемой строке введены некорректно"<<endl;
 					fout<<"Данные во вновь обрабатываемой строке введены некорректно";
 
-                                        break;
+                                       // break;
                                 }
+				else{
 
-			istringstream s2{ str };
-			vector<int> vector_inp;
-			vector_inp.assign(istream_iterator<int>{s2}, {});
+					istringstream s2{ str };
+					vector<int> vector_inp;
+					vector_inp.assign(istream_iterator<int>{s2}, {});
 
-			RecF(vector_inp, &vector_out, ident, vector_inp.size());
-			cout << vector_out << endl;
-			fout<<vector_out;
-                        fout<<"\n";
+					RecF(vector_inp, &vector_out, ident, vector_inp.size());
+					cout << vector_out << endl;
+					fout<<vector_out;
+                        		fout<<"\n";
 
-			vector_out = "";
+					vector_out = "";
+				}
 
 		}
 
