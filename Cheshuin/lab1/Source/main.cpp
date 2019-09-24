@@ -15,7 +15,7 @@ enum types{
 
 int dialog();
 void cliHandler(int argc, char** argv);
-int readCommand(void);
+int readCommand();
 bool parse(types type, string& str);
 bool typeIsEq(char chr, types type);
 string typeToStr(types type);
@@ -37,7 +37,7 @@ bool parse(types type, string& str){
 
     static int deep = 0;
     static int instanceCount = 0;
-    int instanceNum;
+    int instanceNum = 0;
 
     if(deep == 0){
         position = 0;
@@ -169,8 +169,8 @@ string typeToStr(types type){
     return "Unknown type";
 }
 
-int dialog(void){
-    int command;
+int dialog(){
+    int command = 0;
     string expression;
     string filePath;
     ifstream inputFile;
@@ -241,10 +241,11 @@ int dialog(void){
     }
 }
 
-int readCommand(void){
+int readCommand(){
     string command;
 
     while(true){
+
         cin.clear();
         getline(cin, command);
 
