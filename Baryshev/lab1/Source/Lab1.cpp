@@ -23,7 +23,7 @@ void report(char* logst, const char ReportString[]){
 }
 
 void copy_string(char* str1, char* str2){
-	for(int i = 0; i < strlen(str2); i++)
+	for(int i = 0; i < (int)strlen(str2); i++)
 		str1[i] = str2[i];
 	str1[strlen(str2)] = '\0';
 }
@@ -31,7 +31,7 @@ void copy_string(char* str1, char* str2){
 int calculate_operation(char* logst){
 	char buf[10];
 	int count = 0;
-	for(int i = 0; i < strlen(logst); i++){
+	for(int i = 0; i < (int)strlen(logst); i++){
 		buf[i] = logst[i];
 		count++;
 		if(logst[i + 1] == '('){
@@ -40,7 +40,7 @@ int calculate_operation(char* logst){
 		}
 	}
 	if(strcmp(buf, array[2]) == 0){
-		for(int i = count + 1; i < strlen(logst); i++){
+		for(int i = count + 1; i < (int)strlen(logst); i++){
 			if(logst[i] == 'f')
 				return 1;
 			else
@@ -48,7 +48,7 @@ int calculate_operation(char* logst){
 		}
 	}
 	if(strcmp(buf, array[3]) == 0){
-		for(int i = count + 1; i < strlen(logst); i++){
+		for(int i = count + 1; i < (int)strlen(logst); i++){
 			if(logst[i] == 't'){
 				return 1;
 			}
@@ -56,23 +56,24 @@ int calculate_operation(char* logst){
 		return 0;
 	}
 	if(strcmp(buf, array[4]) == 0){
-		for(int i = count + 1; i < strlen(logst); i++){
+		for(int i = count + 1; i < (int)strlen(logst); i++){
 			if(logst[i] == 'f'){
 				return 0;
 			}
 		}
 		return 1;
-	}	
+	}
+	return 0;
 }
 
 void put_string(char* str1, char* str2, int position, int term_simbol_pos){
 	int count = 0;
-	for(int i = position; i < strlen(str2) + position; i++){
+	for(int i = position; i < (int)strlen(str2) + position; i++){
 		str1[i] = str2[count];
 		count++;
 	}
 	count = 0;
-	for(int i = strlen(str2) + position; i < strlen(str1); i++){
+	for(int i = strlen(str2) + position; i < (int)strlen(str1); i++){
 		str1[i] = str1[term_simbol_pos + count];
 		count++;
 		if(str1[term_simbol_pos + count] == '\0'){
@@ -86,7 +87,7 @@ void calculate(char* string, int operation_pos){
 	if(operation_pos != 0){
 		char buf_last_operation[strlen(string)];
 		int count = 0;
-		for(int i = operation_pos + 1; i < strlen(string); i++){
+		for(int i = operation_pos + 1; i < (int)strlen(string); i++){
 			cout << string[i];
 			buf_last_operation[count] = string[i];
 			count++;
@@ -119,7 +120,7 @@ void  LastOperation(char* string, int position, int last_position, int last_oper
 		last_position = position - 1;
 	else
 		last_position = position;
-	for(int i = position; i < strlen(string); i++){
+	for(int i = position; i < (int)strlen(string); i++){
 		if(string[i] == '(' or string[i] == ',' or string[i] == ')'){
 			if(string[i + 1] == '\0'){
 				delta++;
@@ -140,7 +141,7 @@ void  LastOperation(char* string, int position, int last_position, int last_oper
 			count++;
 		}
 	}
-	if(position < strlen(string)){
+	if(position < (int)strlen(string)){
 		position = position + count + delta;
 		buf[count] = '\0';
 	}
