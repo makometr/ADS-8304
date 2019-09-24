@@ -1,0 +1,11 @@
+((aORb)AND(NOTcANDd))
+(abNOTabc)
+aANDb
+a
+TRUE
+(TRUEORFALSE)
+(aORTRUE)
+NOTa
+NOT(aORb)
+NOTaORa
+bORbORa
