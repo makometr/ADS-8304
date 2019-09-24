@@ -3,7 +3,6 @@
 #include <map>
 #include <algorithm>
 #include <fstream>
-#include <sstream>
 #include <map>
 
 struct Node{
@@ -153,8 +152,7 @@ int main(int argc, char* argv[]){
 			tmp_s = "";
 			while(s[k] != ')')
 				tmp_s += s[k++];
-			std::istringstream stream(tmp_s);
-			stream >> val;
+			val = stoi(tmp_s);
 			dict.insert({key, val});
 			s.erase(0, ++k);
 		}
@@ -202,8 +200,7 @@ int main(int argc, char* argv[]){
                         tmp_s = "";
                         while(s[k] != ')')
                                 tmp_s += s[k++];
-                        std::istringstream stream(tmp_s);
-                        stream >> val;
+                        val = stoi(tmp_s);
                         dict.insert({key, val});
                         s.erase(0, ++k);
                 }
