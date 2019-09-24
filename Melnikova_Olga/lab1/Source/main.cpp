@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <vector>
+#include <cctype>
 
 
 int GetRoot(int x, std::vector<int>* sets)  //для нахождения представителя, подняться вверх по родительским ссылкам до тех пор, пока не наткнемся на корень
@@ -36,6 +37,14 @@ int GetManID(std::string name, std::vector<std::string>* people, int peopleCount
 	//в цикле по people сравниваем name c people[i]. если равно, то возвращаем i
 }
 
+unsigned char IsStringOK(char* str){
+	unsigned char i = 0;
+	for(i = 0; i<strlen(str); i++){
+		if(!isalpha(str[i])) return 0;
+	}
+	return 1;
+}
+
 void ReadAndWritePeople(std::vector<std::string>* people, std::vector<int>* parents, std::vector<int>* children, int* peopleCount, int* relationsCount)
 {
 	// в цикле считываем строки
@@ -56,7 +65,7 @@ void ReadAndWritePeople(std::vector<std::string>* people, std::vector<int>* pare
 		// ищем имена в people[]
 		// если имени нет - добавить
 
-		while (name != NULL)
+		while ((name != NULL) && (IsStringOK(name)))
 		{
 			int flag = 1;
 			for(int i = 0; i < *peopleCount; i++){
