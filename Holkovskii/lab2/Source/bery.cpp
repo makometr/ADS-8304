@@ -39,14 +39,15 @@ struct Node{
 	std::variant<int, std::string> val;               //std::variant<bool,std::string> val;
 };
 
-void mkNode(Node*&, std::string const&, std::map<std::string,bool> const&);
+void mkNode(Node*&, const std::string &, const std::map<std::string,bool> &);
 
-void mkAtom(std::string const& str,int& ind,Node*& arg, std::map<std::string,bool> const& dict){
+void mkAtom(const std::string & str,int& ind,Node*& arg, const std::map<std::string,bool> & dict){
 	if (str[ind] == '(')
 	{
-		int new_ind = ind, error = 0;
+		size_t new_ind = ind;
+		int error = 0;
 		std::string new_str = "";
-		while (1)                //нахождение соот-ей ')'
+		while (new_ind != str.size())//нахождение соот-ей ')'
 		{
 			new_str += str[new_ind];
 			new_ind++;
@@ -56,6 +57,11 @@ void mkAtom(std::string const& str,int& ind,Node*& arg, std::map<std::string,boo
 				error--;
 			if (error < 0)
 				break;
+		}
+		if(error >= 0)
+		{
+			std::cout << "Wrong Expression" << std::endl;
+			exit(1);
 		}
 		new_str += str[new_ind];
 		mkNode(arg, new_str, dict);
@@ -76,7 +82,7 @@ void mkAtom(std::string const& str,int& ind,Node*& arg, std::map<std::string,boo
 	}
 }
 
-void mkNode(Node* & point, std::string const& str, std::map<std::string,bool> const& dict)
+void mkNode(Node* & point, const std::string & str, const std::map<std::string,bool> & dict)
 {
         int ind = 0;
 	Node* arg1 = new Node;
@@ -94,7 +100,7 @@ void mkNode(Node* & point, std::string const& str, std::map<std::string,bool> co
 		exit(1);
 	}
 	point->val = name_op;
-	while(str[ind] == ' ')
+	while(str[ind] == ' ' && str[ind] != '(')
 		ind++;
 	mkAtom(str, ind, arg1, dict);
 	while (str[ind] == ' ')
@@ -125,6 +131,11 @@ int main(int argc, char* argv[]){
 		int val;
 		std::cout << "Введите список значений переменных" << std::endl;
 		std::getline(std::cin, s);
+		if(s.size()<2)
+		{
+			std::cout << "Wrong format dictionary" << std::endl;
+			return 0;
+		}
 		s.erase(s.begin());
 		s.erase(s.end()-1);
 		int tmp = 0;
@@ -170,6 +181,11 @@ int main(int argc, char* argv[]){
 		std::string s, key="";
                 int val;
                 std::getline(in, s);
+		if(s.size()<2)
+		{
+			std::cout << "Wrong format dictionary" << std::endl;
+			return 0;
+		}
                 s.erase(s.begin());
                 s.erase(s.end()-1);
                 int tmp = 0;
