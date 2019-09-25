@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2019-09-04T17:21:00
+# Project created by QtCreator 2019-09-17T09:59:38
 #
 #-------------------------------------------------
 
@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = lab1
+TARGET = lab2
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -26,10 +26,12 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        mylist.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+        mylist.h
 
 FORMS += \
         mainwindow.ui
