@@ -42,49 +42,6 @@ void MainWindow::on_readFile_radioButton_clicked()
 }
 
 
-void MainWindow::on_test_pushButton_clicked()
-{
-    /*
-     * Функция тестирования. Тестовые данные считываются из папки Tests
-    */
-
-    qDebug() << "Тестирование.";
-
-    std::string expression = "";
-    dir->cd(QApplication::applicationDirPath() + "/Tests");
-    QStringList listFiles = dir->entryList(QStringList("*.txt"), QDir::Files);
-
-    for (auto fileName : listFiles) {
-        if (fileName == "." || fileName == "..")
-            continue;
-
-        qDebug();
-        qDebug() << "Тестовые данные из файла:" << fileName;
-
-        file->close();
-        file->setFileName(dir->path() + "/" + fileName);
-        file->open(QFile::ReadOnly | QFile::Text);
-        in->setDevice(file);
-
-        while (!in->atEnd()) {
-            expression = in->readLine().toStdString();
-
-            qDebug() << "__Считанное выражение__:" << expression.c_str();
-
-            std::string result = MyStack::toInfix(expression);
-            if (result != "") {
-                qDebug() << "Выражение в инфиксной форме: " << result.c_str();
-            }
-            else {
-                qDebug() << "Введенное выражение некорректно";
-            }
-
-            qDebug();
-        }
-    }
-}
-
-
 void MainWindow::on_readLineEdit_radioButton_clicked()
 {
     file->close();

@@ -1,30 +1,38 @@
 #ifndef MYSTACK_H
 #define MYSTACK_H
 
-#include <stack>
+#define QT_NO_DEBUG_OUTPUT
+
+#include <QObject>
+#include <string>
 #include <QDebug>
 
 
-class MyStack
+//перечисления для приоритета операций
+enum optype {power = 3, multiply = 2, minus = 1, plus = 1, null = 0};
+
+//Элемент стека, состоящий из выражения и приоритета этого выражения
+typedef std::pair<std::string, optype> Node;
+
+
+class MyStack : public QObject
 {
     /*
      * Класс-реализация стека, для перевода выражения из
      * постфиксной формы в инфиксную.
     */
 
-    //перечисления для приоритета операций
-    enum optype {power = 3, multiply = 2, minus = 1, plus = 1, null = 0};
-    //Элемент стека, состоящий из выражения и приоритета этого выражения
-    typedef std::pair<std::string, optype> Node;
+    Q_OBJECT
 
 public:
-    explicit MyStack();
+    explicit MyStack(QObject* parent = nullptr);
     ~MyStack();
 
     //Запрет конструктора копирования и оператора присваивания
     MyStack& operator=(const MyStack& list) = delete;
     MyStack(const MyStack& list) = delete;
 
+public slots:
     //Стандартные методы для работы со стеком
     void pop();
     void push(const Node elem);
@@ -35,7 +43,7 @@ public:
     //Статический метод для преобразования выражения с помощью стека
     static std::string toInfix(const std::string& expression);
 
-private:
+private slots:
     //статические методы для проверки на корректность символов
     static bool isDigit(const char ch);
     static bool isAlpha(const char ch);

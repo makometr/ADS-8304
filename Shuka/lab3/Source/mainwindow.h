@@ -29,8 +29,6 @@ public:
 private slots:
     void on_readFile_radioButton_clicked();
 
-    void on_test_pushButton_clicked();
-
     void on_readLineEdit_radioButton_clicked();
 
     void on_readPostfix_radioButton_clicked();

@@ -1,6 +1,6 @@
 #include "mystack.h"
 
-MyStack::MyStack()
+MyStack::MyStack(QObject* parent) : QObject(parent)
 {
     topElem = nullptr;
     sizeStack = 0;
@@ -56,7 +56,7 @@ bool MyStack::isEmpty() const
 }
 
 
-MyStack::Node MyStack::top() const
+Node MyStack::top() const
 {
     /*
      * Доступ к верхнему элементу стека
@@ -110,7 +110,15 @@ std::string MyStack::toInfix(const std::string &expression)
             continue;
         }
         else if (isDigit(elem) || isAlpha(elem)) {
-            while (elem != ' ') {
+            bool isDigitElem = isDigit(elem);
+            while (elem != ' ' && i != expression.end()) {
+                if ((isDigitElem && isAlpha(elem)) ||
+                    (!isDigitElem && !isAlpha(elem)) ||
+                    (isAlpha(elem) && (i+1) != expression.end() &&
+                      isAlpha(*(i+1)))) {
+                    qDebug() << "Error: wrong data!";
+                    return "";
+                }
                 tmpStr += elem;
                 ++i;
                 elem = *i;
@@ -185,6 +193,7 @@ std::string MyStack::toInfix(const std::string &expression)
         }
         tmpStr = "";
     }
+
     if (stack->size() == 1) {
         tmpStr = stack->top().first;
         stack->pop();
