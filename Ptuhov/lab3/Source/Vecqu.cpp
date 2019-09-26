@@ -54,7 +54,6 @@ int main(int argc, char** argv)
 
 			while (1)
 			{
-
 				std::string stringNumberValue = getStringNumberValue(currentFileString);
 				if (stringNumberValue.empty())
 					break;
@@ -67,7 +66,6 @@ int main(int argc, char** argv)
 			while (!queue.empty())
 			{
 				currentFileString += queue.front();
-
 				try
 				{
 					queue.pop();
@@ -78,7 +76,6 @@ int main(int argc, char** argv)
 					return 0;
 				}
 			}
-
 			out << currentFileString << "\r\n";
 		}
 		std::cout << "Work complete let's eat!\n";
