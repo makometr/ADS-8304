@@ -38,9 +38,9 @@ struct Node{
 	std::variant<int, std::string> val;               //std::variant<bool,std::string> val;
 };
 
-void mkNode(Node*&, const std::string &, const std::map<std::string,bool> &);
+bool mkNode(Node*&, const std::string &, const std::map<std::string,bool> &);
 
-void mkAtom(const std::string & str,int& ind,Node*& arg, const std::map<std::string,bool> & dict){
+bool mkAtom(const std::string & str,int& ind,Node*& arg, const std::map<std::string,bool> & dict){
 	if (str[ind] == '(')
 	{
 		size_t new_ind = ind;
@@ -60,10 +60,11 @@ void mkAtom(const std::string & str,int& ind,Node*& arg, const std::map<std::str
 		if(error >= 0)
 		{
 			std::cout << "Wrong Expression" << std::endl;
-			exit(1);
+			return 1;
 		}
 		new_str += str[new_ind];
-		mkNode(arg, new_str, dict);
+		if(mkNode(arg, new_str, dict))
+			return 1;
 		ind = new_ind + 1;
 	}
 	else
@@ -75,13 +76,14 @@ void mkAtom(const std::string & str,int& ind,Node*& arg, const std::map<std::str
 		if(tr == dict.end())
 		{
 			std::cout<<tmp<<" - not declared"<<std::endl;
-			exit(1);
+			return 1;
 		}
 		arg->val = tr->second;
 	}
+	return 0;
 }
 
-void mkNode(Node* & point, const std::string & str, const std::map<std::string,bool> & dict)
+bool mkNode(Node* & point, const std::string & str, const std::map<std::string,bool> & dict)
 {
         int ind = 0;
 	Node* arg1 = new Node;
@@ -96,12 +98,17 @@ void mkNode(Node* & point, const std::string & str, const std::map<std::string,b
 		std::cout << "Invalid operator!\n";
 		delete arg1;
 		delete arg2;
-		exit(1);
+		return 1;
 	}
 	point->val = name_op;
 	while(str[ind] == ' ' && str[ind] != '(')
 		ind++;
-	mkAtom(str, ind, arg1, dict);
+	if( mkAtom(str, ind, arg1, dict))
+	{
+		delete arg1;
+		delete arg2;
+		return 1;
+	}
 	while (str[ind] == ' ')
 		ind++;
 	if (str[ind] == ')')
@@ -110,16 +117,24 @@ void mkNode(Node* & point, const std::string & str, const std::map<std::string,b
 		{
 			point->argv = arg1;
 			delete arg2;
-			return;
+			return 0;
 		}
 		else
 		{
 			std::cout << "Operator does not match expression\n";
-			exit(1);
+			delete arg1;
+			delete arg2;
+			return 1;
 		}
 	}
-	mkAtom(str, ind, arg2, dict);
+	if(mkAtom(str, ind, arg2, dict))
+	{
+		delete arg1;
+		delete arg2;
+		return 1;
+	}
 	point->argv = std::make_pair(arg1, arg2);//сохранение дочерних узлов в родительском
+	return 0;
 }
 
 std::map<std::string, bool>* mkDict(std::istream& in)
@@ -179,7 +194,12 @@ int main(int argc, char* argv[]){
 		std::string s;
 		std::getline(std::cin, s);
 		Node* point = new Node;
-		mkNode(point, s, *dict);
+		if( mkNode(point, s, *dict))
+		{
+			delete point;
+			delete dict;
+			return 0;
+		}
 		std::cout << point->evaluate() << std::endl;
 		delete point;
 		delete dict;
@@ -204,7 +224,12 @@ int main(int argc, char* argv[]){
 		for(auto tr = dict->begin();tr != dict->end(); ++tr)
 			std::cout << tr->first << " : " << tr->second << std::endl;
 		std::cout << "И для выражения: " << s << std::endl;
-		mkNode(point, s, *dict);
+		if(mkNode(point, s, *dict))
+		{
+			delete point;
+			delete dict;
+			return 0;
+		}
 		std::cout << "Ответ: " << point->evaluate() << std::endl;
 		delete point;
 		delete dict;
