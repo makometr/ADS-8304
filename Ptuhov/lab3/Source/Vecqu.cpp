@@ -1,4 +1,4 @@
-﻿#include "Vecqu.h"
+#include "Header.h"
 
 using namespace vecqu;
 
@@ -24,7 +24,7 @@ std::string getStringNumberValue(std::string& currentFileString)
 
 int main(int argc, char** argv)
 {
-	Queue<long long> queue;
+	Queue<std::string> queue;
 
 	if (argc > 2)
 	{
@@ -59,25 +59,14 @@ int main(int argc, char** argv)
 				if (stringNumberValue.empty())
 					break;
 
-				long long numberValue = 0;
-				try
-				{
-					numberValue = stoll(stringNumberValue);
-				}
-				catch (std::out_of_range)
-				{
-					out << "Entered number is out of range. Try to change input data";
-					break;
-				}
-
-				queue.push(numberValue);
-				std::cout << numberValue << " ";
+				queue.push(stringNumberValue);
+				std::cout << stringNumberValue << " ";
 			}
 			std::cout << std::endl << std::endl;
 
 			while (!queue.empty())
 			{
-				currentFileString += std::to_string(queue.front());
+				currentFileString += queue.front();
 
 				try
 				{
@@ -86,6 +75,7 @@ int main(int argc, char** argv)
 				catch (std::out_of_range& e)
 				{
 					std::cout << e.what() << std::endl;
+					return 0;
 				}
 			}
 
