@@ -9,7 +9,7 @@
 namespace vecqu
 {
 	template <typename T>
-	T* resize(T* const& data, size_t old_size, size_t new_size)
+	T* resize(T*& data, size_t old_size, size_t new_size)
 	{
 		T* new_data = new T[new_size];
 		for (size_t i = 0; i < old_size; i++)
@@ -50,7 +50,7 @@ namespace vecqu
 			return size_;
 		}
 
-		void push_back(T pushArg)
+		void push_back(T const& pushArg)
 		{
 			size_++;
 			if (size_ >= capacity_)
@@ -89,7 +89,7 @@ namespace vecqu
 	public:
 		Queue() = default;
 
-		void push(T pushArg)
+		void push(T const& pushArg)
 		{
 			queue_.push_back(pushArg);
 		}
