@@ -25,7 +25,7 @@ namespace vecqu
 	public:
 		Vector() = default;
 
-		Vector(size_t size_) : size_(10), capacity_(20), data_(new T[capacity_])
+		Vector(size_t size) : size_(0), capacity_(size), data_(new T[size])
 		{ }
 
 		~Vector()
