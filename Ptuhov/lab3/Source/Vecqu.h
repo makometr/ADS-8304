@@ -58,8 +58,9 @@ namespace vecqu
 			size_++;
 			if (size_ >= capacity_)
 			{
-				data_ = resize(data_, capacity_, capacity_ + 10);
-				capacity_ += 10;
+				size_t newVectorCapacity = capacity_ + 10;
+				data_ = resize(data_, capacity_, newVectorCapacity);
+				capacity_ = newVectorCapacity;
 			}
 
 			data_[size_ - 1] = pushArg;
