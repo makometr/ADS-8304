@@ -2,14 +2,14 @@
 
 using namespace vecqu;
 
-std::string getStringNumberValue(std::string& currentFileString)
+std::string getStringNumberValue(std::string& currentFileString, stringIteratorsPair& numberIt)
 {
 	auto numberBegin = std::find_if(currentFileString.begin(), currentFileString.end(),
 		[](char currentCheckElement) {return std::isdigit(currentCheckElement); });
 	if (numberBegin == currentFileString.end())
 		return "";
 
-	std::string stringNumberValue = "";
+	std::string stringNumberValue;
 	auto numberEnd = numberBegin;
 
 	while (numberEnd != currentFileString.end() && isdigit(*numberEnd))
@@ -17,7 +17,7 @@ std::string getStringNumberValue(std::string& currentFileString)
 		stringNumberValue += *numberEnd;
 		numberEnd++;
 	}
-	currentFileString.erase(numberBegin, numberEnd);
+	numberIt = std::make_pair(numberBegin, numberEnd);
 
 	return stringNumberValue;
 }
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 			return 0;
 		}
 
-		std::string currentFileString = "";
+		std::string currentFileString;
 
 		while (std::getline(in, currentFileString))
 		{
@@ -54,9 +54,12 @@ int main(int argc, char** argv)
 
 			while (1)
 			{
-				std::string stringNumberValue = getStringNumberValue(currentFileString);
+				stringIteratorsPair numberIt;
+				std::string stringNumberValue = getStringNumberValue(currentFileString, numberIt);
+
 				if (stringNumberValue.empty())
 					break;
+				currentFileString.erase(numberIt.first, numberIt.second);
 
 				queue.push(stringNumberValue);
 				std::cout << stringNumberValue << " ";
@@ -66,15 +69,7 @@ int main(int argc, char** argv)
 			while (!queue.empty())
 			{
 				currentFileString += queue.front();
-				try
-				{
-					queue.pop();
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					return 0;
-				}
+				queue.pop();
 			}
 			out << currentFileString << "\r\n";
 		}

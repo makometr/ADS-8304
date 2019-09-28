@@ -5,6 +5,9 @@
 #include <fstream>
 #include <cctype>
 #include <algorithm>
+#include <map>
+
+using stringIteratorsPair = std::pair<std::string::iterator, std::string::iterator>;
 
 namespace vecqu
 {
