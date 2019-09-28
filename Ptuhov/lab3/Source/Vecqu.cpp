@@ -2,7 +2,7 @@
 
 using namespace vecqu;
 
-std::string getStringNumberValue(std::string& currentFileString, stringIteratorsPair& numberIt)
+std::string getStringNumberValue(std::string const& currentFileString, stringIteratorsPair& numberIt)
 {
 	auto numberBegin = std::find_if(currentFileString.begin(), currentFileString.end(),
 		[](char currentCheckElement) {return std::isdigit(currentCheckElement); });
