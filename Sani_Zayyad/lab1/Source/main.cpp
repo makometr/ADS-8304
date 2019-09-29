@@ -1,43 +1,42 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-using namespace std;
 
 //declaration of Functions
 void ProceedInput();
-string ReadFromConsole();
-void ReadFromFile(string filename);
-bool checkValidity(string str);
-string notFunction(string str);
-bool expression(string str, int pointer);
-void calculate(string input);
+std::string ReadFromConsole();
+void ReadFromFile(std::string filename);
+bool checkValidity(std::string str);
+std::string notFunction(std::string str);
+bool expression(std::string str, int pointer);
+void calculate(std::string input);
 
 //this is the starting point of the progran
 // it asks user to select input option and uses the input to calculate the logic
 void ProceedInput()
 {
     //dialog
-    cout << "> Lab work #1" << endl;
-    cout << "> Choose your input" << endl;
-    cout << "> 0 - from console" << endl;
-    cout << "> 1 - from file default file (input.txt)" << endl;
-    cout << "> 2 - from custom file" << endl;
-    cout << "> Any other key to Exit!" << endl;
+    std::cout << "> Lab work #1" << std::endl;
+    std::cout << "> Choose your input" << std::endl;
+    std::cout << "> 0 - from console" << std::endl;
+    std::cout << "> 1 - from file default file (input.txt)" << std::endl;
+    std::cout << "> 2 - from custom file" << std::endl;
+    std::cout << "> Any other key to Exit!" << std::endl;
 
     int command = 0;
     //command input
-    cin >> command;
-    cin.ignore();
+    std::cin >> command;
+    std::cin.ignore();
 
     //default test file path
-    string FilePath = "/Users/sanizayyad/Documents/input.txt";
-    string input;
+    std::string FilePath = "/Users/sanizayyad/Documents/input.txt";
+    std::string input;
 
     // I used switch statement to trigger the action base on the dialog
     switch (command)
     {
     case 0:
-        cout << "> Your input: ";
+        std::cout << "> Your input: ";
         input = ReadFromConsole();
         calculate(input);
         break;
@@ -45,30 +44,30 @@ void ProceedInput()
         ReadFromFile(FilePath);
         break;
     case 2:
-        cout << "> FilePath: ";
-        cin >> FilePath;
+        std::cout << "> FilePath: ";
+        std::cin >> FilePath;
         ReadFromFile(FilePath);
         break;
     default:
-        cout << "GOODBYE!";
+        std::cout << "GOODBYE!";
     }
 }
 // this function basically just get input from the console
-string ReadFromConsole()
+std::string ReadFromConsole()
 {
-    string input;
-    getline(cin, input);
+    std::string input;
+    std::getline(std::cin, input);
     return input;
 }
 //this function iterates the lines of the file and trigger calculate on every line as input
-void ReadFromFile(string filename)
+void ReadFromFile(std::string filename)
 {
-    ifstream file;
+    std::ifstream file;
     file.open(filename);
 
     if (file.is_open())
     {
-        cout << "Reading from file:"
+        std::cout << "Reading from file:"
              << "\n";
 
         int super_count = 0;
@@ -76,21 +75,21 @@ void ReadFromFile(string filename)
         while (!file.eof())
         {
             super_count++;
-            string str;
+            std::string str;
             getline(file, str);
-            cout << "test #" << super_count << " \"" + str + "\""
+            std::cout << "test #" << super_count << " \"" + str + "\""
                  << "\n";
             calculate(str);
         }
     }
     else
     {
-        cout << "File not opened";
+        std::cout << "File not opened";
     }
     file.close();
 }
 // checking if the brackets are balanced
-bool checkValidity(string str)
+bool checkValidity(std::string str)
 {
     int balanceBracket = 0;
     int i = 0;
@@ -106,7 +105,7 @@ bool checkValidity(string str)
     return false;
 }
 //the main recursive function to check expression
-bool expression(string str, int pos)
+bool expression(std::string str, int pos)
 {
     if (str == "TRUE")
         return true;
@@ -121,7 +120,7 @@ bool expression(string str, int pos)
     {
         pos++;
         bool a, b;
-        string exp_1, exp_2, sign;
+        std::string exp_1, exp_2, sign;
 
         //I splitted the expression three which means for every expression there's
         //expression1 Sign expression2//
@@ -148,17 +147,17 @@ bool expression(string str, int pos)
         exp_1 = str.substr(pos, tmp);
         //if there's a Not statement in expression1
         //we call notFunction to calculate the NOT(logic)
-        if (exp_1.find("NOT") != string::npos)
+        if (exp_1.find("NOT") != std::string::npos)
         {
             exp_1 = notFunction(exp_1);
         }
         //////SIGN
-        string tmpStr = str.substr(tmp + 2);
+        std::string tmpStr = str.substr(tmp + 2);
         int tmp_2 = tmpStr.find(" ");
         sign = tmpStr.substr(0, tmp_2);
         ////expression 2
         exp_2 = tmpStr.substr(tmp_2 + 1, tmpStr.size() - tmp_2 - 2);
-        if (exp_2.find("NOT") != string::npos)
+        if (exp_2.find("NOT") != std::string::npos)
         {
             exp_2 = notFunction(exp_2);
         }
@@ -176,15 +175,15 @@ bool expression(string str, int pos)
     }
 }
 //this returns the negation of a logic.
-string notFunction(string str)
+std::string notFunction(std::string str)
 {
     int tmp = str.find("NOT");
-    string tmp_expression = str.substr(tmp + 3, str.size());
+    std::string tmp_expression = str.substr(tmp + 3, str.size());
     int tmp_closing = tmp_expression.find(")");
     tmp_expression = tmp_expression.substr(0, tmp_closing);
     bool before;
 
-    if (tmp_expression.find(" ") != string::npos)
+    if (tmp_expression.find(" ") != std::string::npos)
     {
         before = expression(tmp_expression, 0);
     }
@@ -194,20 +193,20 @@ string notFunction(string str)
         before = expression(tmp_expression, 0);
     }
 
-    string notExp = before == true ? "NOT(TRUE)" : "NOT(FALSE)";
+    std::string notExp = before == true ? "NOT(TRUE)" : "NOT(FALSE)";
     return notExp;
 }
-void calculate(string input)
+void calculate(std::string input)
 {
     if (checkValidity(input) && !input.empty())
     {
         if (expression(input, 0) == true)
-            cout << "TRUE" << endl;
+            std::cout << "TRUE" << std::endl;
         else
-            cout << "FALSE" << endl;
+            std::cout << "FALSE" << std::endl;
     }
     else
-        cout << "\t ERROR!!!" << endl;
+        std::cout << "\t ERROR!!!" << std::endl;
 }
 
 int main()
