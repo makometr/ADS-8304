@@ -1,0 +1,4 @@
+#! /bin/bash
+make
+./lab1 Tests/test.txt
+./lab1 Tests/wrong.txt
