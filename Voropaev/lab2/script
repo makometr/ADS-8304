@@ -1,0 +1,10 @@
+#! /bin/bash
+make
+./lab2 Tests/t1
+echo "__________________________"
+./lab2 Tests/t2
+echo "__________________________"
+./lab2 Tests/t3
+echo "__________________________"
+rm -f lab2
+make clean
