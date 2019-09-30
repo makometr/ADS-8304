@@ -7,20 +7,24 @@ Stack<type>::Stack(size_t max_size) {
     st = new type[max_size + 2];
     len = 0;
 }
+
 template <class type>
 Stack<type>::~Stack() {
     delete [] st;
     st = nullptr;
 }
+
 template <class type>
 void Stack<type>::push(type elem) {
     st[len] = elem;
     len++;
 }
+
 template <class type>
 type Stack<type>::pop() {
     return st[--len];
 }
+
 template <class type>
 bool Stack<type>::isEmpty() {
     return len == 0;
