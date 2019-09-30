@@ -1,5 +1,4 @@
-#ifndef LAB2_H
-#define LAB2_H
+#pragma once
 #include <algorithm>
 #include <sstream>
 struct s_expr;
@@ -23,7 +22,7 @@ void read_s_expr(char prev, lisp& y, std::stringstream& s);
 void read_seq(lisp& y, std::stringstream& s);
 
 
-bool isAtom(lisp const s) {
+bool is_atom(lisp const s) {
     if (s == nullptr)
         return false;
     return s->tag;
@@ -31,7 +30,7 @@ bool isAtom(lisp const s) {
 
 lisp head(const lisp s) {
     if (s != nullptr)
-        if (!isAtom(s))
+        if (!is_atom(s))
             return s->node.pair.hd;
         else {
             std::cerr << "Error: Head(atom)" << std::endl << std::endl;
@@ -45,7 +44,7 @@ lisp head(const lisp s) {
 
 lisp tail(const lisp s) {
     if (s != nullptr)
-        if (!isAtom(s))
+        if (!is_atom(s))
             return s->node.pair.tl;
         else {
             std::cerr << "Error: Tail(atom)" << std::endl << std::endl;
@@ -59,7 +58,7 @@ lisp tail(const lisp s) {
 
 void destroy(lisp s) {
     if (s != nullptr) {
-        if (!isAtom(s)) {
+        if (!is_atom(s)) {
             destroy(head(s));
             destroy(tail(s));
         }
@@ -69,7 +68,7 @@ void destroy(lisp s) {
 
 lisp cons(lisp const h, lisp const t) {
     lisp p;
-    if (isAtom(t)) {
+    if (is_atom(t)) {
         std::cerr << "Error: cons(*, atom) \n";
         exit(1);
     }
@@ -146,5 +145,3 @@ int dip(lisp const x) {
     }
     return 0;
 }
-
-#endif
