@@ -5,7 +5,7 @@ struct queue
 {
 	struct Elem
 	{
-		Elem(char new_val):val(new_val),next(nullptr){}
+		Elem(char new_val): val(new_val), next(nullptr){}
 		~Elem(){
 			delete next;
 		}
