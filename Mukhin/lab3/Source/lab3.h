@@ -1,6 +1,7 @@
-#ifndef LAB3
-#define LAB3
+#pragma once
 #include <cstdlib>
+#include <fstream>
+
 template <class type>
 class Stack{
     private:
@@ -13,4 +14,3 @@ class Stack{
         type pop();
         bool isEmpty();
 };
-#endif
