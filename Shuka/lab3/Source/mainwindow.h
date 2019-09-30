@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#define QT_NO_DEBUG_OUTPUT
+
 #include <QMainWindow>
 #include <QTextStream>
 #include <QFile>
@@ -11,7 +13,7 @@
 #include <QDir>
 #include <QStringList>
 #include <string>
-#include <mystack.h>
+#include "mystack.h"
 
 
 namespace Ui {
@@ -25,6 +27,13 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+public slots:
+    static std::string toInfix(MyStack* stack, const std::string& expression);
+    static bool isSign(const char ch);
+    static bool isAlpha(const char ch);
+    static bool isDigit(const char ch);
+
 
 private slots:
     void on_readFile_radioButton_clicked();

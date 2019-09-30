@@ -2,6 +2,7 @@
 #include <QCoreApplication>
 #include <string>
 #include "../../lab3/mystack.h"
+#include "../../lab3/mainwindow.h"
 
 
 class Test_MyStack : public QObject
@@ -9,8 +10,8 @@ class Test_MyStack : public QObject
     Q_OBJECT
 
 public:
-    Test_MyStack() = default;
-    ~Test_MyStack() = default;
+    Test_MyStack();
+    ~Test_MyStack();
 
 private slots:
     void test_correct();
@@ -18,6 +19,9 @@ private slots:
 
     void test_correct_data();
     void test_incorrect_data();
+
+private:
+    MyStack* stack;
 };
 
 
@@ -37,11 +41,23 @@ void Test_MyStack::test_correct_data()
 }
 
 
+Test_MyStack::Test_MyStack()
+{
+    stack = new MyStack;
+}
+
+
+Test_MyStack::~Test_MyStack()
+{
+    delete stack;
+}
+
+
 void Test_MyStack::test_correct()
 {
     QFETCH(QString, expression);
     QFETCH(QString, result);
-    QCOMPARE(MyStack::toInfix(expression.toStdString()), result.toStdString());
+    QCOMPARE(MainWindow::toInfix(stack, expression.toStdString()), result.toStdString());
 }
 
 
@@ -64,7 +80,7 @@ void Test_MyStack::test_incorrect()
 {
     QFETCH(QString, expression);
     QFETCH(QString, result);
-    QCOMPARE(MyStack::toInfix(expression.toStdString()), result.toStdString());
+    QCOMPARE(MainWindow::toInfix(stack, expression.toStdString()), result.toStdString());
 }
 
 
