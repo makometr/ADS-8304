@@ -19,8 +19,7 @@ struct queue
 	}
 
 	bool isEmpty(){
-		if(Head == nullptr) return true;
-		return false;
+		return Head == nullptr;
 	}
 
 	void add(char new_val){
@@ -73,20 +72,19 @@ int main(int argc, char* argv[]){
 		else
 			out.open("G");
 		std::string cur_str;
-		queue* point = new queue;
+		queue point;
 		while(std::getline(in, cur_str))
 		{
 			for(size_t i = 0; i < cur_str.size() ; i++)
 				if(isdigit(cur_str[i]))
-					point->add(cur_str[i]);
+					point.add(cur_str[i]);
 			out << cur_str<< " - ";
-			if(point->isEmpty())
+			if(point.isEmpty())
 				out << "No Digit heare";
-			while(!point->isEmpty())
-				out << point->pop();
+			while(!point.isEmpty())
+				out << point.pop();
 			out << std::endl;
 		}
-		delete point;
 		std::cout << "Work is Done" << std::endl;
 	}
 	return 0;
