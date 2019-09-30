@@ -45,9 +45,9 @@ void krm::find_k(krm& p, std::string s, int& n) {
     }
 
 
-    if(!second && !first && std::get<int>(e->left->value) == std::get<int>(p.e->left->value)
-        && e->left->len == p.e->left->len
-        && std::get<int>(e->right->value) == std::get<int>(p.e->right->value)
+    if(!second && !first && std::get<int>(e->left->value) == std::get<int>(p.e->left->value)// Данное условие запускается, только если ни в левом, ни в правом плече проверяемого коромысла нет
+        && e->left->len == p.e->left->len                                                   // вложенных коромысел(за это отвечают переменный first и second). Если это условие выполнено, то запускается
+        && std::get<int>(e->right->value) == std::get<int>(p.e->right->value)               // сравнение каждого из полей исходного коромысла с коромыслом, введённым для поиска.
         && e->right->len == p.e->right->len){
         std::cout << '1' << s <<  ": Match!!!" << std::endl;
         n++;
@@ -62,7 +62,6 @@ bool krm::make_atom(std::istream& input, krm* y, int mode) {
 
     char v;
     std::string str;
-    char* ptr;
 
     while (true) {
         input >> std::noskipws >> v;
@@ -79,9 +78,9 @@ bool krm::make_atom(std::istream& input, krm* y, int mode) {
     }
 
     if(mode == 1)
-        y->e->left->len = std::strtol(str.data(), &ptr, 10);
+        y->e->left->len = std::stoi(str, nullptr);
     else if(mode == 2)
-        y->e->right->len = std::strtol(str.data(), &ptr, 10);
+        y->e->right->len = std::stoi(str, nullptr);
 
     str.clear();
 
@@ -129,11 +128,11 @@ bool krm::make_atom(std::istream& input, krm* y, int mode) {
 
     if(mode == 1){
         if (std::holds_alternative<int>(y->e->left->value))
-            y->e->left->value.emplace<int>(std::strtol(str.data(), &ptr, 10));
+            y->e->left->value.emplace<int>(std::stoi(str, nullptr));
     }
     if (mode == 2) {
         if (std::holds_alternative<int>(y->e->right->value))
-            y->e->right->value.emplace<int>(std::strtol(str.data(), &ptr, 10));
+            y->e->right->value.emplace<int>(std::stoi(str, nullptr));
         }
 
     return true;

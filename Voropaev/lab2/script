@@ -1,9 +1,12 @@
 #! /bin/bash
 make
+echo "Test #1"
 ./lab2 Tests/t1
 echo "__________________________"
+echo "Test #2"
 ./lab2 Tests/t2
 echo "__________________________"
+echo "Test #3"
 ./lab2 Tests/t3
 echo "__________________________"
 rm -f lab2
