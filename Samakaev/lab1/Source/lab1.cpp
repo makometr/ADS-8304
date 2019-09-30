@@ -3,10 +3,8 @@
 #include <fstream>
 
 
-using namespace std;
-
 //является ли начало строки оператором
-int is_operand(string s)
+int is_operand(std::string s)
 {
 	if (!s.compare(0, 3, "AND"))
 		return 3;
@@ -15,10 +13,10 @@ int is_operand(string s)
 	else return 0;
 }
 //находит позицию оператора AND или OR
-int operand_pos_search(string s)
+int operand_pos_search(std::string s)
 {
 	int len = s.length();
-	string side_str;
+	std::string side_str;
 	int n = 0;
 	for (int i = 0; i < len; i++)
 	{
@@ -34,9 +32,9 @@ int operand_pos_search(string s)
 }
 
 //основная функция
-bool is_prime_logical(string s)
+bool is_prime_logical(std::string s)
 {
-	string side_str = s;
+	std::string side_str = s;
 	int len = s.length();
 	if ((isalpha(s[0]) && len == 1) ||
 		(s == "TRUE") ||
@@ -70,63 +68,42 @@ bool is_prime_logical(string s)
 	else return false;
 }
 
-void file_input() {
-	string testfile = "C:/Users/admin/Documents/GitHub/ADS-8304/Samakaev/lab1/Tests/Test.txt";
-	
-	ifstream file;
+void file_input(char* argv) {
+
+	std::ifstream file;
+	std::string testfile = argv;
 	file.open(testfile);
-	if (!file.is_open()) 
-		std::cout << "Error! File isn't open" << endl;
-	string str;
+	if (!file.is_open())
+		std::cout << "Error! File isn't open" << std::endl;
+	std::string str;
 	while (!file.eof()) {
 		getline(file, str);
 		if (is_prime_logical(str))
-			std::cout << str << "   is prime logical" << endl;
-		else std::cout << str << "   is not prime logical" << endl;
+			std::cout << str << "   is prime logical" << std::endl;
+		else std::cout << str << "   is not prime logical" << std::endl;
 	}
 	file.close();
 }
 
 void console_input()
 {
-	string s;
-	std::cout << "Enter the pattern to check" << endl;
-	cin >> s;
+	std::string s;
+	std::cout << "Enter the pattern to check" << std::endl;
+	std::cin >> s;
 	if (is_prime_logical(s))
-		std::cout << s << "   is prime logical" << endl;
-	else std::cout << s << "   is not prime logical" << endl;
+		std::cout << s << "   is prime logical" << std::endl;
+	else std::cout << s << "   is not prime logical" << std::endl;
 }
 
-void menu()
+//аргументом передаётся имя тестового файла
+int main(int argc, char** argv)
 {
-	int choice = 0;
-	std::cout << "-------------------------" << endl;
-	std::cout << "Press 1 for file input" << endl;
-	std::cout << "Press 2 for console input" << endl;
-	std::cout << "Press 3 to quit" << endl;
-	std::cout << "-------------------------" << endl;
-	cin >> choice;
-	switch (choice)
-	{
-	case 1:
-		file_input();
-		menu();
-		break;
-	case 2:
-	{
+	if (argc == 1)
 		console_input();
-		menu();
-		break;
-	}
-	case 3:
-		break;
-	default:
-		break;
-	}
-}
+	else if (argc == 2)
+		file_input(argv[1]);
+	else
+		std::cout << "too much arguments" << std::endl;
 
-int main()
-{
-	menu();
 	return 0;
 }
