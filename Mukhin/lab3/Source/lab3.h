@@ -1,5 +1,4 @@
-#ifndef LAB3
-#define LAB3
+#pragma once
 #include <cstdlib>
 template <class type>
 class Stack{
@@ -13,4 +12,3 @@ class Stack{
         type pop();
         bool isEmpty();
 };
-#endif
