@@ -13,7 +13,7 @@ struct queue
 		Elem* next;
 	};
 
-	queue():Head(nullptr){}
+	queue(): Head(nullptr){}
 	~queue(){
 		delete Head;
 	}
@@ -52,7 +52,7 @@ private:
 };
 
 int main(int argc, char* argv[]){
-	if(argc==1)
+	if(argc == 1)
 		std::cout << "Need input filename" << std::endl;
 	else
 	{
@@ -67,7 +67,7 @@ int main(int argc, char* argv[]){
 			return 0;
 		}
 		std::ofstream out;
-		if(argc==3)
+		if(argc == 3)
 			out.open(argv[2]);
 		else
 			out.open("G");
