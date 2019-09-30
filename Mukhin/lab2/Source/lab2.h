@@ -4,7 +4,7 @@
 #include <sstream>
 struct s_expr;
 
-struct two_ptr {
+struct ptr {
     s_expr* hd;
     s_expr* tl;
 };
@@ -13,8 +13,8 @@ struct s_expr {
     bool tag;
     union {
         char atom;
-        two_ptr pair;
-    } node;
+        ptr pair;
+    }node;
 };
 
 typedef s_expr* lisp;
@@ -34,25 +34,25 @@ lisp head(const lisp s) {
         if (!isAtom(s))
             return s->node.pair.hd;
         else {
-            std::cerr << "Error: Head(atom) \n";
+            std::cerr << "Error: Head(atom)" << std::endl << std::endl;
             exit(1);
         }
     else {
-        std::cerr << "Error: Head(nil) \n";
+        std::cerr << "Error: Head(nil)" << std::endl << std::endl;
         exit(1);
     }
 }
 
-lisp tail (const lisp s) {
+lisp tail(const lisp s) {
     if (s != nullptr)
         if (!isAtom(s))
             return s->node.pair.tl;
         else {
-            std::cerr << "Error: Tail(atom) \n";
+            std::cerr << "Error: Tail(atom)" << std::endl << std::endl;
             exit(1);
         }
     else {
-        std::cerr << "Error: Tail(nil) \n";
+        std::cerr << "Error: Tail(nil)" << std::endl << std::endl;
         exit(1);
     }
 }
@@ -82,7 +82,7 @@ lisp cons(lisp const h, lisp const t) {
     }
 }
 
-lisp make_atom (char const x) {
+lisp make_atom(char const x) {
     lisp s;
     s = new s_expr;
     s->tag = true;
@@ -90,11 +90,11 @@ lisp make_atom (char const x) {
     return s;
 }
 
-void read_seq (lisp& y, std::stringstream& s) {
+void read_seq(lisp& y, std::stringstream& s) {
     char x;
     lisp p1, p2;
     if (!(s >> x)) {
-        std::cerr << " ! List.Error 2 " << std::endl;
+        std::cerr << " ! List.Error 2 " << std::endl << std::endl;
         exit(1);
     }
     else {
@@ -110,9 +110,9 @@ void read_seq (lisp& y, std::stringstream& s) {
     }
 }
 
-void read_s_expr (char prev, lisp& y, std::stringstream& s) {
+void read_s_expr(char prev, lisp& y, std::stringstream& s) {
     if (prev == ')') {
-        std::cerr << " ! List.Error 1 " << std::endl;
+        std::cerr << " ! List.Error 1 " << std::endl << std::endl;
         exit(1);
     }
     else
@@ -126,11 +126,12 @@ void read_lisp(lisp& y, std::stringstream& s) {
     char x;
     do s >> x;
     while (x == ' ');
-    read_s_expr (x, y, s);
+        read_s_expr(x, y, s);
 }
 
 int dip(lisp const x) {
-    int head = 0, tail = 0;
+    int head = 0;
+    int tail = 0;
     if (x != nullptr) {
         if (x->tag) {
             if (x->node.pair.tl != nullptr) {
