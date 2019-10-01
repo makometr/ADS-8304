@@ -1,15 +1,16 @@
 #pragma once
 
-
 class Stack
 {
 public:
-    Stack():top(nullptr) {}
+    Stack() : top(nullptr)
+    {
+    }
     void push(char element)
     {
-        auto* tmp = new node_;
-        tmp->element_ = element;
-        tmp->prev_ = top;
+        auto* tmp = new Node;
+        tmp->element = element;
+        tmp->prev = top;
         top = tmp;
     }
     bool isEmpty()
@@ -18,10 +19,10 @@ public:
     }
     char pop()
     {
-        if (isEmpty()) return  -1;
-        char element = top->element_;
+        if (isEmpty()) return 0;
+        char element = top->element;
         auto* tmp = top;
-        top = top->prev_;
+        top = top->prev;
         delete tmp;
         return element;
     }
@@ -30,16 +31,15 @@ public:
         while (top)
         {
             auto* tmp = top;
-            top = top->prev_;
+            top = top->prev;
             delete tmp;
         }
     }
-
 private:
-    struct node_
+    struct Node
     {
-        char element_;
-        node_* prev_;
+        char element;
+        Node* prev;
     };
-    node_* top;
+    Node* top;
 };
