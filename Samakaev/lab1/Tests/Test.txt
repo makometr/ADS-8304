@@ -1,11 +1,11 @@
-((aORb)AND(NOTcANDd))
-(abNOTabc)
-aANDb
+((a OR b) AND (NOT c AND d))
+(a b NOT a b c)
+a AND b
 a
 TRUE
-(TRUEORFALSE)
-(aORTRUE)
-NOTa
-NOT(aORb)
-NOTaORa
-bORbORa
+(TRUE OR FALSE)
+(a OR TRUE)
+NOT a
+NOT (a OR b)
+NOT a OR a
+b OR b OR a

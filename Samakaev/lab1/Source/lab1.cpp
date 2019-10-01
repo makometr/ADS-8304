@@ -6,10 +6,10 @@
 //является ли начало строки оператором
 int is_operand(std::string s)
 {
-	if (!s.compare(0, 3, "AND"))
-		return 3;
-	else if (!s.compare(0, 2, "OR"))
-		return 2;
+	if (!s.compare(0, 5, " AND "))
+		return 5;
+	else if (!s.compare(0, 4, " OR "))
+		return 4;
 	else return 0;
 }
 //находит позицию оператора AND или OR
@@ -40,9 +40,9 @@ bool is_prime_logical(std::string s)
 		(s == "TRUE") ||
 		(s == "FALSE"))
 		return true;
-	else if (!(s.compare(0, 3, "NOT")))
+	else if (!(s.compare(0, 4, "NOT ")))
 	{
-		return is_prime_logical(side_str.erase(0, 3));
+		return is_prime_logical(side_str.erase(0, 4));
 	}
 	else if (s[0] == '(' && s[len - 1] == ')')
 	{
