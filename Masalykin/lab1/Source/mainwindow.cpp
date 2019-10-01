@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //file = new QFile;
 }
 
 MainWindow::~MainWindow()
@@ -18,7 +19,7 @@ void MainWindow::on_pushButton_2_clicked()
     QApplication::quit();
 }
 
-bool MainWindow::is_brackets(std::string inp, unsigned long long i, int br_cntr, bool flag){
+bool MainWindow::is_brackets(std::string inp, unsigned int i, int br_cntr, bool flag){
     if(i == inp.length() - 1){
         if(inp[i] == 'A'){
             return true;
@@ -27,6 +28,8 @@ bool MainWindow::is_brackets(std::string inp, unsigned long long i, int br_cntr,
             return false;
         }
     }
+    if(inp == "AA")
+        return false;
     if(inp[i] == 'A' && i != inp.length() -1 && flag)
         return false;
     if(!flag){
@@ -71,31 +74,31 @@ bool MainWindow::is_brackets(std::string inp, unsigned long long i, int br_cntr,
 
 void MainWindow::on_pushButton_clicked()
 {
-    if(is_brackets("A", 0, 0 ,false) == true){
-         if (is_brackets("(B(B(B(BA))))A", 0, 0 ,false) == true) {
-             if (is_brackets("", 0, 0 ,false) == false){
-                 if(is_brackets("AAA", 0, 0 ,false) == false){
-                     if(is_brackets("()", 0, 0 ,false) == false){
-                        if(is_brackets("(B(B(B(B(B(BA))))))(B(B(BA)))A", 0, 0 ,false) == true)
-                        QMessageBox::information(this, "Result", "Tests passed");
-                     }
-                 }
-             }
-         }
-    }
+    if(test(QApplication::applicationDirPath() + "/Tests/true_test.txt", true) &&
+            test(QApplication::applicationDirPath() + "/Tests/false_test.txt", false))
+        QMessageBox::information(this, "Test", "Tests passed");
+    else
+        QMessageBox::warning(this, "Test", "Tests not passed");
 }
 
 void MainWindow::on_pushButton_3_clicked()
 {
     res = ui->lineEdit->text().toStdString();
-    if(res == "AA"){
-        QMessageBox::warning(this, "Result", "NOT EXPRESSION");
-        return;
-    }
     if(is_brackets(res, 0, 0, false)){
         QMessageBox::information(this, "Result", "EXPRESSION");
     }
     else{
         QMessageBox::warning(this, "Result", "NOT EXPRESSION");
     }
+}
+
+bool MainWindow::test(QString way, bool expected_result){
+    QFile file(way);
+    file.open(QIODevice::ReadOnly);
+    while(!file.atEnd())
+        {
+            if(is_brackets(file.readLine().toStdString(), 0, 0, false) != expected_result)
+                return false;
+        }
+    return true;
 }
