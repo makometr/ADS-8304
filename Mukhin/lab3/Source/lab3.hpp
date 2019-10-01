@@ -1,10 +1,10 @@
 #include "lab3.h"
 #include <fstream>
-#define SPARE_MEMORY 2
 
 template <class type>
 Stack<type>::Stack(size_t max_size) {
-    st = new type[max_size + SPARE_MEMORY];
+    const int spare_memory = 2;
+    st = new type[max_size + spare_memory];
     len = 0;
 }
 
