@@ -1,4 +1,4 @@
-﻿#include <vector>
+#include <vector>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -136,24 +136,32 @@ bool isfigure(std::string str) {
 
 int main(int argc, char* argv[])
 {
-        std::string str;
-        int k = 0;
+     int choice = 0;
+	int k = 0;
+	char tmp;
+	std::string str;
 	std::ifstream input;
-		char tmp;
-		std::string proc_str = "";
-            	input.open(argv[1]);
+    	std::string proc_str = "";
+    	while(true){
+	std::cout << "  What type of test do you want to do?" << std::endl;
+    	std::cout << "        1) from the file" << std::endl;
+    	std::cout << "        2) from the console" << std::endl;
+    	std::cout << "  enter any other number to exit." << std::endl;
+    	std::cin >> choice;
+         switch (choice) {
+        case 1:
+            std::cout << "* FROM THE FILE *" << std::endl;
+            	input.open("../Tests/test.txt");
 		if (!input)
-        {
+        	{
             std::cout << "Couldnt open file" <<std::endl;
-            }
+            	}
             while(input.get(tmp)){
                 if (tmp != '\n')
                 {
                 str +=tmp;
 
                 }
-
-
 
                 else
                 {
@@ -166,6 +174,24 @@ int main(int argc, char* argv[])
                 }
             }
 
-}
+            break;
+        case 2:
+            std::cout << "* FROM THE CONSOLE *" << std::endl;
+            while (true) {
+		    
+            std::cin >> str;
+              if (isbracketsequence(str))
+			std::cout << "		" << str << " == Its bracket" << std::endl << std::endl;
+                else
+			std::cout << "		" << str << " == Its not bracket" << std::endl << std::endl;
+                str = "";
 
+            break;
+        	default:
+            std::cout << "               * EXIT *                 " << std::endl;
+            break;
+    		}
+}}
+
+}
 
