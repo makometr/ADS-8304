@@ -1,12 +1,11 @@
 #include <iostream>
 #include <fstream>
-#include "lab3.h"
 #include "lab3.hpp"
 
 int main(int argc, char* argv[]) {
     std::ifstream in(argv[1]);
     std::ofstream out(argv[2], std::ios::app);
-    int max_len = 0;
+    unsigned int max_len = 0;
     int count_string = 0;
     std::string current_line;
     while (getline(in, current_line)) {
