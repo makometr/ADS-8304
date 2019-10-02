@@ -12,7 +12,7 @@
 void IsFloat(std::string str, bool* b, int *flag1, int* flag2);
 
 bool IsInteger(std::string str, bool* b, int *flag1, int *flag2) {//рекурсивная функция, глубина которой определяется количеством цифр в числе
-	
+
 	if (!isdigit(str[0])) {
 		if ((str[0] == '.')||(str[0] == 'E')||(str[0] == '+')||(str[0] == '-')) {
 			IsFloat(str, b, flag1, flag2);
@@ -22,32 +22,33 @@ bool IsInteger(std::string str, bool* b, int *flag1, int *flag2) {//рекурс
 			*b = false;
 			return 0;
 		}
-	}
-	else if (str.length() != 1) {
-		IsInteger(str.substr(1, 100), b, flag1, flag2);
-		return 1;
 
-	}
+	}else{
+		if (str.length() != 1){ 
+			if(!IsInteger(str.substr(1, str.length()), b, flag1, flag2)) return 0;
+		}else return 1;
+	}	
+
 
 }
 
 void IsFloat(std::string str, bool* b, int* flag1, int *flag2) {//функция регулирует постановку знаков в вещественном числе
-
-	if ((!*flag1) &&(!*flag2)&& (((str[0] == '+') || (str[0] == '-')) && ((isdigit(str[1]))) || (isdigit(str[0])))) {
+	
+	if ((!*flag1) &&(!*flag2)&& ((str[0] == '+') || (str[0] == '-') || (isdigit(str[0])))) {
 		*flag1 = 1;
-		if (!IsInteger(str.substr(1, 100), b, flag1, flag2)) return;
+		if (!IsInteger(str.substr(1, str.length()), b, flag1, flag2)) return;
 	}
 	else if (*flag1 && (str[0] == '.')) {
 		*flag1 = 0;
 		*flag2 = 1;
 		*b = true;
-		if (!IsInteger(str.substr(1, 100), b, flag1, flag2)) return;
+		if (!IsInteger(str.substr(1, str.length()), b, flag1, flag2)) return;
 	}
 	
 	else if ((*flag2) && (str[0] == 'E')) {
 		*flag2 = 0;
 		*b = true;
-		if (!IsInteger(str.substr(1, 100), b, flag1, flag2)) return;
+		if (!IsInteger(str.substr(1, str.length()), b, flag1, flag2)) return;
 		}
 
 	else {
@@ -88,7 +89,8 @@ int main()
 			IsFloat(str, &b, &flag1, &flag2);//вызов функции IsFloat
 			b ? std::cout << a << ") " << str << " : True\n\n" : std::cout << a <<") " << str << " : False\n\n";
 			b = false;
-			flag1, flag2 = 0;
+			flag1 = 0;
+			flag2 = 0;
 			a++;
 		}
 		file.close();
