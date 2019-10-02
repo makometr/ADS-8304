@@ -9,10 +9,10 @@
 //целое_без_знака:: = цифра | цифра целое_без_знака
 //целое_число::=целое_без_знака | + целое_без_знака | -целое_без_знака
 
-void IsFloat(std::string str, bool* b, int *flag1, int* flag2);
+void IsFloat(std::string* str1, bool* b, int *flag1, int* flag2);
 
-bool IsInteger(std::string str, bool* b, int *flag1, int *flag2) {//рекурсивная функция, глубина которой определяется количеством цифр в числе
-	
+bool IsInteger(std::string* str1, bool* b, int *flag1, int *flag2) {//рекурсивная функция, глубина которой определяется количеством цифр в числе
+	string str = *str1;
 	if (!isdigit(str[0])) {
 		if ((str[0] == '.')||(str[0] == 'E')||(str[0] == '+')||(str[0] == '-')) {
 			IsFloat(str, b, flag1, flag2);
@@ -31,8 +31,8 @@ bool IsInteger(std::string str, bool* b, int *flag1, int *flag2) {//рекурс
 
 }
 
-void IsFloat(std::string str, bool* b, int* flag1, int *flag2) {//функция регулирует постановку знаков в вещественном числе
-
+void IsFloat(std::string* str1, bool* b, int* flag1, int *flag2) {//функция регулирует постановку знаков в вещественном числе
+	string str = *str1;
 	if ((!*flag1) &&(!*flag2)&& (((str[0] == '+') || (str[0] == '-')) && ((isdigit(str[1]))) || (isdigit(str[0])))) {
 		*flag1 = 1;
 		if (!IsInteger(str.substr(1, 100), b, flag1, flag2)) return;
