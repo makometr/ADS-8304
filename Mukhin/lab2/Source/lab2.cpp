@@ -12,10 +12,8 @@ struct ptr {
 
 struct s_expr {
     bool tag;
-    union {
-        char atom;
-        ptr pair;
-    }node;
+    char atom;
+    ptr pair;
 };
 
 typedef s_expr* lisp;
@@ -32,7 +30,7 @@ bool is_atom(lisp const s) {
 lisp head(const lisp s) {
     if (s != nullptr)
         if (!is_atom(s))
-            return s->node.pair.hd;
+            return s->pair.hd;
         else {
             std::cerr << "Error: Head(atom)" << std::endl << std::endl;
             exit(1);
@@ -46,7 +44,7 @@ lisp head(const lisp s) {
 lisp tail(const lisp s) {
     if (s != nullptr)
         if (!is_atom(s))
-            return s->node.pair.tl;
+            return s->pair.tl;
         else {
             std::cerr << "Error: Tail(atom)" << std::endl << std::endl;
             exit(1);
@@ -76,8 +74,8 @@ lisp cons(lisp const h, lisp const t) {
     else {
         p = new s_expr;
         p->tag = false;
-        p->node.pair.hd = h;
-        p->node.pair.tl = t;
+        p->pair.hd = h;
+        p->pair.tl = t;
         return p;
     }
 }
@@ -86,7 +84,7 @@ lisp make_atom(char const x) {
     lisp s;
     s = new s_expr;
     s->tag = true;
-    s->node.atom = x;
+    s->atom = x;
     return s;
 }
 
@@ -134,13 +132,13 @@ int dip(lisp const x) {
     int tail = 0;
     if (x != nullptr) {
         if (x->tag) {
-            if (x->node.pair.tl != nullptr) {
-                tail = dip(x->node.pair.tl);
+            if (x->pair.tl != nullptr) {
+                tail = dip(x->pair.tl);
             }
         }
         else {
-            head = (x->node.pair.hd != nullptr) ? dip(x->node.pair.hd) + 1 : 0;
-            tail = (x->node.pair.tl != nullptr) ? dip(x->node.pair.tl) : 0;
+            head = (x->pair.hd != nullptr) ? dip(x->pair.hd) + 1 : 0;
+            tail = (x->pair.tl != nullptr) ? dip(x->pair.tl) : 0;
         }
         return std::max(head, tail);
     }
