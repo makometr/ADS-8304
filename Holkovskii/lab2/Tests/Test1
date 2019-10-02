@@ -1,0 +1,2 @@
+((Leha 1)(Dimon 0)(Kris 1))
+(OR (AND Leha Kris)(AND Dimon Kris))
