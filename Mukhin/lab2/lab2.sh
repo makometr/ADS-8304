@@ -1,7 +1,7 @@
 #!/bin/bash
 g++ -Wall -Werror Source/lab2.cpp -o lab2
 echo -n "1) "
-./lab2 "(a(a(a)((a)a))(a(a)(a)))"
+./lab2 "((a))"
 echo -n "2) "
 ./lab2 "(a)"
 echo -n "3) "
