@@ -212,8 +212,8 @@ int main(int argc, char* argv[]) {
 		std::getline(in, s);
 		Node* point = new Node;
 		std::cout << "Для значений: " << std::endl;
-		for(auto tr = dict->begin();tr != dict->end(); ++tr) {
-			std::cout << tr->first << " : " << tr->second << std::endl;
+		for(const auto& [key_,val_]: *dict) {
+			std::cout << key_ << " : " << val_ << std::endl;
 		}
 		std::cout << "И для выражения: " << s << std::endl;
 		if(mkNode(point, s, *dict)) {
