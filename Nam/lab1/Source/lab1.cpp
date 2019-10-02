@@ -2,34 +2,34 @@
 #include <string>
 #include <fstream>
 
-// Функция, ведущая диалог с пользователем по поводу формата вывода(Сделана для того, чтобы в случае ошибки, пользователь мог ввести данные заново);
+// Г”ГіГ­ГЄГ¶ГЁГї, ГўГҐГ¤ГіГ№Г Гї Г¤ГЁГ Г«Г®ГЈ Г± ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГҐГ¬ ГЇГ® ГЇГ®ГўГ®Г¤Гі ГґГ®Г°Г¬Г ГІГ  ГўГ»ГўГ®Г¤Г (Г‘Г¤ГҐГ«Г Г­Г  Г¤Г«Гї ГІГ®ГЈГ®, Г·ГІГ®ГЎГ» Гў Г±Г«ГіГ·Г ГҐ Г®ГёГЁГЎГЄГЁ, ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гј Г¬Г®ГЈ ГўГўГҐГ±ГІГЁ Г¤Г Г­Г­Г»ГҐ Г§Г Г­Г®ГўГ®);
 std::string outDialog(int option);
 
-// Функция, ведущая диалог с пользователем по поводу формата ввода(Сделана для того, чтобы в случае ошибки, пользователь мог ввести данные заново);
+// Г”ГіГ­ГЄГ¶ГЁГї, ГўГҐГ¤ГіГ№Г Гї Г¤ГЁГ Г«Г®ГЈ Г± ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГҐГ¬ ГЇГ® ГЇГ®ГўГ®Г¤Гі ГґГ®Г°Г¬Г ГІГ  ГўГўГ®Г¤Г (Г‘Г¤ГҐГ«Г Г­Г  Г¤Г«Гї ГІГ®ГЈГ®, Г·ГІГ®ГЎГ» Гў Г±Г«ГіГ·Г ГҐ Г®ГёГЁГЎГЄГЁ, ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гј Г¬Г®ГЈ ГўГўГҐГ±ГІГЁ Г¤Г Г­Г­Г»ГҐ Г§Г Г­Г®ГўГ®);
 std::string InDialog(int option);
 
-// Функция, ведущая общий диалог и объединяющая введенные данные из outDialog и InDialog;
+// Г”ГіГ­ГЄГ¶ГЁГї, ГўГҐГ¤ГіГ№Г Гї Г®ГЎГ№ГЁГ© Г¤ГЁГ Г«Г®ГЈ ГЁ Г®ГЎГєГҐГ¤ГЁГ­ГїГѕГ№Г Гї ГўГўГҐГ¤ГҐГ­Г­Г»ГҐ Г¤Г Г­Г­Г»ГҐ ГЁГ§ outDialog ГЁ InDialog;
 void Dialog();
 
-// Функция, проверяющая введенную строку на наличие наших символов;
+// Г”ГіГ­ГЄГ¶ГЁГї, ГЇГ°Г®ГўГҐГ°ГїГѕГ№Г Гї ГўГўГҐГ¤ГҐГ­Г­ГіГѕ Г±ГІГ°Г®ГЄГі Г­Г  Г­Г Г«ГЁГ·ГЁГҐ Г­Г ГёГЁГµ Г±ГЁГ¬ГўГ®Г«Г®Гў;
 bool CheckInputData(std::string inputData);
 
-// Функция, выводящая результат, а так же вызывающая функцию Analyzer;
+// Г”ГіГ­ГЄГ¶ГЁГї, ГўГ»ГўГ®Г¤ГїГ№Г Гї Г°ГҐГ§ГіГ«ГјГІГ ГІ, Г  ГІГ ГЄ Г¦ГҐ ГўГ»Г§Г»ГўГ ГѕГ№Г Гї ГґГіГ­ГЄГ¶ГЁГѕ Analyzer;
 void Result(std::string _data_, std::ostream& out, int i);
 
-// Рекурсивная фунция, обрабатывающая введеную пользователем строку;
+// ГђГҐГЄГіГ°Г±ГЁГўГ­Г Гї ГґГіГ­Г¶ГЁГї, Г®ГЎГ°Г ГЎГ ГІГ»ГўГ ГѕГ№Г Гї ГўГўГҐГ¤ГҐГ­ГіГѕ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГҐГ¬ Г±ГІГ°Г®ГЄГі;
 bool Analyzer(std::string& _data_, std::ostream& out, int i);
 
 std::string outDialog(int option) {
 	std::cout << "\nChoise your output format(Press a number and after press Enter) :\n\n1)Console\n2)Your file(Write a path for your file or write name of file and it will be created in a directory with a code)\n3)Back\nYour choise: ";
 	std::string inputData;
 	std::cin >> option;
-	// Вывод с консоли;
+	// Г‚Г»ГўГ®Г¤ Г± ГЄГ®Г­Г±Г®Г«ГЁ;
 	if (option == 1)
 	{
 		return "cout";
 	}
-	// Вывод в файл;
+	// Г‚Г»ГўГ®Г¤ Гў ГґГ Г©Г«;
 	else if (option == 2)
 	{
 		std::cout << "\nInput path for your file.txt and press Enter: ";
@@ -47,7 +47,7 @@ std::string outDialog(int option) {
 		}
 		return inputData;
 	}
-	// Вернуться назад, знаю, что это не очень хорошо, но зато работает и есть возможность передумать ;) P.S.: Только много раз не нажимайте на "3";
+	// Г‚ГҐГ°Г­ГіГІГјГ±Гї Г­Г Г§Г Г¤, Г§Г­Г Гѕ, Г·ГІГ® ГЅГІГ® Г­ГҐ Г®Г·ГҐГ­Гј ГµГ®Г°Г®ГёГ®, Г­Г® Г§Г ГІГ® Г°Г ГЎГ®ГІГ ГҐГІ ГЁ ГҐГ±ГІГј ГўГ®Г§Г¬Г®Г¦Г­Г®Г±ГІГј ГЇГҐГ°ГҐГ¤ГіГ¬Г ГІГј ;) P.S.: Г’Г®Г«ГјГЄГ® Г¬Г­Г®ГЈГ® Г°Г Г§ Г­ГҐ Г­Г Г¦ГЁГ¬Г Г©ГІГҐ Г­Г  "3";
 	else if (option == 3)
 	{
 		Dialog();
@@ -57,7 +57,7 @@ std::string outDialog(int option) {
 std::string InDialog(int option)
 {
 	std::string inputData;
-	// Вввод с консоли;
+	// Г‚ГўГўГ®Г¤ Г± ГЄГ®Г­Г±Г®Г«ГЁ;
 	if (option == 1)
 	{
 		std::cout << "\nInput your string and press Enter: ";
@@ -70,7 +70,7 @@ std::string InDialog(int option)
 		else
 			return inputData;
 	}
-	// Ввод из файла;
+	// Г‚ГўГ®Г¤ ГЁГ§ ГґГ Г©Г«Г ;
 	else if (option == 2)
 	{
 		std::cout << "\nInput path for your file.txt and press Enter:";
@@ -94,9 +94,9 @@ void Dialog()
 	std::string inputData;
 	std::string outPath;
 	std::cin >> inOption;
-	// Нужно, чтобы std::getline() работал корректно;
+	// ГЌГіГ¦Г­Г®, Г·ГІГ®ГЎГ» std::getline() Г°Г ГЎГ®ГІГ Г« ГЄГ®Г°Г°ГҐГЄГІГ­Г®;
 	std::cin.ignore(); 
-	// Ввод с консоли;
+	// Г‚ГўГ®Г¤ Г± ГЄГ®Г­Г±Г®Г«ГЁ;
 	if (inOption == 1)
 	{
 		inputData = InDialog(1);
@@ -113,7 +113,7 @@ void Dialog()
 			Result(inputData, workStream, 0);
 		}
 	}
-	// Ввод из файла;
+	// Г‚ГўГ®Г¤ ГЁГ§ ГґГ Г©Г«Г ;
 	else if (inOption == 2)
 	{
 		inputData = InDialog(2);
@@ -149,13 +149,13 @@ void Dialog()
 		}
 
 	}
-	// Выход из программы;
+	// Г‚Г»ГµГ®Г¤ ГЁГ§ ГЇГ°Г®ГЈГ°Г Г¬Г¬Г»;
 	else if (inOption == 3)
 	{
 		std::cout << "Goodbye, CYA later!";
 		return;
 	}
-	// В случае неккоректной выбранной опции;
+	// Г‚ Г±Г«ГіГ·Г ГҐ Г­ГҐГЄГЄГ®Г°ГҐГЄГІГ­Г®Г© ГўГ»ГЎГ°Г Г­Г­Г®Г© Г®ГЇГ¶ГЁГЁ;
 	else
 	{
 		std::cout << "\nPlease press not like a dunmb, only four numbers're here -_-\n";
@@ -191,7 +191,6 @@ bool Analyzer(std::string& _data_, std::ostream& out, int i)
 {
 	out << std::endl << "Depth:" << i << std::endl << "String looks:" << _data_ << std::endl << "_______________________";
 	if (_data_ == "x")
-		std::cout << "qwer";
 		return 1;
 	std::size_t objA = _data_.find("A");
 	std::size_t objB = _data_.find("B");
