@@ -13,7 +13,7 @@ bool checkTreeBrackets(std::string const& stringTreeForm)
 		if (i == ')')
 			ccnt++;
 
-		//можно любое число > 0
+		//РјРѕР¶РЅРѕ РІРѕР·РІСЂР°С‰Р°С‚СЊ Р»СЋР±РѕРµ С‡РёСЃР»Рѕ > 0
 		if (ccnt > ocnt)
 			return false;
 	}
@@ -26,14 +26,14 @@ bool checkTreeBrackets(std::string const& stringTreeForm)
 
 std::string extractBracketsValue(std::string const& stringTreeForm, size_t* stringIndexPointer)
 {
-	//error - переменная необходимая для обработки данного случая (...(...)...) она позволяет получить значение 
-	//лежащее точно от уже найденной открывающей до корректной закрывающей скобки
+	//error - РїРµСЂРµРјРµРЅРЅР°СЏ РЅРµРѕР±С…РѕРґРёРјР°СЏ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё РґР°РЅРЅРѕРіРѕ СЃР»СѓС‡Р°СЏ (...(...)...) РѕРЅР° РїРѕР·РІРѕР»СЏРµС‚ РїРѕР»СѓС‡РёС‚СЊ Р·РЅР°С‡РµРЅРёРµ 
+	//Р»РµР¶Р°С‰РµРµ С‚РѕС‡РЅРѕ РѕС‚ СѓР¶Рµ РЅР°Р№РґРµРЅРЅРѕР№ РѕС‚РєСЂС‹РІР°СЋС‰РµР№ РґРѕ РєРѕСЂСЂРµРєС‚РЅРѕР№ Р·Р°РєСЂС‹РІР°СЋС‰РµР№ СЃРєРѕР±РєРё
 	int tmp_ind = *stringIndexPointer, error = 0;
 	std::string bracketsValue;
 
 	while (tmp_ind < stringTreeForm.size())
 	{
-		//запись очередного символа
+		//Р·Р°РїРёСЃСЊ РѕС‡РµСЂРµРґРЅРѕРіРѕ СЃРёРјРІРѕР»Р°
 		bracketsValue += stringTreeForm[tmp_ind];
 		tmp_ind++;
 
@@ -45,20 +45,20 @@ std::string extractBracketsValue(std::string const& stringTreeForm, size_t* stri
 			break;
 	}
 
-	//запись ')'
+	//Р·Р°РїРёСЃСЊ ')'
 	bracketsValue += stringTreeForm[tmp_ind];
 
-	//перенос индекса за выражение в скобках дял считывания второго аргумента
+	//РїРµСЂРµРЅРѕСЃ РёРЅРґРµРєСЃР° Р·Р° РІС‹СЂР°Р¶РµРЅРёРµ РІ СЃРєРѕР±РєР°С… РґСЏР» СЃС‡РёС‚С‹РІР°РЅРёСЏ РІС‚РѕСЂРѕРіРѕ Р°СЂРіСѓРјРµРЅС‚Р°
 	*stringIndexPointer = tmp_ind + 1;
 	return bracketsValue;
 }
 
 bool formTree(std::string const& stringTreeForm, std::shared_ptr<Node>& root)
 {
-	//первый символ - '(', нет необходимости его рассматривать
+	//РїРµСЂРІС‹Р№ СЃРёРјРІРѕР» - '(', РЅРµС‚ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё РµРіРѕ СЂР°СЃСЃРјР°С‚СЂРёРІР°С‚СЊ
 	size_t stringIndex = 1;
 
-	//запись имени корня
+	//Р·Р°РїРёСЃСЊ РёРјРµРЅРё РєРѕСЂРЅСЏ
 	std::string rootName;
 	while (stringIndex < stringTreeForm.size() &&
 		  (stringTreeForm[stringIndex] != '(' && stringTreeForm[stringIndex] != ')'))
@@ -72,7 +72,7 @@ bool formTree(std::string const& stringTreeForm, std::shared_ptr<Node>& root)
 	root->name = rootName;
 	//
 
-	//если был встречен конец строки, то левое и правое поддерево пустые
+	//РµСЃР»Рё Р±С‹Р» РІСЃС‚СЂРµС‡РµРЅ РєРѕРЅРµС† СЃС‚СЂРѕРєРё, С‚Рѕ Р»РµРІРѕРµ Рё РїСЂР°РІРѕРµ РїРѕРґРґРµСЂРµРІРѕ РїСѓСЃС‚С‹Рµ
 	if (stringTreeForm[stringIndex] == ')')
 	{
 		root->left = nullptr;
@@ -88,7 +88,7 @@ bool formTree(std::string const& stringTreeForm, std::shared_ptr<Node>& root)
 	if (!formLeftResult)
 		return false;
 
-	//если был встречен конец строки, то правое поддерево пустое
+	//РµСЃР»Рё Р±С‹Р» РІСЃС‚СЂРµС‡РµРЅ РєРѕРЅРµС† СЃС‚СЂРѕРєРё, С‚Рѕ РїСЂР°РІРѕРµ РїРѕРґРґРµСЂРµРІРѕ РїСѓСЃС‚РѕРµ
 	if (stringTreeForm[stringIndex] == ')')
 	{
 		root->left = leftTree;
@@ -104,12 +104,12 @@ bool formTree(std::string const& stringTreeForm, std::shared_ptr<Node>& root)
 	if (!formRightResult)
 		return false;
 
-	//проверка на корректность конечных символов
+	//РїСЂРѕРІРµСЂРєР° РЅР° РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚СЊ РєРѕРЅРµС‡РЅС‹С… СЃРёРјРІРѕР»РѕРІ
 	if (stringTreeForm[stringIndex] != ')' || stringIndex + 1 != stringTreeForm.size())
 		return false;
 	//
 
-	//формирование бинарного дерева
+	//С„РѕСЂРјРёСЂРѕРІР°РЅРёРµ Р±РёРЅР°СЂРЅРѕРіРѕ РґРµСЂРµРІР°
 	root->left = leftTree;
 	root->right = rightTree;
 	//
@@ -200,7 +200,7 @@ void checkTree(std::string& stringTreeForm, std::ostream& out)
 {
 	auto root = std::make_shared<Node>();
 
-	//удаление пробелов
+	//СѓРґР°Р»РµРЅРёРµ РїСЂРѕР±РµР»РѕРІ
 	stringTreeForm.erase(std::remove_if(stringTreeForm.begin(), stringTreeForm.end(), [](char c) {return c == ' '; }), stringTreeForm.end());
 
 	int checkBracketsResult = checkTreeBrackets(stringTreeForm);
@@ -251,7 +251,7 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
-	//для консоли
+	//РґР»СЏ РєРѕРЅСЃРѕР»Рё
 	std::string stringTreeForm;
 
 	std::cout << "Enter string: ";
