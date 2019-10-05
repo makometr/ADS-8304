@@ -2,8 +2,11 @@
 #include <string>
 #include "list.h"
 
-void IerList::readData( IerList*& y, std::string str, int& iter){
-	
+void IerList::readData( IerList*& listToMerge, std::string str, int& iter){
+
+	//смотрит символ с индексом iter, запускает собирание атома если считано число
+	//в противном случае чтение продолжается функцией readSequence
+
 	int prev = 0;
 	char lastSymbol = str[iter];
 
@@ -27,10 +30,10 @@ void IerList::readData( IerList*& y, std::string str, int& iter){
 			this->makeAtom(prev);
 		}
 	}
-	else this->readSequence(y, str, iter);
+	else this->readSequence(listToMerge, str, iter);
 } 
 
-void IerList::readSequence(IerList*& y, std::string str, int& iter){	
+void IerList::readSequence(IerList*& listToMerge, std::string str, int& iter){//чтение, установление связей между частями списка
 
 	IerList* list1,* list2;
 
@@ -48,12 +51,12 @@ void IerList::readSequence(IerList*& y, std::string str, int& iter){
 			list2 = new IerList;
 			list1->readData(list1, str, iter);
 			list2->readSequence(list2, str, iter);
-			y->merge(list1, list2);
+			listToMerge->merge(list1, list2);
 		} 
 	}
 }
 
-void IerList::printSymbol(){
+void IerList::printSymbol() const {//печать отдельных атомов
 
 	if ((this->isNull())) {
 		std::cout << " () ";
@@ -68,7 +71,7 @@ void IerList::printSymbol(){
 	}
 }
 
-void IerList::writeSequence(){
+void IerList::writeSequence() const { //рекурсивная печать списка
 
 	if (!(this->isNull())) {
 		this->getHead()->printSymbol(); 
@@ -83,11 +86,10 @@ IerList::~IerList(){
 		delete this->getHead();
 		delete this->getTail();
 	}	
-	delete this;
 }
 
 
-bool IerList::isNull(){ 
+bool IerList::isNull() const { 
 
 	if (!(this->tag) && (this->head == nullptr) && (this->tail == nullptr))
 		return true;
@@ -95,7 +97,7 @@ bool IerList::isNull(){
 }
 
 
-IerList::IerList* getHead(){
+IerList* IerList::getHead() const {
 	
 	if (!this->isNull()) 
 		if (!this->isAtom())	
@@ -109,7 +111,7 @@ IerList::IerList* getHead(){
 	}
 }
 
-IerList* IerList::getTail(){
+IerList* IerList::getTail() const {
 	
 	if (!this->isNull())
 		if (!this->isAtom())	
@@ -123,7 +125,7 @@ IerList* IerList::getTail(){
 	}
 }
 
-IerList* IerList::getTrueTail(){
+IerList* IerList::getTrueTail() const { //обычный tail всегда является списком, а эта функция достает его первый элемент
 	
 	if (!this->isNull())
 		if (!this->isAtom())
@@ -139,7 +141,7 @@ IerList* IerList::getTrueTail(){
 	}
 }
 
-int IerList::getAtom(){
+int IerList::getAtom() const {
 	if (this->isNull() || !(this->isAtom())) {
 		std::cout << "Нет атома!\n";
 		return 0;
@@ -148,7 +150,7 @@ int IerList::getAtom(){
 		return this->atom;
 }
 
-bool IerList::isAtom(){	
+bool IerList::isAtom() const {	
 
 	if (this->isNull()) 
 		return false;
@@ -158,7 +160,7 @@ bool IerList::isAtom(){
 
 
 
-void IerList::merge(IerList* head, IerList* tail){ //costruct 1ist
+void IerList::merge(IerList* head, IerList* tail){ 
 	
 	if (tail->isAtom()) { 
 		std::cerr << "Error: cons(*, atom) \n"; 
@@ -171,14 +173,14 @@ void IerList::merge(IerList* head, IerList* tail){ //costruct 1ist
 	}
 }
 
-void IerList::makeAtom(const int x){ //construct atom
+void IerList::makeAtom(const int x){ 
 
 	this->tag = true;
 	this->atom = x;
 
 }	
 
-void IerList::readList(IerList*& y, std::string str){
+void IerList::readList(IerList*& listToMerge, std::string str) { //функция-запускатор чтения списка
 	char x = '\0';
 	int iter = 0;
 	do{ 
@@ -188,16 +190,16 @@ void IerList::readList(IerList*& y, std::string str){
 		
 	}
 	while (x==' ');
-	this->readData(y, str, iter);
+	this->readData(listToMerge, str, iter);
 }
 
-void IerList::print(){
+void IerList::print() const {//функция-запускатор печатания списка
 	this->printSymbol();
 	std::cout<<"\n";
 }	
 
-bool IerList::isBalanceBeam(){
-	int res = this->goRoundBalanceBeam(false);
+bool IerList::isBalanceBeam() const {
+	int res = this->isNull() ? 1 : this->goRoundBalanceBeam(false);
 	std::string status = "";
 	switch (res){
 		case 0:
@@ -216,15 +218,15 @@ bool IerList::isBalanceBeam(){
 			status = "Не указана масса";
 			break;
 	}
-	std::cout << "Статус коромысла: " << string << "\n";
+	std::cout << "Статус коромысла: " << status << "\n";
 	return res>0? false : true;
 }	
 
-int IerList::goRoundBalanceBeam(bool isInShoulder){	
+int IerList::goRoundBalanceBeam(bool isInShoulder) const {
 
 	if (!(this->isNull()) ){
 		
-		if (!(isInShoulder)){
+		if (!(isInShoulder)){ //если не в плече, то смотрим, есть ли два вложенных списка
 			
 			if ((this->getHead() != nullptr) && !(this->getHead()->isNull()) && !(this->getHead()->isAtom())) {}//okey	
 			else return 1;//no shoulder
@@ -232,12 +234,12 @@ int IerList::goRoundBalanceBeam(bool isInShoulder){
 			if ((this->getTail() != nullptr) && !(this->getTail()->isNull()) && !(this->getTail()->isAtom())) {}//okey
 			else return 1;//no shoulder
 			
-			int res = this->getHead()->goRoundBalanceBeam(true);
+			int res = this->getHead()->goRoundBalanceBeam(true); //запуск анализа левого плеча
 			if (!res)
-				return this->getTrueTail()->goRoundBalanceBeam(true);
+				return this->getTrueTail()->goRoundBalanceBeam(true); //запуск анализа правого плеча
 			else return res;
 		}
-		else {
+		else { //если внутри плеча то проверка наличия длины и массы/коромысла
 			
 			if ((this->getHead() != nullptr) && !(this->getHead()->isNull()) &&(this->getHead()->isAtom()) ) {}//okey
 			else return 2;//no length
@@ -250,7 +252,7 @@ int IerList::goRoundBalanceBeam(bool isInShoulder){
 					timeToRet = true;
 				}
 				if (!(nextHead->isAtom()) && (nextList->getTail() == nullptr || nextList->getTail()->isNull())){//length and balance beam
-					return nextHead->goRoundBalanceBeam(false);
+					return nextHead->goRoundBalanceBeam(false); //запуск анализа наличия плечей вложенного коромысла
 				}
 				else if (!timeToRet){ 
 					return 3; //more then two values
@@ -262,6 +264,7 @@ int IerList::goRoundBalanceBeam(bool isInShoulder){
 				return 4; //less then two values
 		}
 	}
+	return 1;
 }	
 
 

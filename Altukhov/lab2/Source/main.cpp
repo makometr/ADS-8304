@@ -7,8 +7,7 @@ void findWeight(IerList* list, int& weight){
 	
 	std::cout << "Смотрю в список:";
 	list->print();
-
-	if ((!(list->isNull())) && ((list->getTail() == nullptr)) && list->getHead()->isAtom() ){
+	if ((!(list->isNull())) && (list->getTail()!=nullptr) && ((list->getTrueTail() == nullptr)) && list->getHead()->isAtom() ){
 		weight += list->getHead()->getAtom();
 		std::cout << "Текущий вес: " << weight << "\n";
 	}
@@ -25,27 +24,30 @@ bool isListInString(std::string str){
 	
 	std::stack <char> inputStack;
 	
-	for (int i=0; i<str.length(); i++){
+	for (unsigned int i=0; i<str.length(); i++){
 		
 		if (str[i] == '(') {
 			inputStack.push(str[i]);
 		}
 		else if (str[i] == ')') {
 			if (inputStack.empty()){
-				return false;//не хватает скобок
+				std::cout << "Не хватает открывающей скобки\n";
+				return false;
 			}
 			inputStack.pop();
 		}
 		else if (str[i] == ' ' || isdigit(str[i])) {}//skip
 		
 		else{
-			return false;//неподходящие символы
+			std::cout << "Использование запрещенных символов\n";
+			return false;
 		}
 	}
 	if (inputStack.empty()){
 		return true;
 	}
-	return false;//не хватает скобок
+	std::cout << "Не хватает закрывающей скобки\n";
+	return false;
 }
 
 int main(){
@@ -62,14 +64,17 @@ int main(){
 	
     IerList* list = new IerList;
     list->readList(list, input);
+
     check = list->isBalanceBeam();
 	if (!check){
 		delete list;
 		return 0;
 	}
+
 	int weight = 0;
 	findWeight(list, weight);
 	std::cout << "Вес: " << weight <<"\n";
+
 	delete list;
     return 0;
 }

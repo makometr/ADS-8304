@@ -1,5 +1,5 @@
-#IFNDEF IER_LIST
-#DEFINE IER_LIST
+#ifndef IER_LIST
+#define IER_LIST
 
 class  IerList;
 
@@ -11,8 +11,8 @@ private:
 	IerList  *head;
 	IerList  *tail;
 	
-	void readData( IerList*& y, std::string str, int& iter);
-	void readSequence(IerList*& y, std::string str, int& iter);
+	void readData( IerList*& listToMerge, std::string str, int& iter);
+	void readSequence(IerList*& listToMerge, std::string str, int& iter);
 	void printSymbol() const;
 	void writeSequence() const;
 	
@@ -33,7 +33,7 @@ public:
 	
 	void merge(IerList* head, IerList* tail);
 
-	void readList(IerList*& y, std::string str) const;
+	void readList(IerList*& listForMerge, std::string str);
 	void print() const;
 	
 	bool isBalanceBeam() const;
@@ -41,4 +41,4 @@ public:
 	
 };
 
-#ENDIF
+#endif
