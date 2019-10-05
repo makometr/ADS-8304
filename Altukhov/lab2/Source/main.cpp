@@ -54,7 +54,7 @@ int main(){
     
 	std::string input;
 	std::getline(std::cin, input );
-	
+	std::cout << "\n\n----------Введенная строка: "<< input << "\n\n";
 	bool check = isListInString(input);
 	if (!check){
 		std::cout << "Некорректный ввод\n";
