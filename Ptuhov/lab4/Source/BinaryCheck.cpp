@@ -2,7 +2,7 @@
 
 void workWithStringTreeForm(std::string& currentCheckTree, std::ostream& out)
 {
-	//удаление пробелов
+	//СѓРґР°Р»РµРЅРёРµ РїСЂРѕР±РµР»РѕРІ
 	currentCheckTree.erase(std::remove_if(currentCheckTree.begin(), currentCheckTree.end(), [](char c) {return c == ' '; }), currentCheckTree.end());
 
 	if (!checkBracketsPlacement(currentCheckTree))
@@ -11,7 +11,7 @@ void workWithStringTreeForm(std::string& currentCheckTree, std::ostream& out)
 		return;
 	}
 
-	//запись значения хранящегося в главном узле в переменную variableStringValue
+	//Р·Р°РїРёСЃСЊ Р·РЅР°С‡РµРЅРёСЏ С…СЂР°РЅСЏС‰РµРіРѕСЃСЏ РІ РіР»Р°РІРЅРѕРј СѓР·Р»Рµ РІ РїРµСЂРµРјРµРЅРЅСѓСЋ variableStringValue
 	size_t stringIndex = 1;
 	std::string variableStringValue;
 	while (currentCheckTree[stringIndex] != '(' && currentCheckTree[stringIndex] != ')' &&
@@ -22,7 +22,7 @@ void workWithStringTreeForm(std::string& currentCheckTree, std::ostream& out)
 	}
 	//
 
-	//если дерево состоит из одного узла, то в нем не может быть повторяющихся узлов
+	//РµСЃР»Рё РґРµСЂРµРІРѕ СЃРѕСЃС‚РѕРёС‚ РёР· РѕРґРЅРѕРіРѕ СѓР·Р»Р°, С‚Рѕ РІ РЅРµРј РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїРѕРІС‚РѕСЂСЏСЋС‰РёС…СЃСЏ СѓР·Р»РѕРІ
 	if (currentCheckTree[stringIndex] == ')')
 	{
 		out << "NO" << std::endl;
@@ -30,7 +30,7 @@ void workWithStringTreeForm(std::string& currentCheckTree, std::ostream& out)
 	}
 	//
 
-	//Определение типа ранее считанного значения
+	//РћРїСЂРµРґРµР»РµРЅРёРµ С‚РёРїР° СЂР°РЅРµРµ СЃС‡РёС‚Р°РЅРЅРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ
 	int variableType = getVariableType(variableStringValue);
 	switch (variableType)
 	{
@@ -77,15 +77,15 @@ bool checkBracketsPlacement(std::string const& checkString)
 
 std::string extractBracketsValue(std::string const& stringTreeForm, size_t* stringIndexPointer)
 {
-	//error - переменная необходимая для обработки данного случая (...(...)...) она позволяет получить значение 
-	//лежащее точно от уже найденной открывающей до корректной закрывающей скобки
+	//error - РїРµСЂРµРјРµРЅРЅР°СЏ РЅРµРѕР±С…РѕРґРёРјР°СЏ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё РґР°РЅРЅРѕРіРѕ СЃР»СѓС‡Р°СЏ (...(...)...) РѕРЅР° РїРѕР·РІРѕР»СЏРµС‚ РїРѕР»СѓС‡РёС‚СЊ Р·РЅР°С‡РµРЅРёРµ 
+	//Р»РµР¶Р°С‰РµРµ С‚РѕС‡РЅРѕ РѕС‚ СѓР¶Рµ РЅР°Р№РґРµРЅРЅРѕР№ РѕС‚РєСЂС‹РІР°СЋС‰РµР№ РґРѕ РєРѕСЂСЂРµРєС‚РЅРѕР№ Р·Р°РєСЂС‹РІР°СЋС‰РµР№ СЃРєРѕР±РєРё
 	size_t tmp_ind = *stringIndexPointer;
 	int error = 0;
 	std::string bracketsValue;
 
 	while (1)
 	{
-		//запись очередного символа
+		//Р·Р°РїРёСЃСЊ РѕС‡РµСЂРµРґРЅРѕРіРѕ СЃРёРјРІРѕР»Р°
 		bracketsValue += stringTreeForm[tmp_ind];
 		tmp_ind++;
 
@@ -97,10 +97,10 @@ std::string extractBracketsValue(std::string const& stringTreeForm, size_t* stri
 			break;
 	}
 
-	//запись ')'
+	//Р·Р°РїРёСЃСЊ ')'
 	bracketsValue += stringTreeForm[tmp_ind];
 
-	//перенос индекса за выражение в скобках дял считывания второго аргумента
+	//РїРµСЂРµРЅРѕСЃ РёРЅРґРµРєСЃР° Р·Р° РІС‹СЂР°Р¶РµРЅРёРµ РІ СЃРєРѕР±РєР°С… РґСЏР» СЃС‡РёС‚С‹РІР°РЅРёСЏ РІС‚РѕСЂРѕРіРѕ Р°СЂРіСѓРјРµРЅС‚Р°
 	*stringIndexPointer = tmp_ind + 1;
 	return bracketsValue;
 }
