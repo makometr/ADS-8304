@@ -1,4 +1,0 @@
-
-#!/bin/bash
-./build_script
-./lab1 --test
