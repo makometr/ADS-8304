@@ -1,0 +1,3 @@
+lab2: Source/lab1.cpp Source/hierachy.cpp
+	g++ Source/main.cpp Source/hierachy.cpp -o lab2
+
