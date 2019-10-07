@@ -67,7 +67,7 @@ void determineTreeValuesType(std::string& currentCheckTree, std::ostream& out)
 bool checkBracketsPlacement(std::string const& checkString)
 {
 	if (*checkString.begin() != '(' || *(checkString.end() - 1) != ')')
-		return 0;
+		return false;
 
 	//ocnt - open cnt, ccnt - close cnt
 	size_t ocnt = 0;
@@ -149,7 +149,7 @@ int main(int argc, char** argv)
 			if (!checkBracketsPlacement(currentCheckTree))
 			{
 				out << "Hmm, uncorect brackets statement\n";
-				return 0;
+				continue;
 			}
 
 			determineTreeValuesType(currentCheckTree, out);
