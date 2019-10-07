@@ -18,7 +18,7 @@ private:
 	
 public:
 
-	IerList();
+	IerList::IerList():tag(false), head(nullptr), tail(nullptr) {}
 	~IerList();
 	
 	bool isNull() const;

@@ -35,7 +35,8 @@ void IerList::readData( IerList*& listToMerge, std::string str, int& iter){
 
 void IerList::readSequence(IerList*& listToMerge, std::string str, int& iter){//чтение, установление связей между частями списка
 
-	IerList* list1,* list2;
+	IerList* list1;
+	IerList* list2;
 
 	if (!(str[++iter])) {
 		std::cerr << " ! List.Error 2 " << "\n"; 
@@ -79,7 +80,6 @@ void IerList::writeSequence() const { //рекурсивная печать сп
 	}
 }
 
-IerList::IerList():tag(false), head(nullptr), tail(nullptr) {}
 
 IerList::~IerList(){
 	if (!(this->isNull()) && !(this->isAtom()) ){
@@ -198,10 +198,12 @@ void IerList::print() const {//функция-запускатор печата�
 	std::cout<<"\n";
 }	
 
+enum class balanceBeamStatuses {noErrors, noShoulder, noLength, excessValues, noMass};
+
 bool IerList::isBalanceBeam() const {
-	int res = this->isNull() ? 1 : this->goRoundBalanceBeam(false);
-	std::string status = "";
-	switch (res){
+	balanceBeamStatuses res = this->isNull() ? balanceBeamStatuses::noShoulder : this->goRoundBalanceBeam(false);
+	std::string status;
+	switch (static_cast<int>(res)){
 		case 0:
 			status = "Все хорошо";
 			break;
@@ -219,30 +221,30 @@ bool IerList::isBalanceBeam() const {
 			break;
 	}
 	std::cout << "Статус коромысла: " << status << "\n";
-	return res>0? false : true;
+	return static_cast<int>(res)>0? false : true;
 }	
 
-int IerList::goRoundBalanceBeam(bool isInShoulder) const {
+balanceBeamStatuses IerList::goRoundBalanceBeam(bool isInShoulder) const {
 
 	if (!(this->isNull()) ){
 		
 		if (!(isInShoulder)){ //если не в плече, то смотрим, есть ли два вложенных списка
 			
 			if ((this->getHead() != nullptr) && !(this->getHead()->isNull()) && !(this->getHead()->isAtom())) {}//okey	
-			else return 1;//no shoulder
+			else return balanceBeamStatuses::noShoulder;
 			
 			if ((this->getTail() != nullptr) && !(this->getTail()->isNull()) && !(this->getTail()->isAtom())) {}//okey
-			else return 1;//no shoulder
+			else return balanceBeamStatuses::noShoulder;
 			
-			int res = this->getHead()->goRoundBalanceBeam(true); //запуск анализа левого плеча
-			if (!res)
+			balanceBeamStatuses res = this->getHead()->goRoundBalanceBeam(true); //запуск анализа левого плеча
+			if (res == balanceBeamStatuses::noErrors)
 				return this->getTrueTail()->goRoundBalanceBeam(true); //запуск анализа правого плеча
 			else return res;
 		}
 		else { //если внутри плеча то проверка наличия длины и массы/коромысла
 			
 			if ((this->getHead() != nullptr) && !(this->getHead()->isNull()) &&(this->getHead()->isAtom()) ) {}//okey
-			else return 2;//no length
+			else return balanceBeamStatuses::noLength;
 			
 			if ((this->getTail() != nullptr) && !(this->getTail()->isNull()) && (this->getTail() != nullptr)){
 				IerList* nextList = this->getTail();
@@ -255,16 +257,16 @@ int IerList::goRoundBalanceBeam(bool isInShoulder) const {
 					return nextHead->goRoundBalanceBeam(false); //запуск анализа наличия плечей вложенного коромысла
 				}
 				else if (!timeToRet){ 
-					return 3; //more then two values
+					return balanceBeamStatuses::excessValues;
 				}
 				if (timeToRet)
-					return 0;
+					return balanceBeamStatuses::noErrors;
 			}
 			else
-				return 4; //less then two values
+				return balanceBeamStatuses::noMass;
 		}
 	}
-	return 1;
+	return balanceBeamStatuses::noShoulder;
 }	
 
 
