@@ -171,31 +171,7 @@ class BinaryTree
 public:
 	BinaryTree(std::shared_ptr<Node<T>> const& root) : mainRoots(root)
 	{ }
-
-	void printTree(std::shared_ptr<Node<T>> const& root)
-	{
-		if (!root)
-			return;
-
-		if (root->left)
-			std::cout << root->value << " : " << root->left->value;
-		else
-			std::cout << root->value << " - leaf";
-
-		if (root->right)
-			std::cout << ", " << root->right->value << "\n";
-		else
-			std::cout << "\n";
-
-		if (root->value == mainRoots->value)
-			std::cout << "\nHey this a left part:\n";
-		printTree(root->left);
-
-		if (root->value == mainRoots)
-			std::cout << "\nHey this a right part:\n";
-		printTree(root->right);
-	}
-
+	
 	/*
 		findSameElements        \
 		treeSearch               -- функции осуществляющие поиск одинаковых узлов рассматриваемого дерева 
