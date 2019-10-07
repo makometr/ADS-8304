@@ -1,3 +1,1 @@
-lab2: Source/main.cpp Source/hierachy.cpp
-	g++ Source/main.cpp Source/hierachy.cpp -o lab2
-
+g++ -Wall Source/main.cpp Source/hierachy.cpp -o lab2
