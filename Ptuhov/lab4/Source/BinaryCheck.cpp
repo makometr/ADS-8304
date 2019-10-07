@@ -1,54 +1,53 @@
 #include "BinaryTree.h"
 
-void workWithStringTreeForm(std::string& currentCheckTree, std::ostream& out)
+void determineTreeValuesType(std::string& currentCheckTree, std::ostream& out)
 {
-	//удаление пробелов
-	currentCheckTree.erase(std::remove_if(currentCheckTree.begin(), currentCheckTree.end(), [](char c) {return c == ' '; }), currentCheckTree.end());
-
-	if (!checkBracketsPlacement(currentCheckTree))
-	{
-		out << "Hmm, uncorect brackets statement\n";
-		return;
-	}
-
-	//запись значения хранящегося в главном узле
-	size_t stringIndex = 1;
+	//запись значения хранящегося в главном узле, 1 - пропуск (
+	size_t mainNodeNameStart = 1;
 	std::string variableStringValue;
-	while (currentCheckTree[stringIndex] != '(' && currentCheckTree[stringIndex] != ')' &&
-		stringIndex < currentCheckTree.size())
+	while (currentCheckTree[mainNodeNameStart] != '(' && currentCheckTree[mainNodeNameStart] != ')' &&	mainNodeNameStart < currentCheckTree.size())
 	{
-		variableStringValue += currentCheckTree[stringIndex];
-		stringIndex++;
+		variableStringValue += currentCheckTree[mainNodeNameStart];
+		mainNodeNameStart++;
 	}
 	//
 
 	//если дерево состоит из одного узла, то в нем не может быть повторяющихся узлов
-	if (currentCheckTree[stringIndex] == ')')
+	if (currentCheckTree[mainNodeNameStart] == ')')
 	{
 		out << "NO" << std::endl;
 		return;
 	}
 	//
-	
+
 	int variableType = getVariableType(variableStringValue);
+
+	int checkResult = -1;
 	switch (variableType)
 	{
 	case 1:
-		workWithTree<int>(currentCheckTree, out);
+		checkResult = treeCheck(treeCreation<int>(currentCheckTree));
 		break;
 
 	case 2:
-		workWithTree<double>(currentCheckTree, out);
+		checkResult = treeCheck(treeCreation<double>(currentCheckTree));
 		break;
 
 	case 3:
-		workWithTree<char>(currentCheckTree, out);
+		checkResult = treeCheck(treeCreation<char>(currentCheckTree));
 		break;
 
 	case 4:
-		workWithTree<std::string>(currentCheckTree, out);
+		checkResult = treeCheck(treeCreation<std::string>(currentCheckTree));
 		break;
 	}
+	if (checkResult == -1)
+	{
+		out << "Your binary tree is incorrect!\n";
+		return;
+	}
+
+	out << ((checkResult) ? "YES\n" : "NO\n");
 }
 
 bool checkBracketsPlacement(std::string const& checkString)
@@ -56,6 +55,7 @@ bool checkBracketsPlacement(std::string const& checkString)
 	if (*checkString.begin() != '(' || *(checkString.end() - 1) != ')')
 		return 0;
 
+	//ocnt - open cnt, ccnt - close cnt
 	size_t ocnt = 0;
 	size_t ccnt = 0;
 
@@ -68,7 +68,7 @@ bool checkBracketsPlacement(std::string const& checkString)
 			ccnt++;
 
 		if (ccnt > ocnt)
-			return 0;
+			return false;
 	}
 
 	return ccnt == ocnt;
@@ -129,17 +129,35 @@ int main(int argc, char** argv)
 			if (!currentCheckTree.empty() && *(currentCheckTree.end() - 1) == '\r')
 				currentCheckTree.erase(currentCheckTree.end() - 1);
 
-			workWithStringTreeForm(currentCheckTree, out);
+			//удаление пробелов
+			currentCheckTree.erase(std::remove_if(currentCheckTree.begin(), currentCheckTree.end(), [](char c) {return c == ' '; }), currentCheckTree.end());
+
+			if (!checkBracketsPlacement(currentCheckTree))
+			{
+				out << "Hmm, uncorect brackets statement\n";
+				return 0;
+			}
+
+			determineTreeValuesType(currentCheckTree, out);
 		}
 
 		return 0;
 	}
 
-	std::string stringTreeForm;
+	std::string currentCheckTree;
 	std::cout << "Enter binary tree:";
-	std::getline(std::cin, stringTreeForm);
+	std::getline(std::cin, currentCheckTree);
 
-	workWithStringTreeForm(stringTreeForm, std::cout);
+	//удаление пробелов
+	currentCheckTree.erase(std::remove_if(currentCheckTree.begin(), currentCheckTree.end(), [](char c) {return c == ' '; }), currentCheckTree.end());
+
+	if (!checkBracketsPlacement(currentCheckTree))
+	{
+		std::cout << "Hmm, uncorect brackets statement\n";
+		return 0;
+	}
+
+	determineTreeValuesType(currentCheckTree, std::cout);
 
 	return 0;
 }

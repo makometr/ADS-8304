@@ -6,6 +6,14 @@
 #include <memory>
 #include <algorithm>
 
+enum Types
+{
+	IntType = 1,
+	DoubleType,
+	CharType,
+	StringType,
+};
+
 std::string extractBracketsValue(std::string const& stringTreeForm, size_t* stringIndexPointer);
 bool checkBracketsPlacement(std::string const& checkString);
 
@@ -24,12 +32,8 @@ struct Node
 	std::shared_ptr<Node<T>> right;
 };
 
-/*
-	fromString       \
-	                  -- функции необходимые для получения типа хранящихся значений в полученном дереве
-	getVariableType  /
-*/
-
+//шаблонная функция принимабщая строку и извлеающее из нее значения типа T,
+//в случае ошибки бросается исключение
 template<class T>
 T fromString(std::string const& checkString)
 {
@@ -43,31 +47,31 @@ T fromString(std::string const& checkString)
 	return tmp;
 }
 
-//int - 1, double - 2, char - 3, string - 4
+//функция принимает строку и при помощи ранее описанной функции fromString определяет ее тип
 int getVariableType(std::string const& checkString)
 {
 	try
 	{
 		fromString<int>(checkString);
-		return 1;
+		return IntType;
 	}
 	catch (std::invalid_argument&)
 	{
 		try
 		{
 			fromString<double>(checkString);
-			return 2;
+			return DoubleType;
 		}
 		catch (std::invalid_argument&)
 		{
 			try
 			{
 				fromString<char>(checkString);
-				return 3;
+				return CharType;
 			}
 			catch (std::invalid_argument&)
 			{
-				return 4;
+				return StringType;
 			}
 		}
 	}
@@ -81,15 +85,14 @@ bool formTree(std::string const& stringTreeForm, std::shared_ptr<Node<T>>& root)
 
 	//запись имени корня
 	std::string rootStringValue;
-	while (stringIndex < stringTreeForm.size() &&
-		(stringTreeForm[stringIndex] != '(' && stringTreeForm[stringIndex] != ')'))
+	while (stringIndex < stringTreeForm.size() && (stringTreeForm[stringIndex] != '(' && stringTreeForm[stringIndex] != ')'))
 	{
 		rootStringValue += stringTreeForm[stringIndex];
 		stringIndex++;
 	}
 	if (rootStringValue.empty())
 		return false;
-	
+
 	//проверка на то, что тип содержащийся в узлах соответствует типу содержащемуся в голове дерева
 	T rootValue;
 	try
@@ -143,26 +146,26 @@ bool formTree(std::string const& stringTreeForm, std::shared_ptr<Node<T>>& root)
 }
 
 template <typename T>
-void workWithTree(std::string const& stringTreeForm, std::ostream& out)
+BinaryTree<T> treeCreation(std::string const& stringTreeForm)
 {
 	auto root = std::make_shared<Node<T>>();
 	bool formResult = formTree(stringTreeForm, root);
-	if (!formResult)
-	{
-		out << "Incorrect tree form or it's not a binary tree\n";
-		return;
-	}
 
-	BinaryTree<T> binTree(root);
+	return (formResult) ? BinaryTree<T>(root) : BinaryTree<T>(nullptr);
+}
+
+template <typename T>
+int treeCheck(BinaryTree<T>&& binTree)
+{
+	std::shared_ptr<Node<T>> root = binTree.getRootsValue();
+	if (!root)
+		return -1;
 
 	bool leftCheck = binTree.findSameElements(root->left);
 	if (leftCheck)
-	{
-		out << "YES\n";
-		return;
-	}
+		return 1;
 
-	out << ((binTree.findSameElements(root->right)) ? "YES\n" : "NO\n");
+	return binTree.findSameElements(root->right);
 }
 
 template <typename T>
@@ -171,12 +174,12 @@ class BinaryTree
 public:
 	BinaryTree(std::shared_ptr<Node<T>> const& root) : mainRoots(root)
 	{ }
-	
-	/*
-		findSameElements        \
-		treeSearch               -- функции осуществляющие поиск одинаковых узлов рассматриваемого дерева 
-		checkElementsOnSameness /
-	*/
+
+	std::shared_ptr<Node<T>> getRootsValue() const
+	{
+		return mainRoots;
+	}
+
 	bool findSameElements(std::shared_ptr<Node<T>> const& checkElement)
 	{
 		if (checkElement == nullptr)
