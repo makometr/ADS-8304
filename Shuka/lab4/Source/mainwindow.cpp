@@ -182,7 +182,7 @@ bool MainWindow::isCorrectStr(const std::string &str)
     */
 
     bool isElem = false;
-    bool f = true;
+    bool flagisCorrect = true;
     if (str[0] != '(') {
         qDebug() << "Скобочная запись бинарного дерева должна начинаться и заканчиваться скобками";
         return false;
@@ -229,7 +229,7 @@ bool MainWindow::isCorrectStr(const std::string &str)
                     closeB++;
                 }
             }
-            f = f && isCorrectStr(str.substr(indexStart, indexEnd - indexStart + 1));
+            flagisCorrect = flagisCorrect && isCorrectStr(str.substr(indexStart, indexEnd - indexStart + 1));
             indexStart = indexEnd;
         }
     }
@@ -239,7 +239,7 @@ bool MainWindow::isCorrectStr(const std::string &str)
             return false;
         }
         if (indexStart == str.length() - 1) {
-            return f;
+            return flagisCorrect;
         }
         else {
             qDebug() << "Некорректный ввод";
