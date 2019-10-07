@@ -1,8 +1,7 @@
 #include <iostream>
 #include "expression.h"
 
-int main()
-{
+int main() {
     Expression expr;
 
     std::string exprStr;

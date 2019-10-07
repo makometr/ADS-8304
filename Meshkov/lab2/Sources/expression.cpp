@@ -11,8 +11,7 @@ void Expression::load(const std::string &exprStr, std::string::size_type *after)
         *after = pos;
 }
 
-bool Expression::isEmpty() const
-{
+bool Expression::isEmpty() const {
     return m_head == nullptr;
 }
 
@@ -50,8 +49,7 @@ std::string Expression::readNextChunk(const std::string &exprStr, std::string::s
         return {};
 }
 
-std::shared_ptr<Expression::Node> Expression::parseExpr(const std::string &exprStr, std::string::size_type &pos)
-{
+std::shared_ptr<Expression::Node> Expression::parseExpr(const std::string &exprStr, std::string::size_type &pos) {
     std::shared_ptr<Node> expr;
 
     expr = parseBinaryExpr(exprStr, pos);
@@ -62,35 +60,31 @@ std::shared_ptr<Expression::Node> Expression::parseExpr(const std::string &exprS
     if (expr != nullptr)
         return expr;
 
-    auto oldPos = pos;
-    auto nextChunk = readNextChunk(exprStr, pos);
+    auto newPos = pos;
+    auto nextChunk = readNextChunk(exprStr, newPos);
     if (nextChunk == "(") {
-        expr = parseTrivialOperand(exprStr, pos);
-        auto nextChunk = readNextChunk(exprStr, pos);
-        if (expr != nullptr && nextChunk == ")")
+        expr = parseTrivialOperand(exprStr, newPos);
+        auto nextChunk = readNextChunk(exprStr, newPos);
+        if (expr != nullptr && nextChunk == ")") {
+            pos = newPos;
             return Node::makeSubexpression(expr);
+        }
     }
-    pos = oldPos;
     return nullptr;
 }
 
-std::shared_ptr<Expression::Node> Expression::parseBinaryExpr(const std::string &exprStr, std::string::size_type &pos)
-{
-    auto oldPos = pos;
+std::shared_ptr<Expression::Node> Expression::parseBinaryExpr(const std::string &exprStr, std::string::size_type &pos) {
+    auto newPos = pos;
 
-    auto nextChunk = readNextChunk(exprStr, pos);
-    if (nextChunk != "(") {
-        pos = oldPos;
+    auto nextChunk = readNextChunk(exprStr, newPos);
+    if (nextChunk != "(")
         return nullptr;
-    }
 
-    auto leftOperand = parseExprOrTrivialOperand(exprStr, pos);
-    if (leftOperand == nullptr) {
-        pos = oldPos;
+    auto leftOperand = parseExprOrTrivialOperand(exprStr, newPos);
+    if (leftOperand == nullptr)
         return nullptr;
-    }
 
-    nextChunk = readNextChunk(exprStr, pos);
+    nextChunk = readNextChunk(exprStr, newPos);
     auto operation = std::make_shared<Node>();
     if (nextChunk == "+")
         operation->setOperation(Operation::ADDITION);
@@ -100,67 +94,54 @@ std::shared_ptr<Expression::Node> Expression::parseBinaryExpr(const std::string 
         operation->setOperation(Operation::MULTIPLICATION);
     else if (nextChunk == "^")
         operation->setOperation(Operation::POW);
-    else {
-        pos = oldPos;
+    else
         return nullptr;
-    }
 
-    auto rightOperand = parseExprOrTrivialOperand(exprStr, pos);
-    if (rightOperand == nullptr) {
-        pos = oldPos;
+    auto rightOperand = parseExprOrTrivialOperand(exprStr, newPos);
+    if (rightOperand == nullptr)
         return nullptr;
-    }
 
-    nextChunk = readNextChunk(exprStr, pos);
-    if (nextChunk != ")") {
-        pos = oldPos;
+    nextChunk = readNextChunk(exprStr, newPos);
+    if (nextChunk != ")")
         return nullptr;
-    }
 
     leftOperand->setNext(operation);
     operation->setNext(rightOperand);
 
+    pos = newPos;
     return Node::makeSubexpression(leftOperand);
 }
 
-std::shared_ptr<Expression::Node> Expression::parseUnaryExpr(const std::string &exprStr, std::string::size_type &pos)
-{
-    auto oldPos = pos;
+std::shared_ptr<Expression::Node> Expression::parseUnaryExpr(const std::string &exprStr, std::string::size_type &pos) {
+    auto newPos = pos;
 
-    auto nextChunk = readNextChunk(exprStr, pos);
-    if (nextChunk != "(") {
-        pos = oldPos;
+    auto nextChunk = readNextChunk(exprStr, newPos);
+    if (nextChunk != "(")
         return nullptr;
-    }
 
-    nextChunk = readNextChunk(exprStr, pos);
+    nextChunk = readNextChunk(exprStr, newPos);
     auto operation = std::make_shared<Node>();
     if (nextChunk == "exp") {
         operation->setOperation(Operation::EXP);
     } else {
-        pos = oldPos;
         return nullptr;
     }
 
-    auto operand = parseExprOrTrivialOperand(exprStr, pos);
-    if (operand == nullptr) {
-        pos = oldPos;
+    auto operand = parseExprOrTrivialOperand(exprStr, newPos);
+    if (operand == nullptr)
         return nullptr;
-    }
 
-    nextChunk = readNextChunk(exprStr, pos);
-    if (nextChunk != ")") {
-        pos = oldPos;
+    nextChunk = readNextChunk(exprStr, newPos);
+    if (nextChunk != ")")
         return nullptr;
-    }
 
     operation->setNext(operand);
 
+    pos = newPos;
     return Node::makeSubexpression(operation);
 }
 
-std::shared_ptr<Expression::Node> Expression::parseExprOrTrivialOperand(const std::string &exprStr, std::string::size_type &pos)
-{
+std::shared_ptr<Expression::Node> Expression::parseExprOrTrivialOperand(const std::string &exprStr, std::string::size_type &pos) {
     std::shared_ptr<Node> node;
 
     node = parseExpr(exprStr, pos);
@@ -174,8 +155,7 @@ std::shared_ptr<Expression::Node> Expression::parseExprOrTrivialOperand(const st
     return nullptr;
 }
 
-std::shared_ptr<Expression::Node> Expression::parseTrivialOperand(const std::string &exprStr, std::string::size_type &pos)
-{
+std::shared_ptr<Expression::Node> Expression::parseTrivialOperand(const std::string &exprStr, std::string::size_type &pos) {
     std::shared_ptr<Node> node;
 
     node = parseNumber(exprStr, pos);
@@ -189,63 +169,55 @@ std::shared_ptr<Expression::Node> Expression::parseTrivialOperand(const std::str
     return nullptr;
 }
 
-std::shared_ptr<Expression::Node> Expression::parseNumber(const std::string &exprStr, std::string::size_type &pos)
-{
-    auto oldPos = pos;
-
-    auto nextChunk = readNextChunk(exprStr, pos);
+std::shared_ptr<Expression::Node> Expression::parseNumber(const std::string &exprStr, std::string::size_type &pos) {
+    auto newPos = pos;
+    auto nextChunk = readNextChunk(exprStr, newPos);
 
     try {
         size_t after;
         auto number = std::stod(nextChunk, &after);
-        if (after != nextChunk.length()) {
-            pos = oldPos;
+        if (after != nextChunk.length())
             return nullptr;
-        }
+        pos = newPos;
         return Node::makeNumber(number);
     } catch (std::invalid_argument &) {
-        pos = oldPos;
         return nullptr;
     } catch (std::out_of_range &) {
+        pos = newPos;
         return Node::makeNumber(std::numeric_limits<double>::infinity());
     }
 }
 
-std::shared_ptr<Expression::Node> Expression::parseVariable(const std::string &exprStr, std::string::size_type &pos)
-{
-    auto oldPos = pos;
+std::shared_ptr<Expression::Node> Expression::parseVariable(const std::string &exprStr, std::string::size_type &pos) {
+    auto newPos = pos;
+    auto nextChunk = readNextChunk(exprStr, newPos);
 
-    auto nextChunk = readNextChunk(exprStr, pos);
-
-    if (std::all_of(nextChunk.begin(), nextChunk.end(), isalpha) && nextChunk != "exp")
+    if (std::all_of(nextChunk.begin(), nextChunk.end(), isalpha) && nextChunk != "exp") {
+        pos = newPos;
         return Node::makeVariable(nextChunk);
-    pos = oldPos;
+    }
     return nullptr;
 }
 
-std::shared_ptr<Expression::Node> Expression::Node::makeOperation(Expression::Operation operation)
-{
+std::shared_ptr<Expression::Node> Expression::Node::makeOperation(Expression::Operation operation) {
     auto node = std::make_shared<Node>();
     node->setOperation(operation);
     return node;
 }
 
-std::shared_ptr<Expression::Node> Expression::Node::makeNumber(double number)
-{
+std::shared_ptr<Expression::Node> Expression::Node::makeNumber(double number) {
     auto node = std::make_shared<Node>();
     node->setNumber(number);
     return node;
 }
 
-std::shared_ptr<Expression::Node> Expression::Node::makeVariable(std::string variable)
-{
+std::shared_ptr<Expression::Node> Expression::Node::makeVariable(std::string variable) {
     auto node = std::make_shared<Node>();
     node->setVariable(variable);
     return node;
 }
 
-std::shared_ptr<Expression::Node> Expression::Node::makeSubexpression(std::shared_ptr<Expression::Node> child)
-{
+std::shared_ptr<Expression::Node> Expression::Node::makeSubexpression(std::shared_ptr<Expression::Node> child) {
     auto node = std::make_shared<Node>();
     node->setChild(child);
     return node;
@@ -268,34 +240,29 @@ std::shared_ptr<Expression::Node> Expression::Node::deepCopy(bool copySubsequent
     return copy;
 }
 
-void Expression::Node::setOperation(Expression::Operation operation)
-{
+void Expression::Node::setOperation(Expression::Operation operation) {
     m_type = Node::Type::OPERATION;
     m_value = operation;
 }
 
-void Expression::Node::setNumber(double number)
-{
+void Expression::Node::setNumber(double number) {
     m_type = Node::Type::NUMBER;
     m_value = number;
 }
 
-void Expression::Node::setVariable(std::string variable)
-{
+void Expression::Node::setVariable(std::string variable) {
     m_type = Node::Type::VARIABLE;
     m_value = variable;
 }
 
-void Expression::Node::setChild(std::shared_ptr<Expression::Node> child)
-{
+void Expression::Node::setChild(std::shared_ptr<Expression::Node> child) {
     if (child == nullptr)
         return;
     m_type = Node::Type::SUBEXPRESSION;
     m_value = child;
 }
 
-Expression::Node::Type Expression::Node::getType() const
-{
+Expression::Node::Type Expression::Node::getType() const {
     return m_type;
 }
 
@@ -315,18 +282,15 @@ std::shared_ptr<Expression::Node> Expression::Node::getChild() const {
     return std::get<std::shared_ptr<Node>>(m_value);
 }
 
-void Expression::Node::setNext(std::shared_ptr<Expression::Node> next)
-{
+void Expression::Node::setNext(std::shared_ptr<Expression::Node> next) {
     m_next = next;
 }
 
-std::shared_ptr<Expression::Node> Expression::Node::getNext() const
-{
+std::shared_ptr<Expression::Node> Expression::Node::getNext() const {
     return m_next;
 }
 
-std::string Expression::Node::toString() const
-{
+std::string Expression::Node::toString() const {
     auto callToString = [](std::shared_ptr<Node> node) -> std::string {
         if (node != nullptr)
             return node->toString();
@@ -364,8 +328,7 @@ std::string Expression::Node::toString() const
     return ""; // Never will be reached
 }
 
-bool Expression::Node::containVariable(const std::string &variable, bool checkSubsequent) const
-{
+bool Expression::Node::containVariable(const std::string &variable, bool checkSubsequent) const {
     auto callContainVariable = [&](std::shared_ptr<Node> node) -> bool {
         if (node != nullptr)
             return node->containVariable(variable, true);
@@ -382,8 +345,7 @@ bool Expression::Node::containVariable(const std::string &variable, bool checkSu
     return false;
 }
 
-void Expression::Node::derive(const std::string &variable)
-{
+void Expression::Node::derive(const std::string &variable) {
     switch (getType()) {
     case Node::Type::NUMBER:
         /* Formula: da/dx = 0 */
@@ -406,8 +368,7 @@ void Expression::Node::derive(const std::string &variable)
     }
 }
 
-void Expression::Node::deriveSubexpression(const std::string &variable)
-{
+void Expression::Node::deriveSubexpression(const std::string &variable) {
     auto callDerive = [&variable](std::shared_ptr<Node> node) {
         if (node != nullptr)
             node->derive(variable);

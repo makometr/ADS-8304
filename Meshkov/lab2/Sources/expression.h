@@ -14,8 +14,8 @@ public:
 
     std::string toString() const;
 
-    class ComplexPowerException : public std::exception
-    {};
+    class ComplexPowerException : public std::exception {
+    };
     /* Differentiates by "variable".
      * May throw ComplexPowerException.
      */
