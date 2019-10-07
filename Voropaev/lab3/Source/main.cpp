@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-	//INPUT
+
     std::getline(input_file_stream, value_str);
 
     try {
@@ -66,28 +66,26 @@ int main(int argc, char* argv[]) {
 
     std::getline(input_file_stream, processed_string);
     std::cout << "Processed string:\n" << processed_string << "\n______________________________" << std::endl;
-
 	
-	//MAIN PROCESS
+	
     std::string current_digit_str;
     int counter = 0;
 
-    for(auto proc_symbol:processed_string) {
-
+    for(auto proc_symbol: processed_string) {
         counter++;
-
+		
         if(isdigit(proc_symbol)) {
             current_digit_str += proc_symbol;
             if(counter != processed_string.size()) {
                 continue;
             }
         }
-
+		else {
+			continue;
+		}
 
         if(!current_digit_str.empty()) {
-
             int value = 0;
-
 
             try {
                 value = std::stoi(current_digit_str);
@@ -102,7 +100,6 @@ int main(int argc, char* argv[]) {
             }
             std::cout << "Current found digit: " << value << std::endl;
 
-
             if (value < lesser_value) {
                 less_than_a.push(value);
             }
@@ -113,14 +110,12 @@ int main(int argc, char* argv[]) {
                 greater_than_b.push(value);
             }
 
-
             current_digit_str = "";
         }
     }
     std::cout << "______________________________\n";
 
-
-	//OUTPUT
+	
     queue::el popped_value;
 
     if (!less_than_a.getSize()) {
@@ -136,7 +131,6 @@ int main(int argc, char* argv[]) {
     }
     std::cout << "\n______________________________";
 
-
     if (!between_a_and_b.getSize()) {
         std::cout << "No numbers in the second queue(Greater than lesser_value and lesser than greater_value)"
                   << std::endl;
@@ -150,7 +144,6 @@ int main(int argc, char* argv[]) {
         }
     }
     std::cout << "\n______________________________";
-
 
     if (!greater_than_b.getSize()) {
         std::cout << "No numbers in the third queue(greater than B)" << std::endl;

@@ -1,7 +1,3 @@
-//
-// Created by Anton on 04.10.2019.
-//
-
 #include "queue.h"
 #include <iostream>
 
