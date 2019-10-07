@@ -69,23 +69,22 @@ bool checkBracketsPlacement(std::string const& checkString)
 	if (*checkString.begin() != '(' || *(checkString.end() - 1) != ')')
 		return false;
 
-	//ocnt - open cnt, ccnt - close cnt
-	size_t ocnt = 0;
-	size_t ccnt = 0;
+	size_t openBracketCnt = 0;
+	size_t closeBracketCnt = 0;
 
 	for (char symb : checkString)
 	{
 		if (symb == '(')
-			ocnt++;
+			openBracketCnt++;
 
 		if (symb == ')')
-			ccnt++;
+			closeBracketCnt++;
 
-		if (ccnt > ocnt)
+		if (closeBracketCnt > openBracketCnt)
 			return false;
 	}
 
-	return ccnt == ocnt;
+	return closeBracketCnt == openBracketCnt;
 }
 
 std::string extractBracketsValue(std::string const& stringTreeForm, size_t* stringIndexPointer)
