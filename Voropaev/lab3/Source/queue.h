@@ -1,7 +1,3 @@
-//
-// Created by Anton on 04.10.2019.
-//
-
 #pragma once
 
 class queue {
@@ -38,6 +34,3 @@ private:
     int size = 0;
 
 };
-
-
-#endif //UNTITLED4_QUEUE_H

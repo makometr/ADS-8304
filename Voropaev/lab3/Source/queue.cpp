@@ -7,7 +7,6 @@
     head = nullptr;
 }
 
-
 void queue::push(int v) {
 
     el* n = new el(v);
@@ -26,29 +25,24 @@ void queue::push(int v) {
     size++;
 }
 
-
 queue::el queue::pop() {
 
     if (head == tail) {
         el tmp = *tail;
-
         delete(tail);
 
         tail = nullptr;
         head = tail;
-
 
         size--;
 
         return tmp;
     }
     else {
-
         el last_elem = *head;
         el* tmp_head = head;
 
         head = tail;
-
 
         while (head->next != tmp_head) {
             head = head->next;
@@ -63,7 +57,6 @@ queue::el queue::pop() {
         return last_elem;
     }
 }
-
 
 int queue::getSize() {
     return size;
