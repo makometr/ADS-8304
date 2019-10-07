@@ -80,38 +80,35 @@ int main(int argc, char* argv[]) {
                 continue;
             }
         }
-		else {
+		else if(current_digit_str.empty()){
 			continue;
 		}
+		
+		int value = 0;
+		try {
+			value = std::stoi(current_digit_str);
+		}
+		catch(std::invalid_argument& exception) {
+			std::cout << "Invalid argument of the found digit: " << current_digit_str << std::endl;
+			return 1;
+		}
+		catch(std::out_of_range& exception) {
+			std::cout << "Found digit is too large for INT to contain it!!!\nFound digit: " << current_digit_str << std::endl;
+			return 1;
+		}
+		std::cout << "Current found digit: " << value << std::endl;
 
-        if(!current_digit_str.empty()) {
-            int value = 0;
+		if (value < lesser_value) {
+			less_than_a.push(value);
+		}
+		else if (value >= lesser_value && value <= greater_value) {
+			between_a_and_b.push(value);
+		}
+		else if (value > greater_value) {
+			greater_than_b.push(value);
+		}
 
-            try {
-                value = std::stoi(current_digit_str);
-            }
-            catch(std::invalid_argument& exception) {
-                std::cout << "Invalid argument of the found digit: " << current_digit_str << std::endl;
-                return 1;
-            }
-            catch(std::out_of_range& exception) {
-                std::cout << "Found digit is too large for INT to contain it!!!\nFound digit: " << current_digit_str << std::endl;
-                return 1;
-            }
-            std::cout << "Current found digit: " << value << std::endl;
-
-            if (value < lesser_value) {
-                less_than_a.push(value);
-            }
-            else if (value >= lesser_value && value <= greater_value) {
-                between_a_and_b.push(value);
-            }
-            else if (value > greater_value) {
-                greater_than_b.push(value);
-            }
-
-            current_digit_str = "";
-        }
+		current_digit_str = "";
     }
     std::cout << "______________________________\n";
 
