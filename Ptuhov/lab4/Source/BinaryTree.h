@@ -14,6 +14,17 @@ enum Types
 	StringType,
 };
 
+template <typename T>
+struct TransformPair
+{
+	TransformPair() = default;
+	TransformPair(T newValue, bool newTransformResult) : value(newValue), transformResult(newTransformResult)
+	{ }
+
+	T value;
+	bool transformResult = false;
+};
+
 std::string extractBracketsValue(std::string const& stringTreeForm, size_t* stringIndexPointer);
 bool checkBracketsPlacement(std::string const& checkString);
 
@@ -34,47 +45,17 @@ struct Node
 
 //шаблонная функция принимабщая строку и извлеающее из нее значения типа T,
 //в случае ошибки бросается исключение
-template<class T>
-T fromString(std::string const& checkString)
+template <typename T>
+TransformPair<T> fromString(std::string const& checkString)
 {
 	std::istringstream stream(checkString);
-	T tmp;
-	stream >> tmp;
+	T value;
+	stream >> value;
 
 	if (stream.fail() || stream.peek() != EOF)
-		throw std::invalid_argument("");
+		return TransformPair<T>('0', false);
 
-	return tmp;
-}
-
-//функция принимает строку и при помощи ранее описанной функции fromString определяет ее тип
-int getVariableType(std::string const& checkString)
-{
-	try
-	{
-		fromString<int>(checkString);
-		return IntType;
-	}
-	catch (std::invalid_argument&)
-	{
-		try
-		{
-			fromString<double>(checkString);
-			return DoubleType;
-		}
-		catch (std::invalid_argument&)
-		{
-			try
-			{
-				fromString<char>(checkString);
-				return CharType;
-			}
-			catch (std::invalid_argument&)
-			{
-				return StringType;
-			}
-		}
-	}
+	return TransformPair<T>(value, true);
 }
 
 template <typename T>
@@ -94,15 +75,11 @@ bool formTree(std::string const& stringTreeForm, std::shared_ptr<Node<T>>& root)
 		return false;
 
 	//проверка на то, что тип содержащийся в узлах соответствует типу содержащемуся в голове дерева
+	std::istringstream stream(rootStringValue);
 	T rootValue;
-	try
-	{
-		rootValue = fromString<T>(rootStringValue);
-	}
-	catch (std::invalid_argument&)
-	{
+	stream >> rootValue;
+	if (stream.fail() || stream.peek() != EOF)
 		return false;
-	}
 	//
 
 	root->value = rootValue;

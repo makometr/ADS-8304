@@ -1,13 +1,30 @@
 #include "BinaryTree.h"
 
+int getVariableType(std::string const& checkString)
+{
+	TransformPair<char> charTransform = fromString<char>(checkString);
+	if (charTransform.transformResult)
+		return CharType;
+
+	TransformPair<int> intTranform = fromString<int>(checkString);
+	if (intTranform.transformResult)
+		return IntType;
+
+	TransformPair<double> doubleTransform = fromString<double>(checkString);
+	if (doubleTransform.transformResult)
+		return DoubleType;
+
+	return StringType;
+}
+
 void determineTreeValuesType(std::string& currentCheckTree, std::ostream& out)
 {
 	//запись значения хранящегося в главном узле, 1 - пропуск (
 	size_t mainNodeNameStart = 1;
-	std::string mainNodeValue;
-	while (mainNodeValue[mainNodeNameStart] != '(' && mainNodeValue[mainNodeNameStart] != ')' &&	mainNodeNameStart < currentCheckTree.size())
+	std::string variableStringValue;
+	while (currentCheckTree[mainNodeNameStart] != '(' && currentCheckTree[mainNodeNameStart] != ')' &&	mainNodeNameStart < currentCheckTree.size())
 	{
-		mainNodeValue += currentCheckTree[mainNodeNameStart];
+		variableStringValue += currentCheckTree[mainNodeNameStart];
 		mainNodeNameStart++;
 	}
 	//
@@ -20,7 +37,7 @@ void determineTreeValuesType(std::string& currentCheckTree, std::ostream& out)
 	}
 	//
 
-	int variableType = getVariableType(mainNodeValue);
+	int variableType = getVariableType(variableStringValue);
 
 	int checkResult = -1;
 	switch (variableType)
@@ -28,15 +45,12 @@ void determineTreeValuesType(std::string& currentCheckTree, std::ostream& out)
 	case 1:
 		checkResult = treeCheck(treeCreation<int>(currentCheckTree));
 		break;
-
 	case 2:
 		checkResult = treeCheck(treeCreation<double>(currentCheckTree));
 		break;
-
 	case 3:
 		checkResult = treeCheck(treeCreation<char>(currentCheckTree));
 		break;
-
 	case 4:
 		checkResult = treeCheck(treeCreation<std::string>(currentCheckTree));
 		break;
@@ -53,7 +67,7 @@ void determineTreeValuesType(std::string& currentCheckTree, std::ostream& out)
 bool checkBracketsPlacement(std::string const& checkString)
 {
 	if (*checkString.begin() != '(' || *(checkString.end() - 1) != ')')
-		return false;
+		return 0;
 
 	//ocnt - open cnt, ccnt - close cnt
 	size_t ocnt = 0;
