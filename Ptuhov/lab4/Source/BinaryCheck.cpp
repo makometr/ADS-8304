@@ -11,7 +11,7 @@ void workWithStringTreeForm(std::string& currentCheckTree, std::ostream& out)
 		return;
 	}
 
-	//запись значения хранящегося в главном узле в переменную variableStringValue
+	//запись значения хранящегося в главном узле
 	size_t stringIndex = 1;
 	std::string variableStringValue;
 	while (currentCheckTree[stringIndex] != '(' && currentCheckTree[stringIndex] != ')' &&
@@ -29,8 +29,7 @@ void workWithStringTreeForm(std::string& currentCheckTree, std::ostream& out)
 		return;
 	}
 	//
-
-	//Определение типа ранее считанного значения
+	
 	int variableType = getVariableType(variableStringValue);
 	switch (variableType)
 	{
