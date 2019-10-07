@@ -2,6 +2,7 @@
 #define IER_LIST
 
 class  IerList;
+enum class balanceBeamStatuses {noErrors, noShoulder, noLength, excessValues, noMass};
 
 class  IerList{
 	
@@ -18,7 +19,7 @@ private:
 	
 public:
 
-	IerList::IerList():tag(false), head(nullptr), tail(nullptr) {}
+	IerList():tag(false), head(nullptr), tail(nullptr) {}
 	~IerList();
 	
 	bool isNull() const;
@@ -37,7 +38,7 @@ public:
 	void print() const;
 	
 	bool isBalanceBeam() const;
-	int goRoundBalanceBeam(bool isInShoulder) const;
+	balanceBeamStatuses goRoundBalanceBeam(bool isInShoulder) const;
 	
 };
 

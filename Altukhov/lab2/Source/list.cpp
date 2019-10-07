@@ -198,8 +198,6 @@ void IerList::print() const {//функция-запускатор печата�
 	std::cout<<"\n";
 }	
 
-enum class balanceBeamStatuses {noErrors, noShoulder, noLength, excessValues, noMass};
-
 bool IerList::isBalanceBeam() const {
 	balanceBeamStatuses res = this->isNull() ? balanceBeamStatuses::noShoulder : this->goRoundBalanceBeam(false);
 	std::string status;
