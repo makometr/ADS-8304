@@ -8,9 +8,6 @@ HierarchicalList::HierarchicalList()
 
     flag = false;
     data = 0;
-
-    nextList.reset();
-    nestedList.reset();
 }
 
 
