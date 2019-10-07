@@ -136,10 +136,8 @@ bool formTree(std::string const& stringTreeForm, std::shared_ptr<Node<T>>& root)
 		return false;
 	//
 
-	//формирование бинарного дерева
 	root->left = leftTree;
 	root->right = rightTree;
-	//
 
 	return true;
 }
