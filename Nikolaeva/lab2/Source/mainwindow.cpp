@@ -26,7 +26,7 @@ void MainWindow::on_reverse_pushButton_clicked()
     qDebug() << "Start reverseList";
 
     HierarchicalList::ListPointer list(new HierarchicalList);
-    std::string listStr = "";
+    std::string listStr;
 
     if (ui->readFromWindow_radioButton->isChecked()) {
         listStr = ui->input_lineEdit->text().toStdString();

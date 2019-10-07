@@ -1,29 +1,19 @@
 #include "hierarchicallist.h"
 
 
-HierarchicalList::HierarchicalList(QObject *parent): QObject (parent)
+HierarchicalList::HierarchicalList(QObject *parent): QObject (parent) , pair(Pointers())
 {
     /*
      * По умолчанию объект класса является пустым списком
     */
 
-    flag = false;
-    atom = 0;
-}
-
-
-HierarchicalList::~HierarchicalList()
-{
-    /*
-     * Т.к в классе используются умные указатели, освбождение
-     * памяти происхоит автоматически
-    */
+    flagIsAtom = false;
 }
 
 
 std::string HierarchicalList::toStdString() const
 {
-    std::string list = "";
+    std::string list;
     if (this->isNull()) {
         list += "()";
     }
@@ -32,10 +22,10 @@ std::string HierarchicalList::toStdString() const
     }
     else {
         list += '(';
-        list += this->head->toStdString();
+        list += std::get<Pointers>(this->pair).head->toStdString();
 
-        if (this->tail != nullptr)
-            this->tail->tailToStdTring(list);
+        if (std::get<Pointers>(this->pair).tail != nullptr)
+            std::get<Pointers>(this->pair).tail->tailToStdTring(list);
 
         list += ')';
     }
@@ -62,7 +52,7 @@ bool HierarchicalList::isNull() const
      * false - в ином случае
     */
 
-    return (!flag && head == nullptr && tail == nullptr);
+    return (!flagIsAtom && std::get<Pointers>(this->pair).head == nullptr && std::get<Pointers>(this->pair).tail == nullptr);
 }
 
 
@@ -71,7 +61,7 @@ HierarchicalList::ListPointer HierarchicalList::getHead() const
     /*
      * Возвращает указатель на вложенные списки
     */
-    return head;
+    return std::get<Pointers>(this->pair).head;
 }
 
 
@@ -81,7 +71,7 @@ HierarchicalList::ListPointer HierarchicalList::getTail() const
      * Возврщает указатель на следующий список
     */
 
-    return tail;
+    return std::get<Pointers>(this->pair).tail;
 }
 
 
@@ -92,7 +82,7 @@ bool HierarchicalList::isAtom() const
      * в ином случае - false
     */
 
-    return flag;
+    return flagIsAtom;
 }
 
 
@@ -108,8 +98,7 @@ HierarchicalList::ListPointer HierarchicalList::cons(ListPointer& head, ListPoin
     }
     else {
         ListPointer tmp (new HierarchicalList);
-        tmp->head = head;
-        tmp->tail = tail;
+        tmp->pair = Pointers(head, tail);
         return tmp;
     }
 }
@@ -163,8 +152,8 @@ void HierarchicalList::createAtom(const char ch)
     /*
      * Создается объект класса - атом
     */
-    this->atom = ch;
-    this->flag = true;
+    this->pair.emplace<char>(ch);
+    this->flagIsAtom = true;
 }
 
 
@@ -239,8 +228,8 @@ char HierarchicalList::getAtom() const
     /*
      * Функция возвращает значение атома
     */
-    if (flag) {
-        return atom;
+    if (flagIsAtom) {
+        return std::get<char>(this->pair);
     }
     else {
         qDebug() << "Error: getAtom(!atom)\n";
@@ -308,7 +297,7 @@ void HierarchicalList::reverseList(HierarchicalList::ListPointer& list, size_t d
      * В цикле реверсируется список, для вложенного списка вызывается рекурсия.
     */
 
-    std::string debugStr = "";
+    std::string debugStr;
     for (size_t i = 0; i < depth; ++i) {
         debugStr += " ";
     }
@@ -319,15 +308,12 @@ void HierarchicalList::reverseList(HierarchicalList::ListPointer& list, size_t d
     auto current = list;
 
     while (current != nullptr && !current->isNull()) {
-       //Вызов рекурсии для вложенного списка.
-
         if (!current->getHead()->isAtom() && !current->getHead()->isNull()) {
-            reverseList(current->head, depth+1);
+            reverseList(std::get<Pointers>(current->pair).head, depth+1);
         }
-        //Разворот списка с помощью обмена значениями указателей.
 
-        next = current->tail;
-        current->tail = prev;
+        next = std::get<Pointers>(current->pair).tail;
+        std::get<Pointers>(current->pair).tail = prev;
         prev = current;
         current = next;
     }
