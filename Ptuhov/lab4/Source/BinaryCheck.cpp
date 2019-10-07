@@ -4,10 +4,10 @@ void determineTreeValuesType(std::string& currentCheckTree, std::ostream& out)
 {
 	//запись значения хранящегося в главном узле, 1 - пропуск (
 	size_t mainNodeNameStart = 1;
-	std::string variableStringValue;
-	while (currentCheckTree[mainNodeNameStart] != '(' && currentCheckTree[mainNodeNameStart] != ')' &&	mainNodeNameStart < currentCheckTree.size())
+	std::string mainNodeValue;
+	while (mainNodeValue[mainNodeNameStart] != '(' && mainNodeValue[mainNodeNameStart] != ')' &&	mainNodeNameStart < currentCheckTree.size())
 	{
-		variableStringValue += currentCheckTree[mainNodeNameStart];
+		mainNodeValue += currentCheckTree[mainNodeNameStart];
 		mainNodeNameStart++;
 	}
 	//
@@ -20,7 +20,7 @@ void determineTreeValuesType(std::string& currentCheckTree, std::ostream& out)
 	}
 	//
 
-	int variableType = getVariableType(variableStringValue);
+	int variableType = getVariableType(mainNodeValue);
 
 	int checkResult = -1;
 	switch (variableType)
