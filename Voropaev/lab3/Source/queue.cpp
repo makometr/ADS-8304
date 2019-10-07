@@ -6,21 +6,21 @@
 #include <iostream>
 
 
-    queue::queue(){
+    queue::queue() {
     tail = nullptr;
     head = nullptr;
 }
 
 
-void queue::push(int v){
+void queue::push(int v) {
 
     el* n = new el(v);
 
-    if(tail == nullptr){
+
+    if(tail == nullptr) {
         tail = n;
         head = tail;
     }
-
     else {
         head->next = n;
         head = head->next;
@@ -30,8 +30,10 @@ void queue::push(int v){
     size++;
 }
 
-queue::el queue::pop(){
-    if (head == tail){
+
+queue::el queue::pop() {
+
+    if (head == tail) {
         el tmp = *tail;
 
         delete(tail);
@@ -44,19 +46,28 @@ queue::el queue::pop(){
 
         return tmp;
     }
-    else{
-        el tmp = *head;
-        el* tmp_tail = head;
+    else {
+
+        el last_elem = *head;
+        el* tmp_head = head;
+
         head = tail;
-        while (head->next != tmp_tail) {
+
+
+        while (head->next != tmp_head) {
             head = head->next;
         }
-        delete(tmp_tail);
+
+        delete(tmp_head);
+
         head->next = nullptr;
+
         size--;
-        return tmp;
+
+        return last_elem;
     }
 }
+
 
 int queue::getSize() {
     return size;
