@@ -19,7 +19,6 @@ struct s_expr{
 };
 typedef s_expr *lisp;
 
-using namespace std;
 
 
 void read_lisp( lisp& my_list, std::string &str);
@@ -36,13 +35,13 @@ lisp cons(const lisp h, const lisp t);
 lisp make_atom(const base x);
 void destroy(lisp my_list);
 
-//ifstream file;
+
 
 int main(int argc, char *argv[])
 {
 	lisp mainLisp;
 	char symb = ' ';
-	string str;
+	std::string str;
 	int flag;
 	if((argv[1]!=NULL)&&(argv[2]!=NULL)&&(argv[3]!=NULL)){
 		regex_t regex;
@@ -56,22 +55,22 @@ int main(int argc, char *argv[])
 		reti3 = regcomp(&regex, ".\\.txt", 0);
 		reti3 = regexec(&regex, argv[3], 0, NULL, 0);
 		if ((!reti1)&&(!reti2)&&(!reti3)){
-			ifstream fin(argv[1], ios::in);
+			std::ifstream fin(argv[1], std::ios::in);
 			std::getline(fin, str);
 			read_lisp(mainLisp, str);
 			str=str.substr(1);
 			if(!str.empty()){
-				cerr<<"Неправильный ввод списка"<<endl;
+				std::cerr<<"Неправильный ввод списка"<<std::endl;
 				exit(1);
 			}
-			ifstream file(argv[2], ios::in);
+			std::ifstream file(argv[2], std::ios::in);
 			file>>symb;
 			if (symb==' '){
-				cerr<<"Неправильный ввод символа"<<endl;
+				std::cerr<<"Неправильный ввод символа"<<std::endl;
 				destroy(mainLisp);
 				exit(1);
 			}
-    		ofstream fout(argv[3], ios::out);
+    		std::ofstream fout(argv[3], std::ios::out);
     		fout<< symb;
     		if(in_lisp(symb, mainLisp)){
     			fout<<" был найден в иерархическом списке.";
@@ -81,31 +80,31 @@ int main(int argc, char *argv[])
 			destroy(mainLisp);
 			return 0;
 		}else{
-			cout<<"Некорректные названия файлов (расширение txt)"<<endl;
+			std::cout<<"Некорректные названия файлов (расширение txt)"<<std::endl;
 			return 0;
 		}
 	}else{
-		cout<<"\nВы не ввели или ввели неправильно аргументы командной строки.\nПервый аргумент командной строки - файл с расширением txt, из которого считывается список.\nВторой аргумент - файл с расширением txt, в котором записан символ.\nТретий аргумент - файл с расширением txt, куда будет записан результат.\nДля продолжения введите 1, иначе 0."<<endl;
+		std::cout<<"\nВы не ввели или ввели неправильно аргументы командной строки.\nПервый аргумент командной строки - файл с расширением txt, из которого считывается список.\nВторой аргумент - файл с расширением txt, в котором записан символ.\nТретий аргумент - файл с расширением txt, куда будет записан результат.\nДля продолжения введите 1, иначе 0."<<std::endl;
 		
-		cin>>flag;
+		std::cin>>flag;
 		if(flag==0) return 0; 
-		cout<<"Введите в консоль элементы списка!"<<endl;
-		cin>>str;
+		std::cout<<"Введите в консоль элементы списка!"<<std::endl;
+		std::cin>>str;
 		read_lisp(mainLisp, str);
 		str=str.substr(1);
 		if(!str.empty()){
-			cerr<<"Неправильный ввод списка"<<endl;
+			std::cerr<<"Неправильный ввод списка"<<std::endl;
 			exit(1);
 		}
-		cout<<"Введите атом!"<<endl;
-		cin>>symb;
+		std::cout<<"Введите атом!"<<std::endl;
+		std::cin>>symb;
 	}
     if (mainLisp==NULL) exit(1);
 
     if(in_lisp(symb, mainLisp)){
-   		cout<<"Атом был найден в иерархическом списке."<<endl;
+   		std::cout<<"Атом был найден в иерархическом списке."<<std::endl;
 	}else{
-		cout<<"Атом не был найден в иерархическом списке."<<endl;
+		std::cout<<"Атом не был найден в иерархическом списке."<<std::endl;
 	}
 	destroy(mainLisp);
     return 0;
@@ -140,7 +139,7 @@ void read_lisp(lisp &my_list, std::string &str){
 
 void read_s_expr(base symb, lisp &my_list, std::string &str){
     if((symb == ')') || (symb == '\0')){
-    	cerr<<"Неправильный ввод списка"<<endl;
+    	std::cerr<<"Неправильный ввод списка"<<std::endl;
     	exit(1);
     }
     else
@@ -153,7 +152,7 @@ void read_seq(lisp& my_list, std::string &str){
     base x = str[0];
     lisp p1,p2;
     if(x=='\0'){
-    	cerr<<"Неправильный ввод списка"<< endl;
+    	std::cerr<<"Неправильный ввод списка"<< std::endl;
     	exit(1);
     }
     else{
@@ -173,16 +172,16 @@ void read_seq(lisp& my_list, std::string &str){
 lisp head(const lisp my_list){
     if(my_list != NULL)
         if(!isAtom(my_list)) return my_list->node.my_pair.hd;
-        else{cerr<<"Error: Head(atom)\n"; exit(1);}
-    else{cerr<<"Error:Head(nil)\n"; exit(1);}
+        else{std::cerr<<"Error: Head(atom)\n"; exit(1);}
+    else{std::cerr<<"Error:Head(nil)\n"; exit(1);}
 }
 
 lisp tail(const lisp my_list){
     if(my_list != NULL)
         if(!isAtom(my_list)) return my_list->node.my_pair.tl;
-        else{cerr<<"Error: Tail(atom)\n"; exit(1);}
+        else{std::cerr<<"Error: Tail(atom)\n"; exit(1);}
 
-    else{cerr<<"Error: Tail(nil)\n"; exit(1);}
+    else{std::cerr<<"Error: Tail(nil)\n"; exit(1);}
 }
 
 bool isAtom(const lisp my_list){
@@ -197,9 +196,9 @@ bool isNull(const lisp my_list){
 lisp cons(const lisp h, const lisp t){
     lisp p;
     if(isAtom(t)){
-        cerr<<"Error: cons(*, atom)\n"; exit(1);
+        std::cerr<<"Error: cons(*, atom)\n"; exit(1);
     }else{ p = new s_expr;
-        if(p==NULL){cerr<< "Memory Error\n"; exit(1);}
+        if(p==NULL){std::cerr<< "Memory Error\n"; exit(1);}
             else{
                 p->tag = false;
                 p->node.my_pair.hd = h;
