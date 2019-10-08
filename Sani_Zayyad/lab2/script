@@ -1,1 +1,4 @@
-g++ -Wall Source/main.cpp Source/hierachy.cpp -o lab2
+#!/bin/bash
+make
+./lab2 Test/test2.txt
+rm -rf *.o
