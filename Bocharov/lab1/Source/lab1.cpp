@@ -17,9 +17,10 @@ bool isbracketsequence(std::string str)
 bool issquare(std::string str)
 {
 	if (str == "+")
-		return true;
+	  return true;
 
-	if (str.size() < 4) return false; // По условию кв.ск. = [ab], при этом не менее 4 символов
+	if (str.size() < 4) 
+	  return false; // По условию кв.ск. = [ab], при этом не менее 4 символов
 
 	int cnt = 0;
 
@@ -39,8 +40,8 @@ bool issquare(std::string str)
 	if (cnt == str.size() - 2)
 		return false; // в строке нет места для других скобок
 
-	std::string substr1 = "";
-	std::string substr2 = "";
+    std::string substr1;
+    std::string substr2;
 
 	for (int i = 1; i <= cnt; i++)
 		substr1 += str[i]; // записываю первые скобки
@@ -55,9 +56,10 @@ bool issquare(std::string str)
 bool iscircle(std::string str)
 {
 	if (str == "-")
-		return true;
+	  return true;
 
-	if (str.size() < 4) return false;
+	if (str.size() < 4) 
+	  return false;
 
 	int cnt = 0;
 
@@ -77,8 +79,8 @@ bool iscircle(std::string str)
 	if (cnt == str.size() - 2)
 		return false;
 
-	std::string substr1 = "";
-	std::string substr2 = "";
+    	std::string substr1;
+	std::string substr2;
 
 	for (int i = 1; i <= cnt; i++)
 		substr1 += str[i];
@@ -91,13 +93,15 @@ bool iscircle(std::string str)
 
 	return  ((str[0] == '(') && (str[str.size() - 1] == ')') && isfigure(substr1) && issquare(substr2));
 }
-//
+
 bool isfigure(std::string str) {
 
-	if (str == "0")
-		return true;
+    if (str == "0")
+	return true;
 
-	if (str.size() < 4) return false;
+    if (str.size() < 4){
+        return false;
+    }
 
 	int cnt = 0;
 
@@ -117,8 +121,8 @@ bool isfigure(std::string str) {
 	if (cnt == str.size() - 2)
 		return false;
 
-	std::string substr1 = "";
-	std::string substr2 = "";
+	std::string substr1;
+	std::string substr2;
 
 	for (int i = 1; i <= cnt; i++)
 		substr1 += str[i];
@@ -136,60 +140,61 @@ bool isfigure(std::string str) {
 
 int main(int argc, char* argv[])
 {
-     int choice = 0;
+    int choice = 0;
 	int k = 0;
 	char tmp;
 	std::string str;
 	std::ifstream input;
-    	std::string proc_str = "";
-    	while(true){
-	std::cout << "  What type of test do you want to do?" << std::endl;
-    	std::cout << "        1) from the file" << std::endl;
-    	std::cout << "        2) from the console" << std::endl;
-    	std::cout << "  enter any other number to exit." << std::endl;
-    	std::cin >> choice;
-         switch (choice) {
+        std::string proc_str = "";
+    
+        while(true){
+            std::cout << "  What type of test do you want to do?" << std::endl;
+            std::cout << "        1) from the file" << std::endl;
+            std::cout << "        2) from the console" << std::endl;
+            std::cout << "  enter any other number to exit." << std::endl;
+            std::cin >> choice;
+        switch (choice) {
         case 1:
             std::cout << "* FROM THE FILE *" << std::endl;
-            	input.open("../Tests/test.txt");
-		if (!input)
-        {
-            std::cout << "Couldnt open file" <<std::endl;
-            }
+            input.open("./Tests/test.txt");
+             if (!input)
+             {
+                 std::cout << "Couldnt open file" <<std::endl;
+             }
+                
             while(input.get(tmp)){
                 if (tmp != '\n')
                 {
                 str +=tmp;
-
                 }
 
                 else
                 {
-		std::cout << "test "<<++k<<" for string - " << str << std::endl << std::endl;
+                std::cout << "test "<<++k<<" for string - " << str << std::endl << std::endl;
                 if (isbracketsequence(str))
-			std::cout << "		" << str << " == Its bracket" << std::endl << std::endl;
+                    std::cout << "		" << str << " == Its bracket" << std::endl << std::endl;
                 else
-			std::cout << "		" << str << " == Its not bracket" << std::endl << std::endl;
+                    std::cout << "		" << str << " == Its not bracket" << std::endl << std::endl;
                 str = "";
                 }
-            }
+                }
 
             break;
-        case 2:
+       	  case 2:
             std::cout << "* FROM THE CONSOLE *" << std::endl;
             while (true) {
-            std::cin >> str;
-              if (isbracketsequence(str))
-			std::cout << "		" << str << " == Its bracket" << std::endl << std::endl;
+                std::cin >> str;
+                if (isbracketsequence(str)){
+                    std::cout << "		" << str << " == Its bracket" << std::endl << std::endl;}
                 else
-			std::cout << "		" << str << " == Its not bracket" << std::endl << std::endl;
+                    std::cout << "		" << str << " == Its not bracket" << std::endl << std::endl;
                 str = "";
 
-            break;
-        default:
+                break;}
+          default:
             std::cout << "               * EXIT *                 " << std::endl;
             break;
-    }
+    
 
 
 }}
