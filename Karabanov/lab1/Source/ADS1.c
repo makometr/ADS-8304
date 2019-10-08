@@ -3,19 +3,19 @@
 #include <stdbool.h>
 #include <string.h>
 
-int Brackets(char* str, char sc, int i, int RecDepth);
+int Brackets(char* str, char OpenBracket, int i, int RecDepth);
 bool isText(char* str);
 
 /* функция проверки парности скобок, принимает 
 указатель на строку, индекс закрывающей скобки и открывающую скобку*/
-bool PairScope(char* str, char sc, int i){ 
-	if (sc == '(' && str[i] == ')') {	   
+bool PairScope(char* str, char OpenBracket, int i){ 
+	if (OpenBracket == '(' && str[i] == ')') {	   
 		return true;				       
 	}
-	else if (sc == '{' && str[i] == '}') {
+	else if (OpenBracket == '{' && str[i] == '}') {
 		return true;
 	}
-	else if (sc == '[' && str[i] == ']') {
+	else if (OpenBracket == '[' && str[i] == ']') {
 		return true;
 	}
 	else {
@@ -103,7 +103,7 @@ bool isText(char* str) {
 
 /* рекурсивная функция принимает указатель на строку
 символ который является открывающей скобкой индекс текущего символа, глубину рекурсии */
-int Brackets(char* str, char sc, int i, int RecDepth) { 
+int Brackets(char* str, char OpenBracket, int i, int RecDepth) { 
 	bool AlphainScope = false; // наличии буквы в скобках
 	printf("%*.sRecFun('%c')\n", 4*RecDepth, " ", str[i - 1]); // отладочный вывод
 	while (str[i] != '\n'|| str[i] == '\0') {
@@ -124,7 +124,7 @@ int Brackets(char* str, char sc, int i, int RecDepth) {
 			}
 		}
 		// проверка на парсность скобок и вложенность в них символа
-		else if (PairScope(str, sc, i) && AlphainScope) { 
+		else if (PairScope(str, OpenBracket, i) && AlphainScope) { 
 			i++;
 			printf("%*.s", 4*RecDepth, " "); // отладочные выводы
 			printf("Найдена закрывающая скобка '%c', удовлетворяющая условию, выход из рекурсивной функции\n", str[i - 1]);
