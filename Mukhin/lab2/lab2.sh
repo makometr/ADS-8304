@@ -1,5 +1,5 @@
 #!/bin/bash
-g++ -Wall -Werror Source/lab2.cpp -o lab2
+g++ -Wall -Werror ./Source/lab2.cpp -o lab2
 echo -n "1) "
 ./lab2 "((a))"
 echo -n "2) "
@@ -34,4 +34,6 @@ echo -n "16) "
 ./lab2 "(a(b(d)d(fdhfghdfd(f(g)f(d))))"
 echo -n "17) "
 ./lab2 "((a))"
+echo -n "17) "
+./lab2 "(a(b))(c)"
 rm lab2

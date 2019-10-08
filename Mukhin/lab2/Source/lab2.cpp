@@ -6,8 +6,8 @@
 struct s_expr;
 
 struct ptr {
-    s_expr* hd;
-    s_expr* tl;
+    s_expr* hd = nullptr;
+    s_expr* tl = nullptr;
 };
 
 struct s_expr {
@@ -125,6 +125,10 @@ void read_lisp(lisp& y, std::stringstream& s) {
     do s >> x;
     while (x == ' ');
     read_s_expr(x, y, s);
+    if (s.peek() != EOF) {
+        std::cerr << "Incorrect" << std::endl;
+        exit(1);
+    }
 }
 
 int dip(lisp const x) {
