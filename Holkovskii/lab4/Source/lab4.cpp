@@ -4,7 +4,7 @@
 
 template <typename Elem>
 struct bin_tree {
-	bin_tree(const Elem& val = ""): cur_deep(1), deep(1), cur_ind(0) {
+	bin_tree(const Elem& val = Elem()): cur_deep(1), deep(1), cur_ind(0) {
 		bt.resize(1);
 		bt[0] = val;
 	}
@@ -17,7 +17,7 @@ struct bin_tree {
 		cur_ind = (cur_ind << 1) + 1;
 		if(++cur_deep > deep) {
 			deep = cur_deep;
-			bt.resize((1 << deep) - 1,"");
+			bt.resize((1 << deep) - 1,Elem());
 		}
 		return *this;
 	}
@@ -26,7 +26,7 @@ struct bin_tree {
 		cur_ind = (cur_ind << 1) + 2;
 		if(++cur_deep > deep) {
 			deep = cur_deep;
-			bt.resize((1 << deep) - 1,"");
+			bt.resize((1 << deep) - 1,Elem());
 		}
 		return *this;
 	}
@@ -53,7 +53,7 @@ struct bin_tree {
 	bool check() {
 		for(int i = 0; i < (1 << deep) - 1 ; ++i)
 			for(int j = 0; j < (1 << deep) - 1; ++j)
-				if((i != j) && (bt[i] != "") && (bt[i] == bt[j]))
+				if((i != j) && (bt[i] != Elem()) && (bt[i] == bt[j]))
 					return true;
 		return false;
 	}
