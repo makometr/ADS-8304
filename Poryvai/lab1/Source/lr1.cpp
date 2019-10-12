@@ -6,39 +6,21 @@
 #include<fstream>// ifstrem()
 #include<cctype>
 
-
-
-
 using namespace std;
 
 void RecF(vector<int>& vectorin, string* vectorout, int ident, int length) {
 
-
-
-
-
 	int i, j;
 
-
-
 	for (i = 0; i < ident; i++)
-
 		cout << "\t";
-
-
 
 	cout << "RecF(";
 
-
-
 	for (i = 0; i < length; i++)
-
 		cout << vectorin[i] << " ";
 
-
-
 	cout << ")" << endl;
-
 
 
 	if (length % 2 == 0 && length != 2) {
@@ -47,7 +29,6 @@ void RecF(vector<int>& vectorin, string* vectorout, int ident, int length) {
 		vector<int> vectorcopy2(length / 2);
 
 		for (i = 0; i < length / 2; i++)
-
 			vectorcopy1[i] = vectorin[i];
 
 		RecF(vectorcopy1, vectorout, ident + 1, length / 2);
@@ -68,8 +49,6 @@ void RecF(vector<int>& vectorin, string* vectorout, int ident, int length) {
 		vector<int> vectorcopy1((length / 2) + 1);
 		vector<int> vectorcopy2((length / 2) + 1);
 
-
-
 		for (i = 0; i < (length / 2) + 1; i++)
 			vectorcopy1[i] = vectorin[i];
 
@@ -81,7 +60,6 @@ void RecF(vector<int>& vectorin, string* vectorout, int ident, int length) {
 
 			vectorcopy2[j] = vectorin[i];
 			j++;
-
 		}
 
 		RecF(vectorcopy2, vectorout, ident + 1, (length / 2) + 1);
@@ -113,19 +91,13 @@ void RecF(vector<int>& vectorin, string* vectorout, int ident, int length) {
 
 	}
 
-
-
-
-
 }
-
-
 
 int is_alldigits(vector<string> is_digits){//передае вектор из чисел
 
 	vector <string> :: iterator it1= is_digits.begin();
 	int flag = 1;
-      	
+
 	while(it1 != is_digits.end() ){
 
 		string::iterator it2 = (*it1).begin();
@@ -134,12 +106,12 @@ int is_alldigits(vector<string> is_digits){//передае вектор из ч
 			it2++;
 
 		while(it2 != (*it1).end() && isdigit(*it2) ) ++it2;
-		
+
 		if(it2 != (*it1).end()){
 			flag = 0;
 			break;
 		}
-				
+
 		it1++;
 	}
 	return flag;
@@ -147,21 +119,13 @@ int is_alldigits(vector<string> is_digits){//передае вектор из ч
 }
 
 
-
-
-
-
 int main() {
-
-
 
 	setlocale(LC_ALL, "Russian");
 	string vector_out;
 	vector_out = "";
 	int ident = 0;
 	int flag;
-
-
 
 	cout << "Ввод из файла или из консоли? (f , c)\n";
 
@@ -170,17 +134,22 @@ int main() {
 
 	if (arg == 'f') {
 
-
-
 		ifstream data("inp.txt");
-
 		ofstream fout("out.txt");
-		
+
 		if(data){
 
 			string str;
 
 			while (getline(data, str)) {
+
+				       if(str == ""){
+
+                                        	cout<<"Пустая строка"<<endl;
+                                        	fout<<"Пустая строка"<<endl;
+                                        	continue;
+                                	}
+
 
 				istringstream s1{ str };
 				vector<string> is_digits;
@@ -192,7 +161,7 @@ int main() {
 
 					cout<<"Данные во вновь обрабатываемой строке введены некорректно"<<endl;
 					fout<<"Данные во вновь обрабатываемой строке введены некорректно";
-
+					fout<<"\n";
 				//	break;
 				}
 				else{
@@ -203,25 +172,20 @@ int main() {
 					cout << vector_out << endl;
 					fout<<vector_out;
 					fout<<"\n";
-				
+
 					vector_out = "";
 				}
-		
 			}
-			
+
 			fout.close();
 			data.close();
 		}
 		else
 			cout<<"Файл не открыт"<<endl;
-		
-
-
 
 	}
 
 	else if (arg == 'c') {
-
 
 		string str;
 		getline(cin, str);
@@ -229,7 +193,13 @@ int main() {
 		ofstream fout("out.txt");
 
 		while (getline(cin, str)) {
-
+				
+				if(str ==""){
+					
+					cout<<"Пустая строка"<<endl;
+					fout<<"Пустая строка"<<endl;
+					continue;
+				}
 
 			        istringstream s1{ str };
                                 vector<string> is_digits;
@@ -240,8 +210,7 @@ int main() {
                                 if(flag == 0){
 
                                         cout<<"Данные во вновь обрабатываемой строке введены некорректно"<<endl;
-					fout<<"Данные во вновь обрабатываемой строке введены некорректно";
-
+					fout<<"Данные во вновь обрабатываемой строке введены некорректно"<<endl;
                                        // break;
                                 }
 				else{
@@ -263,19 +232,11 @@ int main() {
 		fout.close();
                // data.close();
 
-
-
-
 	}
 
 	else
-
 		cout << "Нет такой команды";
 
-
-
 	return 0;
-
-
 
 }
