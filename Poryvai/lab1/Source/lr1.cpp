@@ -119,7 +119,7 @@ int is_alldigits(vector<string> is_digits){//передае вектор из ч
 }
 
 
-int main() {
+int main(int argc, char* argv[]) {
 
 	setlocale(LC_ALL, "Russian");
 	string vector_out;
@@ -134,7 +134,7 @@ int main() {
 
 	if (arg == 'f') {
 
-		ifstream data("inp.txt");
+		ifstream data(argv[1]);
 		ofstream fout("out.txt");
 
 		if(data){
@@ -143,12 +143,12 @@ int main() {
 
 			while (getline(data, str)) {
 
-				       if(str == ""){
+				if(str == ""){
 
-                                        	cout<<"Пустая строка"<<endl;
-                                        	fout<<"Пустая строка"<<endl;
-                                        	continue;
-                                	}
+                                        cout<<"Пустая строка"<<endl;
+                                        fout<<"Пустая строка"<<endl;
+                                        continue;
+                                }
 
 
 				istringstream s1{ str };
