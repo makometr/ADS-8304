@@ -1,2 +1,2 @@
 all: Source/main.cpp
-	g++ -static-libstdc++ -static-libgcc Source/main.cpp -o lab1
+	g++ -static-libstdc++ -static-libgcc Source/main.cpp Source/atom.cpp Source/data.cpp Source/ioManager.cpp Source/list.cpp Source/listhandler.cpp Source/node.cpp Source/parser.cpp -o lab1
