@@ -1,0 +1,2 @@
+make
+./lab5 Test/TestInput.txt Test/TestOutput.txt
