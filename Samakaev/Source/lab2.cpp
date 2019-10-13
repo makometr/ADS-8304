@@ -38,7 +38,7 @@ void fill_map(std::string& values_str, std::map<std::string, int>& arguements_va
 
 	std::cout << "Arguements values" << std::endl;
 
-	for (int i = 0; i < values_str.length(); i++) {
+	for (size_t i = 0; i < values_str.length(); i++) {
 		if (isalpha(values_str[i])) {
 			std::cout << "Incorrect arguement value!" << std::endl;
 			break;
@@ -160,7 +160,7 @@ void substitute(std::string& expression, std::map<std::string, int>& arguements_
 
 	std::cout << "replaced variables with their values:" << std::endl << expression << std::endl;
 
-	for (int i = 0; i < expression.length(); i++) {
+	for (size_t i = 0; i < expression.length(); i++) {
 		if (isalpha(expression[i])) {
 			std::cout << "You didn't set all values" << std::endl;
 			return;
