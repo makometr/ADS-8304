@@ -140,64 +140,58 @@ bool isfigure(std::string str) {
 
 int main(int argc, char* argv[])
 {
-    int choice = 0;
-	int k = 0;
-	char tmp;
-	std::string str;
-	std::ifstream input;
-        std::string proc_str = "";
+    int choice;
+    int cnttest;
+    char tmp;
+    std::string str;
+    std::ifstream input;
+    std::string proc_str;
     
         while(true){
-            std::cout << "  What type of test do you want to do?" << std::endl;
-            std::cout << "        1) from the file" << std::endl;
-            std::cout << "        2) from the console" << std::endl;
-            std::cout << "  enter any other number to exit." << std::endl;
-            std::cin >> choice;
+          std::cout << "  What type of test do you want to do?" << std::endl;
+          std::cout << "        1) from the file" << std::endl;
+          std::cout << "        2) from the console" << std::endl;
+          std::cout << "  enter any other number to exit." << std::endl;
+          std::cin >> choice;
         switch (choice) {
         case 1:
-            std::cout << "* FROM THE FILE *" << std::endl;
-            input.open("./Tests/test.txt");
-             if (!input)
+          std::cout << "* FROM THE FILE *" << std::endl;
+          input.open("./Tests/test.txt");
+            if (!input)
              {
-                 std::cout << "Couldnt open file" <<std::endl;
-             }
-                
-            while(input.get(tmp)){
-                if (tmp != '\n')
+                 std::cout << "Couldnt open Testfile" <<std::endl;
+             }  
+          while(input.get(tmp)){
+              if (tmp != '\n')
                 {
-                str +=tmp;
+                  str +=tmp;
                 }
-
-                else
+              else
                 {
-                std::cout << "test "<<++k<<" for string - " << str << std::endl << std::endl;
-                if (isbracketsequence(str))
-                    std::cout << "		" << str << " == Its bracket" << std::endl << std::endl;
-                else
-                    std::cout << "		" << str << " == Its not bracket" << std::endl << std::endl;
+                std::cout << "test "<<++cnttest<<" for string - " << str << std::endl << std::endl;
+                   if (isbracketsequence(str))
+                     std::cout << "		" << str << " == Its bracket" << std::endl << std::endl;
+                   else
+                     std::cout << "		" << str << " == Its not bracket" << std::endl << std::endl;
                 str = "";
-                }
-                }
+	        }
+              }
 
             break;
-       	  case 2:
-            std::cout << "* FROM THE CONSOLE *" << std::endl;
+       	 case 2:
+          std::cout << "* FROM THE CONSOLE *" << std::endl;
             while (true) {
-                std::cin >> str;
+              std::cin >> str;
                 if (isbracketsequence(str)){
-                    std::cout << "		" << str << " == Its bracket" << std::endl << std::endl;}
+                  std::cout << "		" << str << " == Its bracket" << std::endl << std::endl;}
                 else
-                    std::cout << "		" << str << " == Its not bracket" << std::endl << std::endl;
+                  std::cout << "		" << str << " == Its not bracket" << std::endl << std::endl;
                 str = "";
-
-                break;}
-          default:
+		   break;}
+         default:
             std::cout << "               * EXIT *                 " << std::endl;
             break;
     
-
-
 }}
-
 
 }
