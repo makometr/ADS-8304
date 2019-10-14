@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
 
 void readData(Queue* queue, ChildrenArr& children, std::ifstream& inputF) {
 	std::string nextLine;
-	std::cout << "=======Начало ввода=======\n";
+	std::cout << "\n=======Начало ввода=======\n\n";
 	while ((std::getline(inputF, nextLine))) {
 		int separator = nextLine.find(" ");
 		if (separator > -1) {
@@ -62,13 +62,13 @@ void readData(Queue* queue, ChildrenArr& children, std::ifstream& inputF) {
 		else { //знак окончания ввода данных — одиночное имя
 			std::cout << "Поиск потомков " << nextLine << "\n";
 			queue->push(nextLine);
-			std::cout << "=======Конец ввода=======\n";
+			std::cout << "\n=======Конец ввода========\n\n";
 			return;
 		}
 
 	}
-	std::cout << "Не указан предок, чьих потомков надо найти.\n";
-	std::cout << "=======Конец ввода=======\n";
+	std::cout << "Не указан предок, потомков которого надо найти.\n";
+	std::cout << "\n=======Конец ввода========\n\n";
 }
 
 void findDescendants(Queue* queue, ChildrenArr& children, std::ofstream& outputF, int genNumber) {
