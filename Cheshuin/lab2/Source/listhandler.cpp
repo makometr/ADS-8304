@@ -364,7 +364,7 @@ List::ListP ListHandler::simplifyOper(std::string& oper, Data::DataP arg1, Data:
             Atom::AtomP newOperAtom(new Atom(oper));
 
             list->pushBack(newArg1);
-            list->pushBack(newArg1);
+            list->pushBack(newArg2);
             list->pushBack(newOperAtom);
         }
     }
@@ -375,7 +375,7 @@ List::ListP ListHandler::simplifyOper(std::string& oper, Data::DataP arg1, Data:
             Atom::AtomP buf = std::static_pointer_cast<Atom>(newArg1);
             if (oper == "-" && isNewArg2Simple)
             {
-                Atom::AtomP buf2 = std::static_pointer_cast<Atom>(arg2);
+                Atom::AtomP buf2 = std::static_pointer_cast<Atom>(newArg2);
                 if(buf->value() == buf2->value())
                 {
                     Atom::AtomP newAtom(new Atom("0"));
