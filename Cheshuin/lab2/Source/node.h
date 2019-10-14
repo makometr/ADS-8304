@@ -2,24 +2,29 @@
 #define NODE_H
 
 #include "data.h"
+#include <memory>
+
 
 class Node
 {
-private:
-    Node* prev_ = nullptr;
-    Node* next_ = nullptr;
-    Data* data_ = nullptr;
 public:
+    typedef std::shared_ptr<Node> NodeP;
+    typedef std::weak_ptr<Node> NodeWP;
+
     Node() = default;
 
-    void setNext(Node* node);
-    Node* next();
+    void setNext(NodeP node);
+    NodeP next();
 
-    void setPrev(Node* node);
-    Node* prev();
+    void setPrev(NodeP node);
+    NodeP prev();
 
-    void setData(Data* data);
-    Data* data();
+    void setData(Data::DataP data);
+    Data::DataP data();
+private:
+    NodeWP prev_;
+    NodeP next_ = nullptr;
+    Data::DataP data_ = nullptr;
 };
 
 #endif // NODE_H

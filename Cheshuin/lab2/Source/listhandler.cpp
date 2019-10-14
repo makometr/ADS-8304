@@ -7,13 +7,13 @@ bool ListHandler::isValid(List& list)
         return false;
     }
 
-    Node* buf = list.begin();
+    Node::NodeP buf = list.begin();
     AtomType exprType = AtomType::UNKNOWN;
 
     // Проверка 1 аргумента
     if(buf->data()->dataType() == DataType::ATOM)
     {
-        Atom* arg1 = static_cast<Atom*>(buf->data());
+        Atom::AtomP arg1 = std::static_pointer_cast<Atom>(buf->data());
 
         if(isArgument(*arg1))
         {
@@ -30,7 +30,7 @@ bool ListHandler::isValid(List& list)
     }
     else
     {
-        List* arg1 = static_cast<List*>(buf->data());
+        List::ListP arg1 = std::static_pointer_cast<List>(buf->data());
 
         if(isValid(*arg1))
         {
@@ -59,7 +59,7 @@ bool ListHandler::isValid(List& list)
 
     if(buf->data()->dataType() == DataType::ATOM)
     {
-        Atom* arg2 = static_cast<Atom*>(buf->data());
+        Atom::AtomP arg2 = std::static_pointer_cast<Atom>(buf->data());
 
         if(isArgument(*arg2) == false)
         {
@@ -69,7 +69,7 @@ bool ListHandler::isValid(List& list)
     }
     else
     {
-        List* arg2 = static_cast<List*>(buf->data());
+        List::ListP arg2 = std::static_pointer_cast<List>(buf->data());
 
         if(isValid(*arg2) == false)
         {
@@ -94,7 +94,7 @@ bool ListHandler::isValid(List& list)
 
     if(buf->data()->dataType() == DataType::ATOM)
     {
-        Atom* oper = static_cast<Atom*>(buf->data());
+        Atom::AtomP oper = std::static_pointer_cast<Atom>(buf->data());
 
         if(oper->type() != AtomType::OPERATOR)
         {
@@ -123,7 +123,7 @@ bool ListHandler::isArgument(Atom& atom)
             atom.type() == AtomType::CONST_VALUE);
 }
 
-List* ListHandler::simplify(List& list)
+List::ListP ListHandler::simplify(List& list)
 {
     if(isValid(list))
     {
@@ -131,9 +131,9 @@ List* ListHandler::simplify(List& list)
         {
             if(list.begin()->data()->dataType() == DataType::LIST)
             {
-                List* buf = static_cast<List*>(list.begin()->data());
+                List::ListP buf = std::static_pointer_cast<List>(list.begin()->data());
 
-                List* newList = simplify(*buf);
+                List::ListP newList = simplify(*buf);
 
                 std::cout << list.toString() << " - is simplified to - ";
                 std::cout << newList->toString() <<std::endl;
@@ -142,28 +142,28 @@ List* ListHandler::simplify(List& list)
             else
             {
 
-                List* newList = new List();
+                List::ListP newList(new List());
 
-                Atom* buf = static_cast<Atom*>(list.begin()->data());
-                Atom* newAtom = new Atom(*buf);
+                Atom::AtomP buf = std::static_pointer_cast<Atom>(list.begin()->data());
+                Atom::AtomP newAtom(new Atom(*buf));
 
                 newList->pushBack(newAtom);
 
                 std::cout << list.toString() << " - is simplified to - ";
-                std::cout << newList->toString() <<std::endl;
+                std::cout << newList->toString() << std::endl;
                 return newList;
             }
         }
 
-        Atom* buf = static_cast<Atom*>(list.end()->data());
+        Atom::AtomP buf = std::static_pointer_cast<Atom>(list.end()->data());
 
         if(buf->type() == AtomType::OPERATOR)
         {
-            std::string* operStr = buf->value();
-            Data* arg1 = list.begin()->data();
-            Data* arg2 = list.begin()->next()->data();
+            std::string operStr = buf->value();
+            Data::DataP arg1 = list.begin()->data();
+            Data::DataP arg2 = list.begin()->next()->data();
 
-            List* newList = simplifyOper(operStr, arg1, arg2);
+            List::ListP newList = simplifyOper(operStr, arg1, arg2);
 
             std::cout << list.toString() << " - is simplified to - ";
             std::cout << newList->toString() <<std::endl;
@@ -171,11 +171,11 @@ List* ListHandler::simplify(List& list)
         }
         else
         {
-            Atom* func = static_cast<Atom*>(list.begin()->data());
-            std::string* funcStr = func->value();
-            Data* arg = list.begin()->next()->data();
+            Atom::AtomP func = std::static_pointer_cast<Atom>(list.begin()->data());
+            std::string funcStr = func->value();
+            Data::DataP arg = list.begin()->next()->data();
 
-            List* newList = simplifyFunc(funcStr, arg);
+            List::ListP newList = simplifyFunc(funcStr, arg);
 
             std::cout << list.toString() << " - is simplified to - ";
             std::cout << newList->toString() << std::endl;
@@ -186,54 +186,49 @@ List* ListHandler::simplify(List& list)
     {
         std::cout << list.toString() << " - not simplified because incorrect. ";
 
-        return &list;
+        return std::make_shared<List>(list);
     }
 }
 
-List* ListHandler::simplifyFunc(std::string* func, Data* arg)
+List::ListP ListHandler::simplifyFunc(std::string& func, Data::DataP arg)
 {
-    List* list = new List();
+    List::ListP list(new List());
+    Data::DataP newArg = nullptr;
     //упрощение аргумента
     if(arg->dataType() == DataType::LIST)
     {
-        List* argExpr = static_cast<List*>(arg);
-        List* simplifyedArgExpr = simplify(*argExpr);
+        List::ListP argExpr = std::static_pointer_cast<List>(arg);
+        List::ListP simplifyedArgExpr = simplify(*argExpr);
 
         if(simplifyedArgExpr->begin()->next() == nullptr)
         {
-            Data* newArg = simplifyedArgExpr->pullHead();
-            delete  simplifyedArgExpr;
-
-            if(newArg->dataType() == DataType::LIST)
-            {
-                Atom* newFuncAtom = new Atom(func);
-
-                list->pushBack(newFuncAtom);
-                list->pushBack(newArg);
-            }
-            else
-            {
-               arg = newArg;
-            }
+            newArg = simplifyedArgExpr->pullHead();
+        }
+        else
+        {
+            newArg = simplifyedArgExpr;
         }
     }
-
-    if(arg->dataType() == DataType::ATOM)
+    else
     {
-        Atom* argAtom = static_cast<Atom*>(arg);
+        newArg = arg;
+    }
+
+    if(newArg->dataType() == DataType::ATOM)
+    {
+        Atom::AtomP argAtom = std::static_pointer_cast<Atom>(newArg);
         //упрощения sin
-        if(*func == "sin")
+        if(func == "sin")
         {
-            if(*argAtom->value() == "PI" || *argAtom->value() == "0")
+            if(argAtom->value() == "PI" || argAtom->value() == "0")
             {
-                std::string* argStr = new std::string("0");
-                Atom* newArgAtom = new Atom(argStr);
+                Atom::AtomP newArgAtom(new Atom("0"));
                 list->pushBack(newArgAtom);
             }
             else
             {
-                Atom* newFuncAtom = new Atom(func);
-                Atom* newArgAtom = new Atom(argAtom->value());
+                Atom::AtomP newFuncAtom(new Atom(func));
+                Atom::AtomP newArgAtom(new Atom(*argAtom));
                 list->pushBack(newFuncAtom);
                 list->pushBack(newArgAtom);
             }
@@ -241,23 +236,20 @@ List* ListHandler::simplifyFunc(std::string* func, Data* arg)
         //упрощения cos
         else
         {
-            if(*argAtom->value() == "PI")
+            if(argAtom->value() == "PI")
             {
-                std::string* argStr = new std::string("-1");
-                Atom* newArgAtom = new Atom(argStr);
+                Atom::AtomP newArgAtom(new Atom("-1"));
                 list->pushBack(newArgAtom);
             }
-            else if(*argAtom->value() == "0")
+            else if(argAtom->value() == "0")
             {
-                std::string* argStr = new std::string("1");
-                Atom* newArgAtom = new Atom(argStr);
+                Atom::AtomP newArgAtom(new Atom("1"));
                 list->pushBack(newArgAtom);
             }
             else
             {
-                std::string* newFunc = new std::string(*func);
-                Atom* newFuncAtom = new Atom(newFunc);
-                Atom* newArgAtom = new Atom(*argAtom);
+                Atom::AtomP newFuncAtom(new Atom(func));
+                Atom::AtomP newArgAtom(new Atom(*argAtom));
                 list->pushBack(newFuncAtom);
                 list->pushBack(newArgAtom);
             }
@@ -265,151 +257,154 @@ List* ListHandler::simplifyFunc(std::string* func, Data* arg)
     }
     else
     {
-        std::string* newFunc = new std::string(*func);
-        Atom* newFuncAtom = new Atom(newFunc);
+        Atom::AtomP newFuncAtom(new Atom(func));
 
         list->pushBack(newFuncAtom);
-        list->pushBack(arg);
+        list->pushBack(newArg);
     }
 
     return list;
 }
 
-List* ListHandler::simplifyOper(std::string* oper, Data* arg1, Data* arg2)
+List::ListP ListHandler::simplifyOper(std::string& oper, Data::DataP arg1, Data::DataP arg2)
 {
-    List* list = new List();
+    List::ListP list(new List());
+    Data::DataP newArg1 = nullptr;
+    Data::DataP newArg2 = nullptr;
 
-    bool isArg1Simple = false;
-    bool isArg2Simple = false;
+    bool isNewArg1Simple = false;
+    bool isNewArg2Simple = false;
     bool isAlreadySimplified = false;
     //упрощение 1 аргумента
     if(arg1->dataType() == DataType::LIST)
     {
-        List* arg1Expr = static_cast<List*>(arg1);
-        List* simplifyedArg1Expr = simplify(*arg1Expr);
+        List::ListP arg1Expr = std::static_pointer_cast<List>(arg1);
+        List::ListP simplifyedArg1Expr = simplify(*arg1Expr);
 
         if(simplifyedArg1Expr->begin()->next() == nullptr)
         {
-            Data* newArg1 = simplifyedArg1Expr->pullHead();
-            delete  simplifyedArg1Expr;
-
-            arg1 = newArg1;
+            newArg1 = simplifyedArg1Expr->pullHead();
         }
         else
         {
-            arg1 = simplifyedArg1Expr;
+            newArg1 = simplifyedArg1Expr;
         }
+    }
+    else
+    {
+        newArg1 = arg1;
     }
     //упрощение 2 аргумента
     if(arg2->dataType() == DataType::LIST)
     {
-        List* arg2Expr = static_cast<List*>(arg2);
-        List* simplifyedArg2Expr = simplify(*arg2Expr);
+        List::ListP arg2Expr = std::static_pointer_cast<List>(arg2);
+        List::ListP simplifyedArg2Expr = simplify(*arg2Expr);
 
         if(simplifyedArg2Expr->begin()->next() == nullptr)
         {
-            Data* newArg2 = simplifyedArg2Expr->pullHead();
-            delete  simplifyedArg2Expr;
-
-            arg2 = newArg2;
+            newArg2 = simplifyedArg2Expr->pullHead();
         }
         else
         {
-            arg2 = simplifyedArg2Expr;
+            newArg2 = simplifyedArg2Expr;
         }
     }
-
-    if(arg1->dataType() == DataType::ATOM)
+    else
     {
-        isArg1Simple = true;
+        newArg2 = arg2;
     }
-    if(arg2->dataType() == DataType::ATOM)
+
+    if(newArg1->dataType() == DataType::ATOM)
     {
-        isArg2Simple = true;
+        isNewArg1Simple = true;
+    }
+    if(newArg2->dataType() == DataType::ATOM)
+    {
+        isNewArg2Simple = true;
     }
     //упрощение текущей операции
-    if(*oper == "*")
+    if(oper == "*")
     {
-        if(isArg1Simple)
+        if(isNewArg1Simple)
         {
-            Atom* buf = static_cast<Atom*>(arg1);
-            if(*buf->value() == "0")
+            Atom::AtomP buf = std::static_pointer_cast<Atom>(newArg1);
+            if(buf->value() == "0")
             {
-                std::string* atomValue = new std::string("0");
-                Atom* newAtom = new Atom(atomValue);
+                Atom::AtomP newAtom(new Atom("0"));
                 list->pushBack(newAtom);
 
                 isAlreadySimplified = true;
             }
-            else if(*buf->value() == "1")
+            else if(buf->value() == "1")
             {
-                list->pushBack(arg2);
+                list->pushBack(newArg2);
 
                 isAlreadySimplified = true;
             }
         }
-        if(isArg2Simple && isAlreadySimplified == false)
+        if(isNewArg2Simple && isAlreadySimplified == false)
         {
-            Atom* buf = static_cast<Atom*>(arg2);
-            if(*buf->value() == "0")
+            Atom::AtomP buf = std::static_pointer_cast<Atom>(newArg2);
+            if(buf->value() == "0")
             {
-                std::string* atomValue = new std::string("0");
-                Atom* newAtom = new Atom(atomValue);
+                Atom::AtomP newAtom(new Atom("0"));
                 list->pushBack(newAtom);
 
                 isAlreadySimplified = true;
             }
-            else if(*buf->value() == "1")
+            else if(buf->value() == "1")
             {
-                list->pushBack(arg1);
+                list->pushBack(newArg1);
 
                 isAlreadySimplified = true;
             }
         }
         if(isAlreadySimplified == false)
         {
-            std::string* newOper = new std::string(*oper);
-            Atom* newOperAtom = new Atom(newOper);
+            Atom::AtomP newOperAtom(new Atom(oper));
 
-            list->pushBack(arg1);
-            list->pushBack(arg2);
+            list->pushBack(newArg1);
+            list->pushBack(newArg1);
             list->pushBack(newOperAtom);
         }
     }
-    else if(*oper == "+" || *oper == "-")
+    else if(oper == "+" || oper == "-")
     {
-        if(isArg1Simple)
+        if(isNewArg1Simple)
         {
-            Atom* buf = static_cast<Atom*>(arg1);
-            if (*oper == "-" && isArg2Simple)
+            Atom::AtomP buf = std::static_pointer_cast<Atom>(newArg1);
+            if (oper == "-" && isNewArg2Simple)
             {
-                Atom* buf2 = static_cast<Atom*>(arg2);
-                if(*buf->value() == *buf2->value())
+                Atom::AtomP buf2 = std::static_pointer_cast<Atom>(arg2);
+                if(buf->value() == buf2->value())
                 {
-                    std::string* atomValue = new std::string("0");
-                    Atom* newAtom = new Atom(atomValue);
+                    Atom::AtomP newAtom(new Atom("0"));
                     list->pushBack(newAtom);
 
                     isAlreadySimplified = true;
                 }
             }
-        }
-        if(isArg2Simple && isAlreadySimplified == false)
-        {
-            Atom* buf = static_cast<Atom*>(arg2);
-            if(*buf->value() == "0")
+            else if(oper == "+" && buf->value() == "0")
             {
-                list->pushBack(arg1);
+                list->pushBack(newArg2);
+                isAlreadySimplified = true;
+            }
+        }
+        if(isNewArg2Simple && isAlreadySimplified == false)
+        {
+            Atom::AtomP buf = std::static_pointer_cast<Atom>(newArg2);
+            if(buf->value() == "0")
+            {
+                list->pushBack(newArg1);
                 isAlreadySimplified = true;
             }
         }
         if(isAlreadySimplified == false)
         {
-            std::string* newOper = new std::string(*oper);
-            Atom* newOperAtom = new Atom(newOper);
+            Atom::AtomP newOperAtom(new Atom(oper));
 
-            list->pushBack(arg1);
-            list->pushBack(arg2);
+            list->pushBack(newArg1);
+            list->pushBack(newArg2);
             list->pushBack(newOperAtom);
         }
     }

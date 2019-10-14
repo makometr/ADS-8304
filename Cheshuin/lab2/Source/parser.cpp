@@ -1,9 +1,9 @@
 #include "parser.h"
 
-List* Parser::parse(std::istream& stream)
+List::ListP Parser::parse(std::istream& stream)
 {
     char buffer = '\0';
-    List* parsedList = new List();
+    List::ListP parsedList(new List());
 
     while(stream.peek() != EOF)
     {
@@ -29,10 +29,10 @@ List* Parser::parse(std::istream& stream)
     return parsedList;
 }
 
-Atom* Parser::readAtom(std::istream& stream)
+Atom::AtomP Parser::readAtom(std::istream& stream)
 {
     char buffer = ' ';
-    std::string* atomValue = new std::string();
+    std::string atomValue = "";
 
     while(stream.peek() != EOF)
     {
@@ -50,10 +50,10 @@ Atom* Parser::readAtom(std::istream& stream)
         }
         else
         {
-            (*atomValue) += buffer;
+            atomValue += buffer;
         }
     }
 
-    Atom* atom = new Atom(atomValue);
+    Atom::AtomP atom(new Atom(atomValue));
     return atom;
 }

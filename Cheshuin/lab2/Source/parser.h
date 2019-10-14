@@ -14,8 +14,8 @@ private:
 public:
     Parser() = default;
 
-    List* parse(std::istream& stream);
-    Atom* readAtom(std::istream& stream);
+    List::ListP parse(std::istream& stream);
+    Atom::AtomP readAtom(std::istream& stream);
 };
 
 #endif // PARSER_H

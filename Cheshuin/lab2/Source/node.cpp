@@ -2,32 +2,32 @@
 #include "list.h"
 #include "atom.h"
 
-void Node::setNext(Node* node)
+void Node::setNext(NodeP node)
 {
     next_ = node;
 }
 
-Node* Node::next()
+Node::NodeP Node::next()
 {
     return next_;
 }
 
-void Node::setPrev(Node* node)
+void Node::setPrev(NodeP node)
 {
     prev_ = node;
 }
 
-Node* Node::prev()
+Node::NodeP Node::prev()
 {
-    return prev_;
+    return Node::NodeP(prev_);
 }
 
-void Node::setData(Data* data)
+void Node::setData(Data::DataP data)
 {
     data_ = data;
 }
 
-Data* Node::data()
+Data::DataP Node::data()
 {
     return data_;
 }

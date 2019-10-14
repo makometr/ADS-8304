@@ -5,24 +5,10 @@ List::List()
     this->setDataType(DataType::LIST);
 }
 
-void List::pushBack(Data* data)
+void List::pushBack(Data::DataP data)
 {
-    if(data->dataType() == DataType::LIST)
-    {
-        List* list = static_cast<List*>(data);
-        pushBack(list);
-    }
-    else if(data->dataType() == DataType::ATOM)
-    {
-        Atom* atom = static_cast<Atom*>(data);
-        pushBack(atom);
-    }
-}
-
-void List::pushBack(List* list)
-{
-    Node* newNode = new Node();
-    newNode->setData(list);
+    Node::NodeP newNode(new Node);
+    newNode->setData(data);
 
     if(head_ == nullptr)
     {
@@ -37,30 +23,12 @@ void List::pushBack(List* list)
     }
 }
 
-void List::pushBack(Atom *atom)
-{
-    Node* newNode = new Node();
-    newNode->setData(atom);
-
-    if(head_ == nullptr)
-    {
-        head_ = newNode;
-        tail_ = newNode;
-    }
-    else
-    {
-        tail_->setNext(newNode);
-        newNode->setPrev(tail_);
-        tail_ = newNode;
-    }
-}
-
-Node* List::begin()
+Node::NodeP List::begin()
 {
     return head_;
 }
 
-Node* List::end()
+Node::NodeP List::end()
 {
     return tail_;
 }
@@ -68,9 +36,9 @@ Node* List::end()
 std::string List::toString()
 {
     std::string outString;
-    Node* curNode = head_;
-    List* curList = nullptr;
-    Atom* curAtom = nullptr;
+    Node::NodeP curNode = head_;
+    List::ListP curList = nullptr;
+    Atom::AtomP curAtom = nullptr;
 
     if(isEmpty())
     {
@@ -81,12 +49,12 @@ std::string List::toString()
     {
         if(curNode->data()->dataType() == DataType::ATOM)
         {
-            curAtom = static_cast<Atom*>(curNode->data());
-            outString += *(curAtom->value());
+            curAtom = std::static_pointer_cast<Atom>(curNode->data());
+            outString += curAtom->value();
         }
         else if(curNode->data()->dataType() == DataType::LIST)
         {
-            curList = static_cast<List*>(curNode->data());
+            curList = std::static_pointer_cast<List>(curNode->data());
             outString += '(' + curList->toString() + ')';
         }
 
@@ -101,13 +69,13 @@ std::string List::toString()
     return outString;
 }
 
-Data* List::pullHead()
+Data::DataP List::pullHead()
 {
-    Data* data = head_->data();
-    Node* buf = head_->next();
+    DataP data = head_->data();
+    Node::NodeP buf = head_->next();
 
     head_->setData(nullptr);
-    delete  head_;
+
     head_ = buf;
 
     return data;

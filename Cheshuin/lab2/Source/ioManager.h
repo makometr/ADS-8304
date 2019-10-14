@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <memory>
 #include <sstream>
 
 class IoManager
@@ -17,6 +18,8 @@ private:
 
     void openNextStream();
 public:
+    typedef std::shared_ptr<IoManager> IoManagerP;
+
     IoManager(int argc, char** argv);
     ~IoManager();
     std::istream* nextStream();

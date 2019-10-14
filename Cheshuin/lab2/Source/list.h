@@ -1,6 +1,7 @@
 #ifndef LIST_H
 #define LIST_H
 
+#include <memory>
 #include "data.h"
 #include "node.h"
 #include "atom.h"
@@ -8,19 +9,19 @@
 class List: public Data
 {
 private:
-    Node* head_  = nullptr;
-    Node* tail_  = nullptr;
+    Node::NodeP head_  = nullptr;
+    Node::NodeP tail_  = nullptr;
 public:
+    typedef std::shared_ptr<List> ListP;
+
     List();
 
-    void pushBack(Data* data);
-    void pushBack(List* list);
-    void pushBack(Atom* atom);
-    Data* pullHead();
+    void pushBack(Data::DataP data);
+    Data::DataP pullHead();
     bool isEmpty();
 
-    Node* begin();
-    Node* end();
+    Node::NodeP begin();
+    Node::NodeP end();
 
     std::string toString();
 };

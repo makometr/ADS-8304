@@ -2,6 +2,7 @@
 #define LISTHANDLER_H
 
 #include <iostream>
+#include <memory>
 #include <map>
 #include <string>
 #include "list.h"
@@ -10,13 +11,15 @@
 class ListHandler
 {
 private:
+    typedef std::shared_ptr<ListHandler> ListHandlerP;
+
     bool isArgument(Atom& atom);
-    List* simplifyFunc(std::string* func, Data* arg);
-    List* simplifyOper(std::string* oper, Data* arg1, Data* arg2);
+    List::ListP simplifyFunc(std::string& func, Data::DataP arg);
+    List::ListP simplifyOper(std::string& oper, Data::DataP arg1, Data::DataP arg2);
 public:
     ListHandler() = default;
     bool isValid(List& list);
-    List* simplify(List& list);
+    List::ListP simplify(List& list);
 };
 
 #endif // LISTHANDLER_H

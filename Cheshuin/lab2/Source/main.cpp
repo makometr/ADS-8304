@@ -7,8 +7,8 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    List* list;
-    List* simlifyedList;
+    List::ListP list;
+    List::ListP simlifyedList;
     Parser parser;
     ListHandler listHandler;
     IoManager ioManager(argc, argv);
