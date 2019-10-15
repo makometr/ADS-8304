@@ -72,7 +72,8 @@ void readData(Queue* queue, ChildrenArr& children, std::ifstream& inputF) {
 }
 
 void findDescendants(Queue* queue, ChildrenArr& children, std::ofstream& outputF) {
-
+	
+	std::string names;
 	bool childIsFound = false;
 	while (!queue->isEmpty()) {
 		std::string ancestor = queue->pop();
@@ -80,7 +81,7 @@ void findDescendants(Queue* queue, ChildrenArr& children, std::ofstream& outputF
 		for (int i = 0; it != children[ancestor].end(); it++, i++) { 
 			if (it->second) {
 				childIsFound = true;
-				outputF << it->first << "; ";
+				names += it->first + "; ";
 				std::cout << i << ") Потомок " << it->first << " от " << ancestor << "\n";
 				queue->push(it->first);
 			}
@@ -89,5 +90,9 @@ void findDescendants(Queue* queue, ChildrenArr& children, std::ofstream& outputF
 	if (!childIsFound){
 		std::cout << "Потомков не найдено.\n";
 		outputF << "Потомков не найдено.\n";
+	}
+	else{
+		outputF << names;
+		std::cout << names << "\n";
 	}
 }
