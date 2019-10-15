@@ -182,25 +182,27 @@ bool helpCompare(const lisp x, const lisp y, bool &flag) {
 }
 
 int main() {
-    lisp lst1 = new s_expr;
-    lisp lst2 = new s_expr;
-    bool compareHierarchicalResult = true;
+	lisp lst1 = new s_expr;
+	lisp lst2 = new s_expr;
+	bool compareHierarchicalResult = true;
 	bool *compareHierarchicalResultPointer = &compareHierarchicalResult;
     
 	read_lisp(lst1);
-    read_lisp(lst2);
+	read_lisp(lst2);
 	std::cout << "1-st lisp is: ";
 	write_lisp(lst1);
 	std::cout << std::endl << "2-nd lisp is: ";
 	write_lisp(lst2);
 	
-	if(compareS_expr(lst1, lst2, *compareHierarchicalResultPointer))
+	if(compareS_expr(lst1, lst2, *compareHierarchicalResultPointer)) {
 		std::cout << std::endl << "Result: They are equal" << std::endl;
-	else
+	}
+	else{
 		std::cout << std::endl << "Result: They are not equal" << std::endl;
+	}
 
 	destroy(lst1);
-    destroy(lst2);
+	destroy(lst2);
     
     return 0;
 }
