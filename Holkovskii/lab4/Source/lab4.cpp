@@ -7,10 +7,15 @@ class bin_tree {
 	int cur_deep;
 	int deep;
 	int cur_ind;
-	std::vector<Elem> vector;
+	Elem* vector;
 public:
 	bin_tree(const Elem& val = Elem()): cur_deep(1), deep(1), cur_ind(0) {
-		vector.resize(1,val);
+		vector = new Elem[1];
+		vector[0] = val;
+	}
+
+	~bin_tree() {
+		delete[] vector;
 	}
 
 	void set(const Elem val) {
@@ -20,8 +25,16 @@ public:
 	bin_tree& left() {
 		cur_ind = (cur_ind << 1) + 1;
 		if(++cur_deep > deep) {
+			Elem* tmp_vector = new Elem[(1<<cur_deep)-1];
+			for(int i = 0; i < (1 << deep) - 1; ++i) {
+				tmp_vector[i] = vector[i];
+			}
+			for(int i = (1 << deep) - 1; i < (1 << cur_deep) - 1; ++i) {
+				tmp_vector[i] = Elem();
+			}
+			delete[] vector;
 			deep = cur_deep;
-			vector.resize((1 << deep) - 1,Elem());
+			vector = tmp_vector;
 		}
 		return *this;
 	}
@@ -29,8 +42,16 @@ public:
 	bin_tree& right() {
 		cur_ind = (cur_ind << 1) + 2;
 		if(++cur_deep > deep) {
+			Elem* tmp_vector = new Elem[(1<<cur_deep)-1];
+			for(int i = 0; i < (1 << deep) - 1; ++i) {
+				tmp_vector[i] = vector[i];
+			}
+			for(int i = (1 << deep) - 1; i < (1 << cur_deep) - 1; ++i) {
+				tmp_vector[i] = Elem();
+			}
+			delete[] vector;
 			deep = cur_deep;
-			vector.resize((1 << deep) - 1,Elem());
+			vector = tmp_vector;
 		}
 		return *this;
 	}
@@ -50,7 +71,9 @@ public:
 		cur_ind = 0;
 		deep = 1;
 		cur_deep = 1;
-		vector.resize(1);
+		delete[] vector;
+		vector = new Elem[1];
+		vector[0] = Elem();
 		return *this;
 	}
 
