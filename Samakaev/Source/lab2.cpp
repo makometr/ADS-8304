@@ -6,18 +6,31 @@
 #include <map>
 
 
-
 struct Node {
-
 	Node() = default;
-
+	
 	std::variant<char, int> value;
 	std::variant<std::pair<Node*, Node*>, Node*> arguments;
 
 	int calculate();
+
 };
 
 bool rec_fill_branch(Node*& element, std::string& expression);
+
+void rec_free(Node* &head) {
+	if (std::holds_alternative<std::pair<Node*, Node*>>(head->arguments)) {
+		if((std::get<std::pair<Node*, Node*>>(head->arguments).first))
+			rec_free((std::get<std::pair<Node*, Node*>>(head->arguments).first));
+		if ((std::get<std::pair<Node*, Node*>>(head->arguments).second))
+			rec_free((std::get<std::pair<Node*, Node*>>(head->arguments).second));
+		free(head);
+	}
+	else if (std::holds_alternative <Node*>(head->arguments)) {
+		rec_free(std::get<Node*>(head->arguments));
+		free(head);
+	}
+}
 
 int Node::calculate()
 {
@@ -171,7 +184,6 @@ void fill_map(std::string& values_str, std::map<std::string, int>& arguements_va
 		values_str.erase(match.position(2), match[2].length());
 	}
 
-	//std::cout << "Arguements values" << std::endl;
 
 	for (size_t i = 0; i < values_str.length(); i++) {
 		if (isalpha(values_str[i])) {
@@ -179,10 +191,6 @@ void fill_map(std::string& values_str, std::map<std::string, int>& arguements_va
 			break;
 		}
 	}
-
-	/*for (auto it = arguements_values_map.begin(); it != arguements_values_map.end(); ++it) {
-		std::cout << it->first << " = " << it->second << std::endl;
-	}*/
 }
 
 //replace var names with their values
@@ -203,8 +211,6 @@ bool substitute(std::string& expression, std::map<std::string, int>& arguements_
 	}
 
 	arguements_values_map.clear();
-
-	//std::cout << "replaced variables with their values:" << std::endl << expression << std::endl;
 
 	for (size_t i = 0; i < expression.length(); i++) {
 		if (isalpha(expression[i])) {
@@ -232,7 +238,6 @@ void console_input(std::map <std::string, int>& arguements_values_map, Node* hea
 	fill_map(values, arguements_values_map);
 
 	if (is_brackets_correct(expression)) {
-		//std::cout << expression << std::endl;
 		if (substitute(expression, arguements_values_map)) {
 			if (rec_fill_branch(head, expression)) {
 				std::cout << head->calculate() << std::endl;;
@@ -265,7 +270,6 @@ void file_input(char* argv, std::map <std::string, int>& arguements_values_map, 
 		fill_map(values, arguements_values_map);
 
 		if (is_brackets_correct(expression)) {
-			//std::cout << expression << std::endl;
 			if (substitute(expression, arguements_values_map)) {
 				if (rec_fill_branch(head, expression)) {
 					std::cout << head->calculate() << std::endl;;
@@ -288,4 +292,6 @@ int main(int argc, char** argv)
 	else if (argc == 2)
 		file_input(argv[1], arguements_values_map, head);
 	else std::cout << "Please check arguments are correct";
+
+	rec_free(head);
 }
