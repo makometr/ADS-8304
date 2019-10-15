@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -41,7 +40,7 @@ public:
         return *this;
     }
 
-    // parameter packs are used to concisely append to a sequence, as in line 170
+    // parameter packs are used to concisely append to a sequence, as exemplified in line 153
     template<typename... Ts>
     Sequence<T> &append(T elem, Ts...elems)
     {
@@ -59,7 +58,6 @@ public:
     }
 
     // some convenient member functions
-
     size_t cardinality()
     {
         return this->vector.size();
