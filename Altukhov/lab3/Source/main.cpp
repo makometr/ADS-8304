@@ -11,7 +11,7 @@
 typedef std::map<std::string, std::map<std::string, bool>> ChildrenArr; //ассоциативный двумерный массив arr[string][string] = bool
 
 void readData(Queue* queue, ChildrenArr& children, std::ifstream& inputF);
-void findDescendants(Queue* queue, ChildrenArr& children, std::ofstream& outputF, int genNumber);
+void findDescendants(Queue* queue, ChildrenArr& children, std::ofstream& outputF);
 
 int main(int argc, char* argv[]) {
 
@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 	Queue* queue = new Queue;
 	ChildrenArr children;
 	readData(queue, children, inputF);
-	findDescendants(queue, children, outputF, 1);
+	findDescendants(queue, children, outputF);
 
 	delete queue;
 	inputF.close();
@@ -71,30 +71,23 @@ void readData(Queue* queue, ChildrenArr& children, std::ifstream& inputF) {
 	std::cout << "\n=======Конец ввода========\n\n";
 }
 
-void findDescendants(Queue* queue, ChildrenArr& children, std::ofstream& outputF, int genNumber) {
+void findDescendants(Queue* queue, ChildrenArr& children, std::ofstream& outputF) {
 
-	Queue* nextGen = new Queue;
-	std::string names;
+	bool childIsFound = false;
 	while (!queue->isEmpty()) {
 		std::string ancestor = queue->pop();
 		std::map<std::string, bool> ::iterator it = children[ancestor].begin();
 		for (int i = 0; it != children[ancestor].end(); it++, i++) { 
 			if (it->second) {
-				names += it->first + "; ";
+				childIsFound = true;
+				outputF << it->first << "; ";
 				std::cout << i << ") Потомок " << it->first << " от " << ancestor << "\n";
-				nextGen->push(it->first);
+				queue->push(it->first);
 			}
 		}
 	}
-	if (!nextGen->isEmpty()) {
-		std::cout << "Поколение " << genNumber << ": " << names << "\n";
-		outputF << "Поколение " << genNumber << ": " << names << "\n";
-		findDescendants(nextGen, children, outputF, genNumber + 1);
-	}
-	else if (genNumber == 1) {
+	if (!childIsFound){
 		std::cout << "Потомков не найдено.\n";
 		outputF << "Потомков не найдено.\n";
 	}
-
-	delete nextGen;
 }
