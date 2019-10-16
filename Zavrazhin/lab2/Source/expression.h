@@ -312,13 +312,13 @@ public:
 
     bool isCorrect()
     {
-        std::stack<std::variant<T,bool>> execution_stack;
+        std::stack<std::variant<T,bool>> executionStack;
         executionErrors.resize(0);
-        this->checkNodes(execution_stack);
-        if(execution_stack.size() > 1)
+        this->checkNodes(executionStack);
+        if(executionStack.size() > 1)
             this->executionErrors.push_back(std::string("There ") + 
-                 (execution_stack.size() > 2 ? "are " : "is ") + 
-                 std::to_string(execution_stack.size() - 1) + 
+                 (executionStack.size() > 2 ? "are " : "is ") + 
+                 std::to_string(executionStack.size() - 1) + 
                  " unused operands left.");
         if(this->parsingErrors.size() > 0 || this->executionErrors.size() > 0)
             return false;
@@ -331,11 +331,11 @@ public:
            !(this->executionErrors.size() > 0 || this->isCorrect()))
             return("There are no errors found.\n");
             
-        auto total_length = 0;
+        auto totalLength = 0;
         for(auto error : this->parsingErrors)
-            total_length += error.length() + 1;
+            totalLength += error.length() + 1;
         for(auto error : this->executionErrors)
-            total_length += error.length() + 1;
+            totalLength += error.length() + 1;
             
         std::string result;
         for(auto error : this->parsingErrors)
@@ -526,7 +526,7 @@ private:
 
     // tries to compute the value of the stored expression in order to find
     // all cases of division by 0
-    void checkNodes(std::stack<std::variant<T,bool>>& execution_stack)
+    void checkNodes(std::stack<std::variant<T,bool>>& executionStack)
     {
         size_t termCount = 1;
         for(auto current = this->begin(), end = this->end(); 
@@ -535,7 +535,7 @@ private:
             // push a number onto the stack
             if(std::holds_alternative<T>(current->content()))
             {
-                execution_stack.push(std::get<T>(current->content()));
+                executionStack.push(std::get<T>(current->content()));
                 if(DEBUG)
                 {
                     std::cout << "~~~~~~" << std::endl;
@@ -548,7 +548,7 @@ private:
             // push an unknown value onto the stack
             else if(std::holds_alternative<std::string>(current->content()))
             {
-                execution_stack.push(true);
+                executionStack.push(true);
                 if(DEBUG)
                 {
                     std::cout << "~~~~~~" << std::endl;
@@ -594,10 +594,10 @@ private:
                                  std::to_string(previousNodeCount + 1) +
                                  " is removed from the stack" << std::endl;
                         }
-                        execution_stack.pop();
+                        executionStack.pop();
                     }
                     // push an unknown value onto the stack as its result
-                    execution_stack.push(true);
+                    executionStack.push(true);
                     if(DEBUG)
                     {
                         std::cout << "Term " + std::to_string(termCount) + 
@@ -610,9 +610,9 @@ private:
                     // if it is "-", try to execute it
                     if(operationType == lab2::OperationType::SUBTRACTION)
                     {
-                        if(std::holds_alternative<T>(execution_stack.top()))
+                        if(std::holds_alternative<T>(executionStack.top()))
                         {
-                            auto operand = std::get<T>(execution_stack.top());
+                            auto operand = std::get<T>(executionStack.top());
                             if(DEBUG)
                             {
                                 std::cout << "Term " 
@@ -620,8 +620,8 @@ private:
                                      ", the operand is " << operand 
                                      << std::endl;
                             }
-                            execution_stack.pop();
-                            execution_stack.push(-operand);
+                            executionStack.pop();
+                            executionStack.push(-operand);
                         }
                         else
                         {
@@ -632,8 +632,8 @@ private:
                                      ", the operand is undecidable" 
                                      << std::endl;
                             }
-                            execution_stack.pop();
-                            execution_stack.push(true);
+                            executionStack.pop();
+                            executionStack.push(true);
                         }
                     }
                     // if it is not "-", report an error
@@ -644,7 +644,7 @@ private:
                               ": The operation \"" +     
                               std::to_string(operationType) +
                               "\" has too few (1) arguments.");
-                        execution_stack.pop();
+                        executionStack.pop();
                         if(DEBUG)
                         {
                             std::cout << "Term " + std::to_string(termCount) + 
@@ -652,7 +652,7 @@ private:
                                  std::to_string(previousNodeCount + 1) +
                                  " is removed from the stack" << std::endl;
                         }
-                        execution_stack.push(true);
+                        executionStack.push(true);
                         if(DEBUG)
                         {
                             std::cout << "Term " + std::to_string(termCount) + 
@@ -664,10 +664,10 @@ private:
                 else if(previousNodeCount == 2)
                 {
                     // retrieve the operands in reverse order
-                    std::variant<T,bool> operand2 = execution_stack.top();
-                    execution_stack.pop();
-                    std::variant<T,bool> operand1 = execution_stack.top();
-                    execution_stack.pop();
+                    std::variant<T,bool> operand2 = executionStack.top();
+                    executionStack.pop();
+                    std::variant<T,bool> operand1 = executionStack.top();
+                    executionStack.pop();
                     if(DEBUG)
                     {
                         std::cout << "Term " + std::to_string(termCount) + 
@@ -691,7 +691,7 @@ private:
                         this->executionErrors.push_back("Term " 
                              + std::to_string(termCount) +
                              ": Division by 0 encountered.");
-                        execution_stack.push(true);
+                        executionStack.push(true);
                         if(DEBUG)
                         {
                             std::cout << "Term " + std::to_string(termCount) + 
@@ -702,7 +702,7 @@ private:
                     else if(std::holds_alternative<bool>(operand1) || 
                             std::holds_alternative<bool>(operand2))
                     {
-                        execution_stack.push(true);
+                        executionStack.push(true);
                         if(DEBUG)
                         {
                             std::cout << "Term " + std::to_string(termCount) + 
@@ -734,7 +734,7 @@ private:
                             result = std::get<T>(operand1) / 
                                      std::get<T>(operand2);
                         }
-                        execution_stack.push(result);
+                        executionStack.push(result);
                         if(DEBUG)
                         {
                             std::cout << "Term " + std::to_string(termCount) + 
