@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <regex>
 #include <string>
 #include <fstream>
@@ -34,6 +34,7 @@ void rec_free(Node* &head) {
 
 int Node::calculate()
 {
+	int devider;
 	if (std::holds_alternative<char>(value))
 	{
 		if (std::get<char>(value) == '+')
@@ -50,9 +51,14 @@ int Node::calculate()
 			else
 				return (-1) * std::get<Node*>(arguments)->calculate();
 		}
-		if (std::get<char>(value) == '/')
-			return std::get<std::pair<Node*, Node*>>(arguments).first->calculate() /
-					std::get<std::pair<Node*, Node*>>(arguments).second->calculate();
+		if (std::get<char>(value) == '/') {
+			devider = std::get<std::pair<Node*, Node*>>(arguments).second->calculate();
+			if (devider != 0)
+				return std::get<std::pair<Node*, Node*>>(arguments).first->calculate() / devider;
+			else {
+				throw(0);
+			}
+		}
 	}
 	else
 		return std::get<int>(value);
@@ -65,9 +71,35 @@ bool is_operand(char c) {
 	else return false;
 }
 
+void rec_cross(Node* element, int &i) {
+	if (std::holds_alternative<char>(element->value) && std::holds_alternative<std::pair<Node*, Node*>>(element->arguments)) {
+		if ((std::get<std::pair<Node*, Node*>>(element->arguments).first)) {
+			if (std::get<char>(element->value)) {
+				rec_cross((std::get<std::pair<Node*, Node*>>(element->arguments).first), i);
+			}
+		}
+		if ((std::get<std::pair<Node*, Node*>>(element->arguments).second)) {
+			if (std::get<char>(element->value)) {
+				rec_cross((std::get<std::pair<Node*, Node*>>(element->arguments).second), i);
+			}
+		}
+		i += 3;
+	}
+	else if (std::holds_alternative<char>(element->value) && std::holds_alternative<Node*>(element->arguments)) {
+		if ((std::get<Node*>(element->arguments))) {
+			if (std::get<char>(element->value)) {
+				rec_cross(std::get<Node*>(element->arguments), i);
+			}
+		}
+		i += 2;
+	}
+
+}
+
 bool create_node(std::string& expression, int &i, Node* &element) {
 	
 	int bracket_cnt = 0;
+	bool is_first = true;
 	std::string buff;
 
 	if (expression[i] == '(') {
@@ -90,7 +122,8 @@ bool create_node(std::string& expression, int &i, Node* &element) {
 	}
 	else {
 		while (expression[i] != ' ' && expression[i] != '(' && expression[i] != ')') {
-			if (isdigit(expression[i])) {
+			if (isdigit(expression[i]) || (expression[i] == '-' && is_first)) {
+				is_first = false;
 				buff += expression[i];
 				i++;
 			}
@@ -98,6 +131,7 @@ bool create_node(std::string& expression, int &i, Node* &element) {
 				return false;
 		}
 		element->value = stoi(buff);
+		is_first = true;
 	}
 
 	return true;
@@ -236,14 +270,21 @@ void console_input(std::map <std::string, int>& arguements_values_map, Node* hea
 	getline(std::cin, values);
 
 	fill_map(values, arguements_values_map);
-
+	int j = 0;
 	if (is_brackets_correct(expression)) {
 		if (substitute(expression, arguements_values_map)) {
 			if (rec_fill_branch(head, expression)) {
-				std::cout << head->calculate() << std::endl;;
+				try {
+					std::cout << head->calculate() << std::endl;
+					rec_cross(head, j);
+				}
+				catch (int error) {
+					if (error == 0)
+						std::cout << "Division by zero was detected" << std::endl;
+				}
 			}
 			else
-				std::cout << "Incorrect expression detected" << std::endl;
+				std::cout << expression << std::endl << "Incorrect expression detected" << std::endl;
 		}
 	}
 }
@@ -265,6 +306,8 @@ void file_input(char* argv, std::map <std::string, int>& arguements_values_map, 
 		getline(file, expression);
 		getline(file, values);
 
+		int j = 0;
+
 		std::cout << i << " : " << expression << std::endl << values << std::endl;
 
 		fill_map(values, arguements_values_map);
@@ -272,10 +315,18 @@ void file_input(char* argv, std::map <std::string, int>& arguements_values_map, 
 		if (is_brackets_correct(expression)) {
 			if (substitute(expression, arguements_values_map)) {
 				if (rec_fill_branch(head, expression)) {
-					std::cout << head->calculate() << std::endl;;
+					try {
+						std::cout << head->calculate() << std::endl;
+						rec_cross(head, j);
+						std::cout << j << std::endl;
+					}
+					catch (int error) {
+						if (error == 0)
+							std::cout << "Division by zero was detected" << std::endl;
+					}
 				}
 				else
-					std::cout << "Incorrect expression detected" << std::endl;
+					std::cout << expression << std::endl << "Incorrect expression detected" << std::endl;
 			}
 		}
 	}
