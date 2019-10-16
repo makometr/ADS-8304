@@ -289,7 +289,6 @@ public:
     Expression(const std::string &expression) 
     : TrivariateHierarchicalList<T, std::string, lab2::OperationType>()
     {
-        std::regex regex("^\\s*");
         auto expression_ = regex_replace(expression, std::regex("^\\s*"), "");
         expression_ = regex_replace(expression_, std::regex("\\s*$"), "");
         expression_ = regex_replace(expression_, std::regex("\\s+"), " ");
@@ -381,16 +380,19 @@ private:
             current += 1;
             while(current != end)
             {
+                // skip spaces
                 while(current != end && *current == ' ')
                 {
                     current += 1;
                 }
+                
                 if(current == end)
                 {
                     this->parsingErrors.push_back("Expression ended unexpectedly");
                     return end;
                 }
 
+                // get ")"
                 if(*current == '(')
                 {
                     if(DEBUG)
@@ -404,6 +406,7 @@ private:
                         current, end);
                 }
                 
+                // get ")"
                 else if(*current == ')')
                 {
                     if(DEBUG)
@@ -422,6 +425,7 @@ private:
                     break;
                 }
 
+                // get a variable
                 else if('A' <= *current && *current <= 'Z' ||
                                            *current == '_' ||
                         'a' <= *current && *current <= 'z')
@@ -439,7 +443,9 @@ private:
                     }
                     current += match[1].length();
                 }
-
+                
+                // get a number
+                // fractions of the pattern ".[0-9]+" are not supported
                 else if('0' <= *current && *current <= '9')
                 {
                     std::smatch match;
@@ -455,55 +461,35 @@ private:
                     }
                     current += match[1].length();
                 }
-
-                else if(*current == '+')
+                
+                // get an operator
+                else if(*current == '+' || *current == '-' || *current == '*' || 
+                        *current == '/')
                 {
-                    currentNode->setContent(lab2::OperationType::ADDITION);
+                    if(*current == '+')
+                        currentNode->setContent(lab2::OperationType::ADDITION);
+                    else if(*current == '-')
+                        currentNode->setContent(lab2::OperationType::SUBTRACTION);
+                    else if(*current == '*')
+                        currentNode->setContent(lab2::OperationType::MULTIPLICATION);
+                    else if(*current == '/')
+                        currentNode->setContent(lab2::OperationType::DIVISION);
                     current += 1;
                     if(DEBUG)
                     {
                         std::cout << std::string(depth - 1, ' ') << 
-                             "| the token  \"+\" was acquired." << std::endl;
-                    }
-                }
-
-                else if(*current == '-')
-                {
-                    currentNode->setContent(lab2::OperationType::SUBTRACTION);
-                    current += 1;
-                    if(DEBUG)
-                    {
-                        std::cout << std::string(depth - 1, ' ') << 
-                             "| the token  \"+\" was acquired." << std::endl;
-                    }
-                }
-
-                else if(*current == '*')
-                {
-                    currentNode->setContent(lab2::OperationType::MULTIPLICATION);
-                    current += 1;
-                    if(DEBUG)
-                    {
-                        std::cout << std::string(depth - 1, ' ') << 
-                             "| the token  \"*\" was acquired." << std::endl;
-                    }
-                }
-
-                else if(*current == '/')
-                {
-                    currentNode->setContent(lab2::OperationType::DIVISION);
-                    current += 1;
-                    if(DEBUG)
-                    {
-                        std::cout << std::string(depth - 1, ' ') << 
-                             "| the token  \"/\" was acquired." << std::endl;
+                             "| the token  \"" << std::to_string(std::get<\
+                             lab2::OperationType>(currentNode->content())) << 
+                             "\" was acquired." << std::endl;
                     }
                 }
                 
+                // ignore other chars
                 else
                 {
                     this->parsingErrors.push_back("Unexpected symbol: " +
                                                    std::to_string(int(*current)));
+                    current += 1;
                 }
 
                 if(current != end && *current != ')')
@@ -520,6 +506,7 @@ private:
         depth -= 1;
         if(depth == 0)
         {
+            // report a presence of a character after the last closing bracket
             if(current != end)
             {
                 this->parsingErrors.push_back("The string contains the "\
@@ -529,7 +516,7 @@ private:
         }
         if(DEBUG)
         {
-            std::cout << "|~~~~~~~~~~~" << std::endl;
+            std::cout << std::string(depth, ' ') << "|~~~~~~~~~~~" << std::endl;
             if(depth > 0)
                 std::cout << std::string(depth - 1, ' ') << "| depth: " << 
                      depth << std::endl;
@@ -537,12 +524,15 @@ private:
         return current;
     }
 
+    // tries to compute the value of the stored expression in order to find
+    // all cases of division by 0
     void checkNodes(std::stack<std::variant<T,bool>>& execution_stack)
     {
         size_t termCount = 1;
         for(auto current = this->begin(), end = this->end(); 
             current != end; termCount += 1, ++current)
         {
+            // push a number onto the stack
             if(std::holds_alternative<T>(current->content()))
             {
                 execution_stack.push(std::get<T>(current->content()));
@@ -555,6 +545,7 @@ private:
                          << std::endl;
                 }
             }
+            // push an unknown value onto the stack
             else if(std::holds_alternative<std::string>(current->content()))
             {
                 execution_stack.push(true);
@@ -565,6 +556,7 @@ private:
                          ", the value is undecidable" << std::endl;
                 }
             }
+            // execute an operation
             else if(std::holds_alternative<lab2::OperationType>(current->content()))
             {
                 auto previousNodeCount = current.getPreviousNodeCount();
@@ -577,6 +569,7 @@ private:
                          std::to_string(operationType) + "\""
                          << std::endl;
                 }
+                // if the operation is called as niladic, report an error
                 if(previousNodeCount == 0)
                 {
                     this->executionErrors.push_back("Term " 
@@ -584,12 +577,14 @@ private:
                          std::to_string(operationType) +
                          "\" has too few (0) arguments.");
                 }
+                // if the operation is called as ternary or ..., report an error
                 else if(previousNodeCount > 2)
                 {
                     this->executionErrors.push_back("Term " 
                          + std::to_string(termCount) + ": The operation \"" + 
                          std::to_string (operationType) + "\" has too many (" + 
                          std::to_string(previousNodeCount) + ") arguments.");
+                    // remove all its arguments from the stack
                     while(previousNodeCount --> 0)
                     {
                         if(DEBUG)
@@ -601,6 +596,7 @@ private:
                         }
                         execution_stack.pop();
                     }
+                    // push an unknown value onto the stack as its result
                     execution_stack.push(true);
                     if(DEBUG)
                     {
@@ -608,8 +604,10 @@ private:
                              ", the result is meaningless" << std::endl;
                     }
                 }
+                // if the operation is called as unary, ...
                 else if(previousNodeCount == 1)
                 {
+                    // if it is "-", try to execute it
                     if(operationType == lab2::OperationType::SUBTRACTION)
                     {
                         if(std::holds_alternative<T>(execution_stack.top()))
@@ -638,6 +636,7 @@ private:
                             execution_stack.push(true);
                         }
                     }
+                    // if it is not "-", report an error
                     else
                     {
                         this->executionErrors.push_back("Term " 
@@ -661,9 +660,10 @@ private:
                         }
                     }
                 }
+                // if the operation is called as binary, ...
                 else if(previousNodeCount == 2)
                 {
-                    // stack stores the operands in reverse order
+                    // retrieve the operands in reverse order
                     std::variant<T,bool> operand2 = execution_stack.top();
                     execution_stack.pop();
                     std::variant<T,bool> operand1 = execution_stack.top();
@@ -683,6 +683,7 @@ private:
                              std::to_string(std::get<T>(operand2)))
                              << std::endl;
                     }
+                    // check for division by 0
                     if(std::holds_alternative<T>(operand2) && 
                        operationType == lab2::OperationType::DIVISION &&
                        std::get<T>(operand2) == 0)
@@ -697,6 +698,7 @@ private:
                                  ", the result is meaningless" << std::endl;
                         }
                     }
+                    // check for undecidable operands
                     else if(std::holds_alternative<bool>(operand1) || 
                             std::holds_alternative<bool>(operand2))
                     {
@@ -707,6 +709,8 @@ private:
                                  ", the result is undecidable" << std::endl;
                         }
                     }
+                    // if neither division by 0 nor undecidable operands were
+                    // encountered, execute the operation and save its result
                     else
                     {
                         T result;
@@ -739,6 +743,7 @@ private:
                         }
                     }
                 }
+                // ignore operands that oppear after an operator
                 if(current->next() != nullptr)
                 {
                     while(current->next() != nullptr)
