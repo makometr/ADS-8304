@@ -38,5 +38,5 @@ int main(int argc, char* argv[])
         cout << "The given expression is \x1b[1mnot\x1b[0m correct." << endl;
         cout << expression.getErrors();
     }
-    cout << endl; // so, wlile testing, calls would be even somewhat distinct
+    cout << endl; // so consecutive calls would be distinct
 }

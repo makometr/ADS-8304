@@ -8,7 +8,8 @@ namespace lab2
     // enum class OperationType is used to encode an arithmetic operation
     enum class OperationType {ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION};
     
-    // overload std::to_string for one useful case
+    // lab2::to_string is similar to std::to_string, but is overloaded for two
+    // additional types
     std::string to_string(const std::string& string)
     {
         return string;
