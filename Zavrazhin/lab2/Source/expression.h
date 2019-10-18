@@ -160,9 +160,9 @@ namespace lab2
                     }
 
                     // get a variable
-                    else if('A' <= *current && *current <= 'Z' ||
-                                               *current == '_' ||
-                            'a' <= *current && *current <= 'z')
+                    else if(('A' <= *current && *current <= 'Z') ||
+                                                *current == '_' ||
+                            ('a' <= *current && *current <= 'z'))
                     {
                         std::smatch match;
                         std::regex regex("^([_A-Za-z][_A-Za-z0-9]*)");

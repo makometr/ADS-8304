@@ -14,12 +14,52 @@ namespace lab2
     class TrivariateHierarchicalList
     {
     protected:
+        class Node;
+    private:
+        class Iterator;
+
+    public:
+        explicit TrivariateHierarchicalList()
+        {
+            this->head_ = new Node();
+        }
+
+        ~TrivariateHierarchicalList()
+        {
+            delete this->head_;
+        }
+
+        std::string represent()
+        {
+            return this->head_->represent();
+        }
+            
+        Iterator begin()
+        {
+            return Iterator(this->head_);
+        }
+            
+        Iterator end()
+        {
+            return Iterator(nullptr);
+        }
+        
+    protected:
+        Node* head()
+        {
+            return this->head_;
+        }
+        
+    private:
+        Node* head_ = nullptr;
+        
+    protected:
         // The nested class Node was designed to be a single node of a 
         // trivariate hierarchical list
         class Node
         {
         public:
-            Node()
+            explicit Node()
             {
                 this->content_ = nullptr;
             }
@@ -97,19 +137,26 @@ namespace lab2
             Node *next_ = nullptr;
         };
         
+    private:
         // The nested class Iterator was designed to facilitate iteration
         // through a hierarchical list using explicit stack manipulations
         class Iterator
         {
         public:
-            Iterator(Node *node)
+            using difference_type = std::ptrdiff_t;
+            using value_type = Node;
+            using pointer = Node*;
+            using reference = Node&;
+            using iterator_category = std::forward_iterator_tag;
+            
+            explicit Iterator(Node *node)
             {
                 this->current = node;
                 this->previousNodeCountStack.push(0);
                 this->normalizePosition();
             }
             
-            Iterator &operator++()
+            Iterator& operator++()
             {
                 if(this->current == nullptr)
                     return *this;
@@ -119,30 +166,30 @@ namespace lab2
                 return *this;
             }
             
-            Iterator  operator++(int)
+            Iterator operator++(int)
             {
                 auto old = *this;
                 ++(*this);
                 return old;
             }
             
-            Node &operator* ()
+            reference operator *()
             {
                 return *(this->current); 
             }
             
-            Node *operator-> ()
+            pointer operator ->()
             {
                 return &**this;
             }
             
-            bool operator== (const Iterator& that)
+            bool operator ==(const Iterator& that)
             {
                 return this->current == that.current && 
                        this->nodeStack == that.nodeStack;
             }
             
-            bool operator!= (const Iterator& that)
+            bool operator !=(const Iterator& that)
             {
                 return this->current != that.current || 
                        this->nodeStack != that.nodeStack;
@@ -161,10 +208,10 @@ namespace lab2
             // ensures that this->current holds a pointer to an atomic node
             void normalizePosition()
             {
-                while(this->current == nullptr && this->nodeStack.size() > 0 ||
-                      this->current != nullptr && 
+                while((this->current == nullptr && this->nodeStack.size() > 0) ||
+                      (this->current != nullptr && 
                       std::holds_alternative<Node*>(this->current->content()) &&
-                      std::get<Node*>(this->current->content()) != nullptr)
+                      std::get<Node*>(this->current->content()) != nullptr))
                 {
                     while(this->current == nullptr && this->nodeStack.size() > 0)
                     {
@@ -183,40 +230,6 @@ namespace lab2
                 }
             }
         };
-        
-        Node* head()
-        {
-            return this->head_;
-        }
-        
-    private:
-        Node* head_ = nullptr;
-
-    public:
-        TrivariateHierarchicalList()
-        {
-            this->head_ = new Node();
-        }
-
-        ~TrivariateHierarchicalList()
-        {
-            delete this->head_;
-        }
-
-        std::string represent()
-        {
-            return this->head_->represent();
-        }
-            
-        Iterator begin()
-        {
-            return Iterator(this->head_);
-        }
-            
-        Iterator end()
-        {
-            return Iterator(nullptr);
-        }
     };
 }
 #endif  // LAB2_TRIVARIATEHIERARCHICALLIST_H_
