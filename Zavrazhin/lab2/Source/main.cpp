@@ -7,19 +7,26 @@ using std::cin;
 using std::cout;
 using std::endl;
 
+using lab2::Expression;
+
 int main(int argc, char* argv[])
 {
-    std::string line;
-    if(argc >= 2)
+    if(argc > 2)
     {
-        for(int i = 1; i < argc; i++)
-            line += std::string(argv[i]) + " ";
+        cout << "Too many command line arguments were provided." << endl;
+    }
+    
+    std::string line;
+    if(argc == 2)
+    {
+            line += std::string(argv[1]);
     }
     else
     {
         cout << "Enter an expression:" << endl;
-        cin >> line;
+        std::getline(cin, line);
     }
+    
     Expression<double> expression(line);
     cout << expression.represent() << endl;
     if(expression.isCorrect())
@@ -31,5 +38,5 @@ int main(int argc, char* argv[])
         cout << "The given expression is \x1b[1mnot\x1b[0m correct." << endl;
         cout << expression.getErrors();
     }
-    cout << endl;
+    cout << endl; // so, wlile testing, calls would be even somewhat distinct
 }
