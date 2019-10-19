@@ -53,7 +53,8 @@ namespace lab2
                 this->executionErrors.push_back(std::string("There ") + 
                      (executionStack.size() > 2 ? "are " : "is ") + 
                      lab2::to_string(executionStack.size() - 1) + 
-                     " unused operands left.");
+                     " unused operand" + (executionStack.size() > 2 ? "s " : 
+                     " ") +  "left.");
             if(this->parsingErrors.size() > 0 || this->executionErrors.size() > 0)
                 return false;
             return true;
@@ -126,7 +127,7 @@ namespace lab2
                         return end;
                     }
 
-                    // get ")"
+                    // get "("
                     if(*current == '(')
                     {
                         if(DEBUG)
@@ -244,7 +245,7 @@ namespace lab2
                 if(current != end)
                 {
                     this->parsingErrors.push_back("The string contains the "\
-                    "following characters after the last closing bracket:\n\t\"" +
+                    "following character(s) after the last closing bracket:\n\t\"" +
                     std::string(current, end) + "\"");
                 }
             }

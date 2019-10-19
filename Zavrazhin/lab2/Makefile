@@ -1,2 +1,2 @@
 lab1: Source/main.cpp Source/utils.h Source/trivariatehierarchicallist.h Source/expression.h
-	g++ Source/main.cpp -std=c++17 -Wall -Werror -fconcepts -o lab2
+	g++ Source/main.cpp -std=c++17 -Wall -Werror -o lab2

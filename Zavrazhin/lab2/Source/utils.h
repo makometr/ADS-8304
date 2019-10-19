@@ -28,7 +28,8 @@ namespace lab2
         return "?";
     }
     
-    std::string to_string(auto value)
+    template<class T>
+    std::string to_string(T value)
     {
         return std::to_string(value);
     }
@@ -46,7 +47,7 @@ namespace lab2
     template<>
     long long stoT<long long>(std::string str){return std::stoll(str);}
     template<>
-    unsigned short stoT<unsigned short>(std::string str){return std::stoi(str);}
+    unsigned short stoT<unsigned short>(std::string str){return std::stoul(str);}
     template<>
     unsigned int stoT<unsigned int>(std::string str){return std::stoul(str);}
     template<>
