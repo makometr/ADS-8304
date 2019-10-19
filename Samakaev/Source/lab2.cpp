@@ -8,7 +8,7 @@
 
 struct Node {
 	Node() = default;
-	
+
 	std::variant<char, int> value;
 	std::variant<std::pair<Node*, Node*>, Node*> arguments;
 
@@ -18,9 +18,9 @@ struct Node {
 
 bool rec_fill_branch(Node*& element, std::string& expression);
 
-void rec_free(Node* &head) {
+void rec_free(Node*& head) {
 	if (std::holds_alternative<std::pair<Node*, Node*>>(head->arguments)) {
-		if((std::get<std::pair<Node*, Node*>>(head->arguments).first))
+		if ((std::get<std::pair<Node*, Node*>>(head->arguments).first))
 			rec_free((std::get<std::pair<Node*, Node*>>(head->arguments).first));
 		if ((std::get<std::pair<Node*, Node*>>(head->arguments).second))
 			rec_free((std::get<std::pair<Node*, Node*>>(head->arguments).second));
@@ -39,15 +39,15 @@ int Node::calculate()
 	{
 		if (std::get<char>(value) == '+')
 			return std::get<std::pair<Node*, Node*>>(arguments).first->calculate() +
-					std::get<std::pair<Node*, Node*>>(arguments).second->calculate();
+			std::get<std::pair<Node*, Node*>>(arguments).second->calculate();
 		if (std::get<char>(value) == '*')
 			return std::get<std::pair<Node*, Node*>>(arguments).first->calculate() *
-					std::get<std::pair<Node*, Node*>>(arguments).second->calculate();
+			std::get<std::pair<Node*, Node*>>(arguments).second->calculate();
 		if (std::get<char>(value) == '-')
 		{
 			if (std::holds_alternative<std::pair<Node*, Node*>>(arguments))
 				return std::get<std::pair<Node*, Node*>>(arguments).first->calculate() -
-						std::get<std::pair<Node*, Node*>>(arguments).second->calculate();
+				std::get<std::pair<Node*, Node*>>(arguments).second->calculate();
 			else
 				return (-1) * std::get<Node*>(arguments)->calculate();
 		}
@@ -71,7 +71,7 @@ bool is_operand(char c) {
 	else return false;
 }
 
-void rec_cross(Node* element, int &i) {
+void rec_cross(Node* element, int& i) {
 	if (std::holds_alternative<char>(element->value) && std::holds_alternative<std::pair<Node*, Node*>>(element->arguments)) {
 		if ((std::get<std::pair<Node*, Node*>>(element->arguments).first)) {
 			if (std::get<char>(element->value)) {
@@ -96,8 +96,8 @@ void rec_cross(Node* element, int &i) {
 
 }
 
-bool create_node(std::string& expression, int &i, Node* &element) {
-	
+bool create_node(std::string& expression, int& i, Node*& element) {
+
 	int bracket_cnt = 0;
 	bool is_first = true;
 	std::string buff;
@@ -137,8 +137,8 @@ bool create_node(std::string& expression, int &i, Node* &element) {
 	return true;
 }
 
-bool rec_fill_branch(Node* &element, std::string& expression) {
-	
+bool rec_fill_branch(Node*& element, std::string& expression) {
+
 	int i = 1;
 	std::string buff;
 
@@ -187,8 +187,8 @@ bool rec_fill_branch(Node* &element, std::string& expression) {
 	return true;
 }
 
-bool is_brackets_correct(std::string &expression) {
-	
+bool is_brackets_correct(std::string& expression) {
+
 	int brackets_cnt = 0;
 
 	for (size_t i = 0; i < expression.length(); i++) {
@@ -212,10 +212,11 @@ void fill_map(std::string& values_str, std::map<std::string, int>& arguements_va
 	std::regex pattern("(\\((\\w+) (-?\\d+)\\))");
 	std::smatch match;
 
-	int is_like_pattern = 0;
-	while (is_like_pattern = std::regex_search(values_str, match, pattern)) {
+	int is_like_pattern = std::regex_search(values_str, match, pattern);
+	while (is_like_pattern) {
 		arguements_values_map.insert(std::pair<std::string, int>(match[2].str(), stoi(match[3])));
 		values_str.erase(match.position(2), match[2].length());
+		is_like_pattern = std::regex_search(values_str, match, pattern);
 	}
 
 
