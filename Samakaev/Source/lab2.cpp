@@ -24,11 +24,11 @@ void rec_free(Node*& head) {
 			rec_free((std::get<std::pair<Node*, Node*>>(head->arguments).first));
 		if ((std::get<std::pair<Node*, Node*>>(head->arguments).second))
 			rec_free((std::get<std::pair<Node*, Node*>>(head->arguments).second));
-		free(head);
+		delete head;
 	}
 	else if (std::holds_alternative <Node*>(head->arguments)) {
 		rec_free(std::get<Node*>(head->arguments));
-		free(head);
+		delete head;
 	}
 }
 
@@ -346,4 +346,5 @@ int main(int argc, char** argv)
 	else std::cout << "Please check arguments are correct";
 
 	rec_free(head);
+}
 }
