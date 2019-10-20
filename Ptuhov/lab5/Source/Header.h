@@ -33,11 +33,9 @@ struct Node
 
 struct DecodePair
 {
-	DecodePair() = default;
 
 	std::string value;
 	bool decodeResult = true;
 };
 
-void dynamicFileReading(std::ifstream&);
 
