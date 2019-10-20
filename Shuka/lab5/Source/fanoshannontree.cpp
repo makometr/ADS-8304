@@ -8,7 +8,7 @@ void FanoShannonTree::createEncodeTree(const std::string &message)
 {
     /*
      * Функция, для создания бинарного дерева кодирования, принимает на вход
-     * текст, возвращает указатель на корень дерева.
+     * текст.
      *
      * 1) Создаются словарь и массив символов. В словарь заносится частота
      * встречаемости каждого символа в тексте.
@@ -48,7 +48,7 @@ void FanoShannonTree::createEncodeTree(const std::string &message)
     }
 
     return createEncodeTree(symbolMap, symbolVector, 0,
-                          symbolVector.size(), message.length());
+                            symbolVector.size(), message.length());
 }
 
 
@@ -59,7 +59,7 @@ void FanoShannonTree::createEncodeTree(std::map<char, size_t> &symbolMap,
     /*
      * Функция, для создания бинарного дерева кодирования, принимает на вход
      * словарь символов, отсортированный по убыванию массив, левый и правый индекс в массиве,
-     * сумму "весов" символов, возвращает указатель на корень дерева.
+     * сумму "весов" символов.
      *
      * 1) Если левый индекс больше либо равен правому - возвращает nullptr.
      *
@@ -85,11 +85,11 @@ void FanoShannonTree::createEncodeTree(std::map<char, size_t> &symbolMap,
 
     FanoShannonTree* leftTree = new FanoShannonTree();
     leftTree->createEncodeTree(symbolMap, symbolVector, left,
-                                    middle + 1, leftSum);
+                               middle + 1, leftSum);
 
     FanoShannonTree* rightTree = new FanoShannonTree();
     rightTree->createEncodeTree(symbolMap, symbolVector, middle + 1,
-                                     right, rightSum);
+                                right, rightSum);
 
     this->concat(sum, leftTree, rightTree);
     leftTree->setParent(this);
@@ -104,7 +104,7 @@ size_t FanoShannonTree::getMiddle(std::map<char, size_t> &symbolMap,
 {
     /*
      * Функция получения середины массива символов, принимает на вход
-     * словарь символов, отсортированный по убыванию массив, левый индекс в массиве,
+     * словарь символов, отсортированный по не возрастанию массив, левый индекс в массиве,
      * ссылки на сумму весов слева и справа от середины, возвращает индекс середины.
     */
 

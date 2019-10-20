@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
         cerr << "Error: incorect console's arguments\n";
     }
 
-    cout << "\nEnd programm\n";
+    cout << "End programm\n";
     return 0;
 }
 
