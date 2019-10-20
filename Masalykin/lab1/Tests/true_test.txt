@@ -1,0 +1,3 @@
+A
+(B(B(B(BA))))A
+(B(B(B(B(B(BA))))))(B(B(BA)))A
