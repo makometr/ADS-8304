@@ -73,6 +73,7 @@ namespace lab2
                 totalLength += error.length() + 1;
                 
             std::string result;
+            result.reserve(totalLength + 9);
             for(auto error : this->parsingErrors)
                 result += error + "\n";
             for(auto error : this->executionErrors)
@@ -233,6 +234,10 @@ namespace lab2
                         currentNode = currentNode->next();
                     }
                 }
+                if(*(current - 1) != ')')
+                {
+                    this->parsingErrors.push_back("Expression ended unexpectedly");
+                }
             }
             else
             {
@@ -244,9 +249,11 @@ namespace lab2
                 // report a presence of a character after the last closing bracket
                 if(current != end)
                 {
-                    this->parsingErrors.push_back("The string contains the "\
-                    "following character(s) after the last closing bracket:\n\t\"" +
-                    std::string(current, end) + "\"");
+                    auto unexpectedSymbols = std::string(current, end);
+                    this->parsingErrors.push_back(std::string("The string ") +
+                         "contains the following unexpected character" + 
+                         (unexpectedSymbols.length() > 2 ? "s " : " ") + 
+                         "at the end:\n\t\"" + unexpectedSymbols + "\"");
                 }
             }
             if(DEBUG)
