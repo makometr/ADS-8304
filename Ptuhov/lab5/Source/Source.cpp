@@ -108,15 +108,10 @@ bool findCodeInTree(std::shared_ptr<Node>& head, std::string const& code, char& 
 		else
 		{
 			if (head->right->character != 0)
-			{
 				character = head->right->character;
-				return true;
-			}
 			else
-			{
 				head = head->right;
-				return true;
-			}
+			return true;
 		}
 	}
 	else
@@ -126,15 +121,10 @@ bool findCodeInTree(std::shared_ptr<Node>& head, std::string const& code, char& 
 		else
 		{
 			if (head->left->character != 0)
-			{
 				character = head->left->character;
-				return true;
-			}
 			else
-			{
 				head = head->left;
-				return true;
-			}
+			return true;
 		}
 
 	}
