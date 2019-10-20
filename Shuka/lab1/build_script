@@ -1,0 +1,3 @@
+#!/bin/bash
+qmake Sourse/Lab_1.pro
+make

@@ -1,0 +1,16 @@
+(a(b(c(t)(y)))(e(a(c(u)(t)))))
+(a(b(a)(a2))(c(a)(a)))
+(a(c)(c))
+()
+(                aaaaaaaa            (bbbb      (cccc))        (cccc)       )
+(Please(Say(YES))(Okay(I(Will(Say(YES))))))
+)()(()())()(
+/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+a(b)(c)
+(a(b)(c
+a(b)(c))
+((b)(c))
+((g)(p)(t))
+{a{b}{}}
+(a()(b))
+....
