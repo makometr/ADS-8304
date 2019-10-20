@@ -246,7 +246,8 @@ namespace lab2
             }
             else
             {
-                this->parsingErrors.push_back("The symbol \"(\" is abscent when necessary");
+                this->parsingErrors.push_back("The symbol \"(\" is abscent"
+                     "where it is required");
             }
             
             depth -= 1;
@@ -345,6 +346,8 @@ namespace lab2
                             }
                             executionStack.pop();
                         }
+                        // overflows it back to 0 in a case of an overflow
+                        previousNodeCount += 1; 
                         if(previousNodeCount == 1)
                         {
                             this->executionErrors.push_back("Term " + 
@@ -364,14 +367,14 @@ namespace lab2
                             this->executionErrors.push_back("Term " + 
                                  lab2::to_string(termCount) + 
                                  ": " + lab2::to_string(previousNodeCount) + 
-                                 " empty operand were encountered during " +
+                                 " empty operands were encountered during " +
                                  "execution");
                             if(DEBUG)
                             {
                                 std::cout << "Term " +
                                      lab2::to_string(termCount) + 
                                  ": " + lab2::to_string(previousNodeCount) + 
-                                 " empty operand were encountered during " +
+                                 " empty operands were encountered during " +
                                  "execution" << std::endl;
                             }
                         }
@@ -388,32 +391,29 @@ namespace lab2
                     // if the operation is called as unary, ...
                     else if(previousNodeCount == 1)
                     {
+                        if(executionStack.size() == 0)
+                        {
+                            this->executionErrors.push_back("Term " + 
+                                 lab2::to_string(termCount) + 
+                                 ": an empty operand was encountered during " +
+                                 "execution");
+                            if(DEBUG)
+                            {
+                                std::cout << "Term " +
+                                     lab2::to_string(termCount) + 
+                                     ": an empty operand was encountered during " +
+                                     "execution" << std::endl;
+                            }
+                            return;
+                        }
+                        
                         // if it is "-", try to execute it
                         if(operationType == lab2::OperationType::SUBTRACTION)
                         {
                             if(std::holds_alternative<T>(executionStack.top()))
                             {
-                                T operand;
-                                if(executionStack.size() >= 1)
-                                {
-                                    operand = std::get<T>(executionStack.top());
-                                }
-                                else
-                                {
-                                    this->executionErrors.push_back("Term " + 
-                                         lab2::to_string(termCount) + 
-                                         ": an empty operand was encountered during " +
-                                         "execution");
-                                    if(DEBUG)
-                                    {
-                                        std::cout << "Term " +
-                                             lab2::to_string(termCount) + 
-                                             ": an empty operand was encountered during " +
-                                             "execution" << std::endl;
-                                    }
-                                    return;
-                                }
-                                
+                                auto operand = std::get<T>(executionStack.top());
+
                                 if(DEBUG)
                                 {
                                     std::cout << "Term " 

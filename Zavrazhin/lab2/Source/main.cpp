@@ -6,7 +6,6 @@
 using std::cin;
 using std::cout;
 using std::endl;
-
 using lab2::Expression;
 
 int main(int argc, char* argv[])
@@ -27,6 +26,7 @@ int main(int argc, char* argv[])
         std::getline(cin, line);
     }
     line.erase(std::remove(line.begin(), line.end(), '\n'), line.end());
+    
     Expression<double> expression(line);
     if(DEBUG)
         cout << expression.represent() << endl;
@@ -41,5 +41,4 @@ int main(int argc, char* argv[])
         cout << "The given expression is \x1b[1mnot\x1b[0m correct." << endl;
         cout << expression.getErrors();
     }
-    cout << endl; // so consecutive calls would be distinct
 }
