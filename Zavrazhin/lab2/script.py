@@ -14,4 +14,6 @@ if out == 0:
 	            for line in input_file:
 	                subprocess.call('./lab2 "' + line + '"', shell=True, 
 	                                cwd='./')
+	                input("Press Enter to continue...")
+	                print()
 

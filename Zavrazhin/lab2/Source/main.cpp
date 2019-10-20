@@ -26,15 +26,18 @@ int main(int argc, char* argv[])
         cout << "Enter an expression:" << endl;
         std::getline(cin, line);
     }
-    
+    line.erase(std::remove(line.begin(), line.end(), '\n'), line.end());
     Expression<double> expression(line);
-    cout << expression.represent() << endl;
+    if(DEBUG)
+        cout << expression.represent() << endl;
     if(expression.isCorrect())
     {
+        cout << "\"" << line << "\"" << endl;
         cout << "The given expression \x1b[1mis\x1b[0m correct." << endl;
     }
     else
     {
+        cout << "\"" << line << "\"" << endl;
         cout << "The given expression is \x1b[1mnot\x1b[0m correct." << endl;
         cout << expression.getErrors();
     }

@@ -54,7 +54,7 @@ namespace lab2
                      (executionStack.size() > 2 ? "are " : "is ") + 
                      lab2::to_string(executionStack.size() - 1) + 
                      " unused operand" + (executionStack.size() > 2 ? "s " : 
-                     " ") +  "left.");
+                     " ") +  "left");
             if(this->parsingErrors.size() > 0 || this->executionErrors.size() > 0)
                 return false;
             return true;
@@ -62,8 +62,9 @@ namespace lab2
 
         std::string getErrors()
         {   
-            if(this->parsingErrors.size() == 0 && 
-               !(this->executionErrors.size() > 0 || this->isCorrect()))
+            bool expressionIsCorrect = this->parsingErrors.size() == 0 && 
+                 !(this->executionErrors.size() > 0 || this->isCorrect());
+            if(expressionIsCorrect)
                 return("There are no errors found.\n");
                 
             auto totalLength = 0;
@@ -107,7 +108,8 @@ namespace lab2
             {
                 current += 1;
             }
-
+            
+            // ensure that the (sub)expression being parsed starts with "("
             if(current != end && *current == '(')
             { 
                 if(depth == 1 && DEBUG)
@@ -124,11 +126,11 @@ namespace lab2
                     
                     if(current == end)
                     {
-                        this->parsingErrors.push_back("Expression ended unexpectedly");
+                        this->parsingErrors.push_back("(Sub)expression ended unexpectedly");
                         return end;
                     }
 
-                    // get "("
+                    // get "(" => parse subexpression
                     if(*current == '(')
                     {
                         if(DEBUG)
@@ -142,7 +144,7 @@ namespace lab2
                             current, end);
                     }
                     
-                    // get ")"
+                    // get ")" => stop parsing (sub)expression
                     else if(*current == ')')
                     {
                         if(DEBUG)
@@ -154,7 +156,7 @@ namespace lab2
                            content())&& std::get<ExpressionNode*>(currentNode->
                            content()) == nullptr)
                         {
-                            this->parsingErrors.push_back("The provided"\
+                            this->parsingErrors.push_back("The provided "\
                                  "expression contains empty parentheses");
                         }
                         current += 1;
@@ -175,7 +177,7 @@ namespace lab2
                             std::cout << std::string(depth - 1, ' ') << 
                                  "| the token  \"" << 
                                  std::get<std::string>(currentNode->content()) << 
-                                 "\" was acquired." << std::endl;
+                                 "\" was acquired" << std::endl;
                         }
                         current += match[1].length();
                     }
@@ -193,7 +195,7 @@ namespace lab2
                             std::cout << std::string(depth - 1, ' ') << 
                                  "| the token  \"" << 
                                  std::get<T>(currentNode->content()) << 
-                                 "\" was acquired." << std::endl;
+                                 "\" was acquired" << std::endl;
                         }
                         current += match[1].length();
                     }
@@ -216,16 +218,18 @@ namespace lab2
                             std::cout << std::string(depth - 1, ' ') << 
                                  "| the token  \"" << lab2::to_string(std::get<\
                                  lab2::OperationType>(currentNode->content())) << 
-                                 "\" was acquired." << std::endl;
+                                 "\" was acquired" << std::endl;
                         }
                     }
                     
-                    // ignore other chars
+                    // ignore other symbols
                     else
                     {
-                        this->parsingErrors.push_back("Unexpected symbol: " +
-                                                       lab2::to_string(int(*current)));
+                        this->parsingErrors.push_back("Unexpected symbol: \"" +
+                                                       std::string(1, *current) 
+                                                       + "\"");
                         current += 1;
+                        continue;
                     }
 
                     if(current != end && *current != ')')
@@ -234,15 +238,17 @@ namespace lab2
                         currentNode = currentNode->next();
                     }
                 }
+                // ensure that all parentheses are closed
                 if(*(current - 1) != ')')
                 {
-                    this->parsingErrors.push_back("Expression ended unexpectedly");
+                    this->parsingErrors.push_back("(Sub)expression ended unexpectedly");
                 }
             }
             else
             {
                 this->parsingErrors.push_back("The symbol \"(\" is abscent when necessary");
             }
+            
             depth -= 1;
             if(depth == 0)
             {
@@ -318,7 +324,7 @@ namespace lab2
                         this->executionErrors.push_back("Term " 
                              + lab2::to_string(termCount) + ": The operation \"" + 
                              lab2::to_string(operationType) +
-                             "\" has too few (0) arguments.");
+                             "\" has too few (0) arguments");
                     }
                     // if the operation is called as ternary or ..., report an error
                     else if(previousNodeCount > 2)
@@ -326,9 +332,9 @@ namespace lab2
                         this->executionErrors.push_back("Term " 
                              + lab2::to_string(termCount) + ": The operation \"" + 
                              lab2::to_string (operationType) + "\" has too many (" + 
-                             lab2::to_string(previousNodeCount) + ") arguments.");
+                             lab2::to_string(previousNodeCount) + ") arguments");
                         // remove all its arguments from the stack
-                        while(previousNodeCount --> 0)
+                        while(previousNodeCount --> 0 && executionStack.size() > 0)
                         {
                             if(DEBUG)
                             {
@@ -339,6 +345,38 @@ namespace lab2
                             }
                             executionStack.pop();
                         }
+                        if(previousNodeCount == 1)
+                        {
+                            this->executionErrors.push_back("Term " + 
+                                 lab2::to_string(termCount) + 
+                                 ": an empty operand was encountered during " +
+                                 "execution");
+                            if(DEBUG)
+                            {
+                                std::cout << "Term " +
+                                     lab2::to_string(termCount) + 
+                                     ": an empty operand was encountered during " +
+                                     "execution" << std::endl;
+                            }
+                        }
+                        else if(previousNodeCount > 0)
+                        {
+                            this->executionErrors.push_back("Term " + 
+                                 lab2::to_string(termCount) + 
+                                 ": " + lab2::to_string(previousNodeCount) + 
+                                 " empty operand were encountered during " +
+                                 "execution");
+                            if(DEBUG)
+                            {
+                                std::cout << "Term " +
+                                     lab2::to_string(termCount) + 
+                                 ": " + lab2::to_string(previousNodeCount) + 
+                                 " empty operand were encountered during " +
+                                 "execution" << std::endl;
+                            }
+                        }
+                        
+                        
                         // push an unknown value onto the stack as its result
                         executionStack.push(true);
                         if(DEBUG)
@@ -355,7 +393,27 @@ namespace lab2
                         {
                             if(std::holds_alternative<T>(executionStack.top()))
                             {
-                                auto operand = std::get<T>(executionStack.top());
+                                T operand;
+                                if(executionStack.size() >= 1)
+                                {
+                                    operand = std::get<T>(executionStack.top());
+                                }
+                                else
+                                {
+                                    this->executionErrors.push_back("Term " + 
+                                         lab2::to_string(termCount) + 
+                                         ": an empty operand was encountered during " +
+                                         "execution");
+                                    if(DEBUG)
+                                    {
+                                        std::cout << "Term " +
+                                             lab2::to_string(termCount) + 
+                                             ": an empty operand was encountered during " +
+                                             "execution" << std::endl;
+                                    }
+                                    return;
+                                }
+                                
                                 if(DEBUG)
                                 {
                                     std::cout << "Term " 
@@ -386,7 +444,7 @@ namespace lab2
                                   + lab2::to_string(termCount) +
                                   ": The operation \"" +     
                                   lab2::to_string(operationType) +
-                                  "\" has too few (1) arguments.");
+                                  "\" has too few (1) arguments");
                             executionStack.pop();
                             if(DEBUG)
                             {
@@ -407,10 +465,45 @@ namespace lab2
                     else if(previousNodeCount == 2)
                     {
                         // retrieve the operands in reverse order
-                        std::variant<T,bool> operand2 = executionStack.top();
-                        executionStack.pop();
-                        std::variant<T,bool> operand1 = executionStack.top();
-                        executionStack.pop();
+                        std::variant<T,bool> operand1, operand2;
+                        if(executionStack.size() >= 2)
+                        {
+                            operand2 = executionStack.top();
+                            executionStack.pop();
+                            operand1 = executionStack.top();
+                            executionStack.pop();
+                        }
+                        else if(executionStack.size() == 1)
+                        {
+                            this->executionErrors.push_back("Term " + 
+                                 lab2::to_string(termCount) + 
+                                 ": an empty operand was encountered during " +
+                                 "execution");
+                            if(DEBUG)
+                            {
+                                std::cout << "Term " +
+                                     lab2::to_string(termCount) + 
+                                     ": an empty operand was encountered during " +
+                                     "execution" << std::endl;
+                            }
+                            return;
+                        }
+                        else
+                        {
+                            this->executionErrors.push_back("Term " +
+                                 lab2::to_string(termCount) + 
+                                 ": 2 empty operands were encountered during " +
+                                 "execution");
+                            if(DEBUG)
+                            {
+                                std::cout << "Term " +
+                                     lab2::to_string(termCount) + 
+                                     ": 2 empty operands were encountered during " +
+                                     "execution" << std::endl;
+                            }
+                            return;
+                        }
+                        
                         if(DEBUG)
                         {
                             std::cout << "Term " + lab2::to_string(termCount) + 
@@ -433,7 +526,7 @@ namespace lab2
                         {
                             this->executionErrors.push_back("Term " 
                                  + lab2::to_string(termCount) +
-                                 ": Division by 0 encountered.");
+                                 ": Division by 0 encountered");
                             executionStack.push(true);
                             if(DEBUG)
                             {

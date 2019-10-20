@@ -9,7 +9,7 @@
 namespace lab2
 {
     // TrivariateHierarchicalList class was designed to store either a value of
-    // one out of three distinct types or a pointer to a sublist  
+    // one out of three distinct types, or a pointer to a sublist 
     template<class T, class U, class V>
     class TrivariateHierarchicalList
     {
@@ -205,7 +205,8 @@ namespace lab2
             std::stack<size_t> previousNodeCountStack;
             Node* current = nullptr;
             
-            // ensures that this->current holds a pointer to an atomic node
+            // ensures that this->current holds a pointer to an atomic node,
+            // or is equal to nullptr if there is no atomic nodes left
             void normalizePosition()
             {
                 while((this->current == nullptr && this->nodeStack.size() > 0) ||
@@ -219,7 +220,8 @@ namespace lab2
                         this->nodeStack.pop();
                         this->previousNodeCountStack.pop();
                     }
-                    while(std::holds_alternative<Node*>(this->current->content()) &&
+                    while(this->current != nullptr &&
+                          std::holds_alternative<Node*>(this->current->content()) &&
                           std::get<Node*>(this->current->content()) != nullptr)
                     {
                         this->nodeStack.push(this->current);

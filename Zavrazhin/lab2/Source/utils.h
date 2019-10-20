@@ -2,14 +2,15 @@
 #define LAB2_UTILS_H_
 
 #include <string>
+#include <sstream>
 
 namespace lab2
 {   
-    // enum class OperationType is used to encode an arithmetic operation
+    // enum class OperationType is used to encode arithmetic operations
     enum class OperationType {ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION};
     
     // lab2::to_string is similar to std::to_string, but is overloaded for two
-    // additional types
+    // additional types: std::string and lab2::OperationType
     std::string to_string(const std::string& string)
     {
         return string;
@@ -34,32 +35,18 @@ namespace lab2
         return std::to_string(value);
     }
     
-    // lab2::stoT is a generalization of std::stoi, std::stol, ...
-    // for a numeric type T
+    // lab2::stoT converts a string into a numeric type
+    // its name resembles the functions std::stoi, std::stol, std::stod, etc
+    // this is necessary to convert a string to a numeric type specified as a 
+    // template parameter
     template<class T>
-    T stoT(std::string);
-    template<>
-    short stoT<short>(std::string str){return std::stoi(str);}
-    template<>
-    int stoT<int>(std::string str){return std::stoi(str);}
-    template<>
-    long stoT<long>(std::string str){return std::stol(str);}
-    template<>
-    long long stoT<long long>(std::string str){return std::stoll(str);}
-    template<>
-    unsigned short stoT<unsigned short>(std::string str){return std::stoul(str);}
-    template<>
-    unsigned int stoT<unsigned int>(std::string str){return std::stoul(str);}
-    template<>
-    unsigned long stoT<unsigned long>(std::string str){return std::stoul(str);}
-    template<>
-    unsigned long long stoT<unsigned long long>(std::string str){return std::stoull(str);}
-    template<>
-    float stoT<float>(std::string str){return std::stof(str);}
-    template<>
-    double stoT<double>(std::string str){return std::stod(str);}
-    template<>
-    long double stoT<long double>(std::string str){return std::stold(str);}
+    short stoT(const std::string& str)
+    {
+        T result;
+        std::istringstream stream(str);
+        stream >> result;
+        return result;
+    }
 }
 
 #endif  // LAB2_UTILS_H_
