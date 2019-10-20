@@ -7,6 +7,7 @@ bool checkMapStringFormCorrection(std::string const& checkString)
 	return std::regex_match(checkString, pattern);
 }
 
+
 bool checkCodeCorrection(std::string const& checkString)
 {
 	return std::find_if(checkString.begin(), checkString.end(), [](char c) {return c != '0' && c != '1'; }) == checkString.end();
@@ -144,7 +145,7 @@ DecodePair decode(std::string const& code, std::shared_ptr<Node> const& head)
 		char character = 0;
 		bool findResult = findCodeInTree(startPoint, currentCheckedCode, character);
 		if (findResult == false)
-			return { "", false };
+			return DecodePair("", false);
 
 		if (character != 0)
 		{
@@ -154,7 +155,7 @@ DecodePair decode(std::string const& code, std::shared_ptr<Node> const& head)
 		}
 	}
 
-	return { decodeResult, true };
+	return DecodePair(decodeResult, true);
 }
 
 int main(int argc, char** argv)

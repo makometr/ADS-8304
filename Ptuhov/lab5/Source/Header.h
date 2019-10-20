@@ -9,6 +9,7 @@
 #include <map>
 #include <regex>
 
+
 using StringVector = std::vector<std::string>;
 using CharactersCodeMap = std::map<char, std::string>;
 
@@ -33,7 +34,9 @@ struct Node
 
 struct DecodePair
 {
-
+	DecodePair(std::string newValue, bool res) : value(newValue), decodeResult(res)
+	{}
+	
 	std::string value;
 	bool decodeResult = true;
 };
