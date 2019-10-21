@@ -2,9 +2,7 @@
 
 HierarchicalList::HierarchicalList()
 {
-    /*
-     * По умолчанию объект класса является пустым списком
-    */
+    
 
     flag = false;
     atom = 0;
@@ -20,10 +18,7 @@ HierarchicalList::~HierarchicalList()
 
 bool HierarchicalList::isNull() const
 {
-    /*
-     * Возвращает true, если элемент является нулевым списком,
-     * false - в ином случае
-    */
+  
 
     return (!flag && nestedList == nullptr && nextList == nullptr);
 }
@@ -31,10 +26,7 @@ bool HierarchicalList::isNull() const
 
 HierarchicalList::ListPointer HierarchicalList::getHead() const
 {
-    /*
-     * Если элемент не атом - возращает указатель на вложенный список,
-     * в ином случае - nullptr
-    */
+  
 
     if (!flag) {
         return nestedList;
@@ -65,10 +57,6 @@ HierarchicalList::ListPointer HierarchicalList::getTail() const
 
 bool HierarchicalList::isAtom() const
 {
-    /*
-     * Если элемент атом - возращает true,
-     * в ином случае - false
-    */
 
     return flag;
 }
