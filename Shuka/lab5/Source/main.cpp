@@ -34,16 +34,15 @@ int main(int argc, char *argv[]) {
             text = readText(cin);
         }
 
-        std::ofstream resultFile("result.txt", std::ios::app);
-
-        FanoShannonTree* tree = new FanoShannonTree();
         result += "Input text:\n" + text + "\n\n";
-        result += tree->encode(text) + "\n\n\n";
-        delete tree;
+
+        FanoShannonTree tree;
+        result += tree.encode(text) + "\n\n\n";
 
         cout << result;
-        resultFile << result;
 
+        std::ofstream resultFile("result.txt", std::ios::app);
+        resultFile << result;
         resultFile.close();
     }
     else {
