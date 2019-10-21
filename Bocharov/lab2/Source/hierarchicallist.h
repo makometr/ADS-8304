@@ -8,7 +8,7 @@
 class HierarchicalList
 {
 public:
-    //Умный укаазатель на список для избежания утечек памяти
+ 
     typedef std::shared_ptr<HierarchicalList> ListPointer;
 
     explicit HierarchicalList();
@@ -21,7 +21,6 @@ public:
     bool isAtom() const;
     char getAtom() const;
 
-    //static-методы можно вызывать как обычные функции, не создавая объект класса
     static bool buildList(ListPointer& list, const std::string& str);
 
     //Перегрузка оператора cout для печати списка, и функция рекурсивной печати следующих списков
