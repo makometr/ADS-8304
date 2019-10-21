@@ -4,10 +4,10 @@
 #include <variant>
 #include <fstream>
 
-typedef struct binkor {
+struct binkor {
 	int lenght;
 	std::variant<std::pair<binkor*, binkor*>, int> system;
-}binkor;
+};
 
 bool check(std::string array) {
 	std::stack <char> Stack;
@@ -21,7 +21,8 @@ bool check(std::string array) {
 			Stack.pop();
 		}
 		else {
-			if ((array[i] != ' ' && !isdigit(array[i]))||Stack.empty()) {
+			if ((array[i] != ' ' && !isdigit(array[i]))
+				|| Stack.empty()) {
 				return false;
 			}
 		}
@@ -31,7 +32,7 @@ bool check(std::string array) {
 	}
 	return true;
 }
-int read(std::string array, int index, binkor* kor) {
+int read(std::string array, long unsigned int index, binkor* kor) {
 	std::pair<binkor*, binkor*> side;
 	if (isdigit(array[index])) {
 		kor->lenght = std::stoi(array.substr(index));
@@ -72,7 +73,9 @@ int read(std::string array, int index, binkor* kor) {
 		index++;
 		return index;
 	}
+	return 0;
 }
+
 int count(binkor* kor) {
 	int result = 0;
 	if (std::holds_alternative<std::pair<binkor*, binkor*>>(kor->system)) {
@@ -96,8 +99,7 @@ int main(int argc, char* argv[]){
 			std::cout << "Wrong input" << std::endl;
 			return 0;
 		}
-		binkor* kor;
-		kor = new binkor;
+		binkor* kor=new binkor;
 		kor->lenght = 0;
 		read(array, 0, kor);
 		std::cout << count(kor) << std::endl;
