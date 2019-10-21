@@ -160,7 +160,7 @@ namespace sorts
 			rightBorder = indexStack.top();
 			indexStack.pop();
 
-			if (rightBorder - leftBorder == 1 && arr[leftBorder] > arr[rightBorder])
+			if (arr[leftBorder] > arr[rightBorder])
 			{
 				std::swap(arr[leftBorder], arr[rightBorder]);
 			}
