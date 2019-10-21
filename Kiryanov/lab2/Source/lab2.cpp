@@ -5,6 +5,12 @@
 #include <fstream>
 
 struct binkor {
+	~binkor() {
+		if (std::holds_alternative<std::pair<binkor*, binkor*>>(system)) {
+			delete std::get<std::pair<binkor*, binkor*>>(system).first;
+			delete std::get<std::pair<binkor*, binkor*>>(system).second;
+		}
+	}
 	int lenght;
 	std::variant<std::pair<binkor*, binkor*>, int> system;
 };
@@ -81,8 +87,8 @@ int count(binkor* kor) {
 	if (std::holds_alternative<std::pair<binkor*, binkor*>>(kor->system)) {
 		result += count(std::get<std::pair<binkor*, binkor*>>(kor->system).first);
 		result += count(std::get<std::pair<binkor*, binkor*>>(kor->system).second);
-		delete std::get<std::pair<binkor*, binkor*>>(kor->system).first;
-		delete std::get<std::pair<binkor*, binkor*>>(kor->system).second;
+		//delete std::get<std::pair<binkor*, binkor*>>(kor->system).first;
+		//delete std::get<std::pair<binkor*, binkor*>>(kor->system).second;
 	}
 	else {
 		result++;
