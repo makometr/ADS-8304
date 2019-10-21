@@ -38,6 +38,7 @@ public:
         if (count > 0) {
             count--;
             lastElement = lastElement->prev;
+   	    lastElement->next = nullptr;
         }
     }
 
