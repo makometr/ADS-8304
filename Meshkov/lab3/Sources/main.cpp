@@ -198,11 +198,11 @@ int main()
         return result;
     };
 
-    auto queue = queueToString(lessThanLeft) +
+    auto result = queueToString(lessThanLeft) +
             queueToString(insideLeftAndRight) +
             queueToString(greaterThanRight);
-    rightTrim(queue);
-    std::cout << "Result: " << queue << std::endl;
+    rightTrim(result);
+    std::cout << "Result: " << result << std::endl;
 
     return EXIT_SUCCESS;
 }
