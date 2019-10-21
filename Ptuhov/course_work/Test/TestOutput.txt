@@ -1,0 +1,16 @@
+-10 1 2 4 5 7 8 15 19 100 8888 
+1
+1 2 3 4 5 
+-10 -1 5 7 8 13 16 19 38 
+1 2 3 4 5 
+0 0 0 0 0 0 
+8.001 8.01 8.02 8.1 9.003 9.02 9.03 
+0 7 17 27 40 
+Array elements don't have same type
+A AAA GHOSN KKKK YH 
+DKNbn GJNOANJ JBG NDNG WNNJK 
+A B C D E 
+E EE EEE EEEE EEEEE 
+YO YOOOOOOOOOOOOOO YOY YOYO YOYOY 
+( ( (((()))) () ) )( 
+Array elements don't have same type
