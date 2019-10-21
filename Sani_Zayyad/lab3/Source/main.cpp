@@ -4,7 +4,7 @@
 #include <string>
 
 void ReadFromFile(std::string filename);
-std::string getInfix(std::string input);
+std::string getInfix(const std::string &input);
 Data makeInfix(char sign, Data firstArg, Data secondArg);
 bool isAlpha(const char ch);
 bool isDigit(const char ch);
@@ -34,7 +34,7 @@ void ReadFromFile(std::string filename)
     }
 }
 
-std::string getInfix(std::string postfixExpression){
+std::string getInfix(const std::string &postfixExpression){
     Stack stack;
     for (auto i = postfixExpression.cbegin(); i < postfixExpression.end(); ++i) {
        char elem = *i;
@@ -44,7 +44,7 @@ std::string getInfix(std::string postfixExpression){
         // If the scanned character is an operand (number||alpahabet),
         // push it to the stack.
        else if (isAlpha(elem) || isDigit(elem)) {
-            std::string tmpStr = "";
+            std::string tmpStr;
             while (elem != ' ' && i != postfixExpression.end()) {
                if ((isDigit(elem) && isAlpha(elem)) ||
                    (!isDigit(elem) && !isAlpha(elem))) {
@@ -107,7 +107,7 @@ std::string getInfix(std::string postfixExpression){
 
 }
 Data makeInfix(char sign, Data firstArg, Data secondArg){
-    std::string tmpStr = "";
+    std::string tmpStr;
 
     int expressionPriority = 0;
      //defining the priority for each sign(operator) according to PEDMAS
