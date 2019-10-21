@@ -24,10 +24,12 @@ enum class TypeCode
 	TypeString
 };
 
+// данная структура содержит данные о трансформации некоторой строки s 
+// в тип T если трансформация прошла успешно, то transformResult = true
 template<typename T>
-struct TranformPair
+struct TransformPair
 {
-	TranformPair(T newVal, bool newTranformResult) : value(newVal), transformResult(newTranformResult)
+	TransformPair(T newVal, bool newTranformResult) : value(newVal), transformResult(newTranformResult)
 	{ }
 
 	T value;
@@ -39,16 +41,16 @@ ReturnType streamsCheck(std::ifstream&, std::ofstream&);
 TypeCode determineType(std::string const&);
 
 template <typename T>
-TranformPair<T> from_string(std::string const& checkString)
+TransformPair<T> from_string(std::string const& checkString)
 {
 	T value;
 	std::istringstream stream(checkString);
 	stream >> value;
 
 	if (stream.fail() || stream.peek() != EOF)
-		return TranformPair<T>(value, false);
+		return TransformPair<T>(value, false);
 
-	return TranformPair<T>(value, true);
+	return TransformPair<T>(value, true);
 }
 
 template <typename T>
@@ -61,14 +63,14 @@ ReturnType reformArr(std::vector<T>& arr, std::string const& arrStringForm)
 		auto searchResult = std::find(startPosition, arrStringForm.end(), ' ');
 		if (searchResult == arrStringForm.end())
 		{
-			TranformPair<T> transformToT = from_string<T>(std::string(startPosition, arrStringForm.end()));
+			TransformPair<T> transformToT = from_string<T>(std::string(startPosition, arrStringForm.end()));
 			if (transformToT.transformResult == false)
 				return ReturnType::IncorrectFileData;
 
 			arr.push_back(transformToT.value);
 			return ReturnType::Correct;
 		}
-		TranformPair<T> transformToT = from_string<T>(std::string(startPosition, searchResult));
+		TransformPair<T> transformToT = from_string<T>(std::string(startPosition, searchResult));
 		if (transformToT.transformResult == false)
 			return ReturnType::IncorrectFileData;
 
@@ -76,8 +78,6 @@ ReturnType reformArr(std::vector<T>& arr, std::string const& arrStringForm)
 
 		startPosition = searchResult + 1;
 	}
-
-	return ReturnType::Correct;
 }
 
 template <typename T>

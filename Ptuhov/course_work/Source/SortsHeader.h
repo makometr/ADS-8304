@@ -83,8 +83,8 @@ namespace sorts
 
 		while (rightArrIndex < rightPart.size())
 		{
-				result.push_back(rightPart[rightArrIndex]);
-				rightArrIndex++;
+			result.push_back(rightPart[rightArrIndex]);
+			rightArrIndex++;
 		}
 
 		arr = std::move(result);
@@ -132,7 +132,7 @@ namespace sorts
 					sortedBlock.push_back(arr[middleBorder + rightArrIndex]);
 					rightArrIndex++;
 				}
-				
+
 				for (size_t insertIndex = leftBorder; insertIndex < rightBorder; insertIndex++)
 				{
 					arr[insertIndex] = sortedBlock[insertIndex - leftBorder];

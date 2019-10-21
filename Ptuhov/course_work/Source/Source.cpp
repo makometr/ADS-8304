@@ -7,23 +7,24 @@ ReturnType streamsCheck(std::ifstream& in, std::ofstream& out)
 
 TypeCode determineType(std::string const& checkString)
 {
-	TranformPair<int> intTransform = from_string<int>(checkString);
+	TransformPair<int> intTransform = from_string<int>(checkString);
 	if (intTransform.transformResult == true)
 		return TypeCode::TypeInt;
 
-	TranformPair<char> charTransform = from_string<char>(checkString);
+	TransformPair<char> charTransform = from_string<char>(checkString);
 	if (charTransform.transformResult == true)
 		return TypeCode::TypeChar;
 
-	TranformPair<double> doubleTransform = from_string<double>(checkString);
+	TransformPair<double> doubleTransform = from_string<double>(checkString);
 	if (doubleTransform.transformResult == true)
 		return TypeCode::TypeDouble;
 
 	return TypeCode::TypeString;
 }
 
-void readFileData(std::ifstream& in, StringVector& fileData)
+StringVector readFileData(std::ifstream& in)
 {
+	StringVector fileData;
 	std::string currentFileString;
 
 	while (std::getline(in, currentFileString))
@@ -33,6 +34,8 @@ void readFileData(std::ifstream& in, StringVector& fileData)
 
 		fileData.push_back(currentFileString);
 	}
+
+	return fileData;
 }
 
 int main(int argc, char** argv)
@@ -53,8 +56,7 @@ int main(int argc, char** argv)
 		}
 
 
-		StringVector fileData;
-		readFileData(in, fileData);
+		StringVector fileData = readFileData(in);
 
 		for (auto it = fileData.begin(); it != fileData.end(); ++it)
 		{
@@ -70,7 +72,7 @@ int main(int argc, char** argv)
 			std::string firstELement(arrStringForm.begin(), searchResult);
 			TypeCode type = determineType(firstELement);
 			auto cmp = [](auto a, auto b) {return a < b; };
-	//		auto reverseCmp = [](auto a, auto b) {return a > b; };
+			//		auto reverseCmp = [](auto a, auto b) {return a > b; };
 
 			switch (type)
 			{
