@@ -8,13 +8,11 @@ template <typename T>
 class BinTree{
 public:
 
-    typedef struct Element{
+    struct elem{
         T value;
         int left_child_index;
         int right_child_index;
-    }elem;
-
-    elem** array;
+    };
 
     explicit BinTree(int n){
         MAX_SIZE = n;
@@ -22,6 +20,22 @@ public:
         for(int i = 0; i < n; i++){
             array[i] = new elem;
         }
+    }
+
+    void set_elem_value(T value, int index) {
+        array[index]->value = value;
+    }
+
+    void set_left_child_index(int current_index, int child_index = -1) {
+        array[current_index]->left_child_index = child_index;
+    }
+
+    void set_right_child_index(int current_index, int child_index = -1) {
+        array[current_index]->right_child_index = child_index;
+    }
+
+    elem* get_root() {
+        return array[0];
     }
 
     bool make_bin_tree(int& counter, std::string& str){
@@ -40,11 +54,11 @@ public:
             return false;
         }
 
-        array[local_index]->value = current_substring;
+        set_elem_value(current_substring, local_index);
 
         if(str[counter] == ')') {
-            array[local_index]->left_child_index = -1;
-            array[local_index]->right_child_index = -1;
+            set_left_child_index(local_index);
+            set_right_child_index(local_index);
             ++counter;
             return true;
         }
@@ -53,20 +67,20 @@ public:
             return false;
         }
         else if(str[counter] == '#') {
-            array[local_index]->left_child_index = -1;
+            set_left_child_index(local_index);
             ++counter;
         }
         else if(str[counter] == '('){
             if(size + 1 == MAX_SIZE){
                 resize_array();
             }
-            array[local_index]->left_child_index = ++size;
+            set_left_child_index(local_index, ++size);
             if(!make_bin_tree(counter, str))
                 return false;
         }
 
         if(str[counter] == ')') {
-            array[local_index]->right_child_index = -1;
+            set_right_child_index(local_index);
             ++counter;
             return true;
         }
@@ -74,7 +88,7 @@ public:
             if(size + 1 == MAX_SIZE){
                 resize_array();
             }
-            array[local_index]->right_child_index = ++size;
+            set_right_child_index(local_index, ++size);
 
             if(!make_bin_tree(counter, str))
                 return false;
@@ -134,4 +148,5 @@ public:
 private:
     int size = 0;
     int MAX_SIZE = 0;
+    elem** array;
 };

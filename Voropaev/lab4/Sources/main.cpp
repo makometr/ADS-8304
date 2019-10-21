@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
             str.erase(0, find_cnt);
             BinTree<std::string> tree(20);
             if(tree.make_bin_tree(counter, str)) {
-                tree.queue_output(tree.array[0], queue);
+                tree.queue_output(tree.get_root(), queue);
             }
             counter = 0;
         }
@@ -36,8 +36,9 @@ int main(int argc, char* argv[]) {
         std::getline(std::cin, str);
         size_t find_cnt = str.find_first_not_of(check_str, 0);
         str.erase(0, find_cnt);
-        tree.make_bin_tree(counter, str);
-        tree.queue_output(tree.array[0], queue);
+        if(!tree.make_bin_tree(counter, str))
+            return 1;
+        tree.queue_output(tree.get_root(), queue);
     }
     return 0;
 }
