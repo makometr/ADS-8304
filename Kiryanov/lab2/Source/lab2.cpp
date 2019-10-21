@@ -1,12 +1,8 @@
 ﻿#include <iostream>
-#include <cstdlib>
-#include <cstdio>
 #include <string>
 #include <stack>
 #include <variant>
 #include <fstream>
-#include <map>
-#include <algorithm>
 
 typedef struct binkor {
 	int lenght;
