@@ -7,13 +7,12 @@
 namespace sorts
 {
 	template <typename T>
-	std::vector<T> operator+(std::vector<T> const& left, std::vector<T> const& right)
+	std::vector<T> operator+=(std::vector<T>& left, std::vector<T> const& right)
 	{
-		std::vector<T> result(left);
 		for (auto i : right)
-			result.push_back(i);
+			left.push_back(i);
 
-		return result;
+		return left;
 	}
 
 	template<typename T, typename FUNC_T>
@@ -42,7 +41,9 @@ namespace sorts
 		quickRecSort(smaller, cmp);
 		quickRecSort(bigger, cmp);
 
-		arr = smaller + equal + bigger;
+		smaller += equal;
+		smaller += bigger;
+		arr = std::move(smaller);
 	}
 
 	template<typename T, typename FUNC_T>

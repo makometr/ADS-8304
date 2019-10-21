@@ -86,7 +86,7 @@ int main(int argc, char** argv)
 					continue;
 				}
 
-				quickItSort(arr, cmp);
+				quickRecSort(arr, cmp);
 				for (auto i : arr)
 					out << i << ' ';
 				out << '\n';
