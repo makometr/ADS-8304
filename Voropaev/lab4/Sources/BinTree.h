@@ -145,6 +145,12 @@ public:
         array = extra_array;
     }
 
+	 ~BinTree(){
+        for(int i = 0; i < MAX_SIZE; i++) {
+            delete(array[i]);
+        }
+        delete[] array;
+    }
 private:
     int size = 0;
     int MAX_SIZE = 0;

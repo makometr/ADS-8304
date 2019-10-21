@@ -40,5 +40,10 @@ int main(int argc, char* argv[]) {
             return 1;
         tree.queue_output(tree.get_root(), queue);
     }
+	
+	   while(!queue.empty()) {
+        delete(queue.front());
+        queue.pop();
+    }
     return 0;
 }
