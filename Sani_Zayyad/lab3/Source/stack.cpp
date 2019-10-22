@@ -1,9 +1,16 @@
 #include "stack.hpp"
 
-Stack::Stack()
+Stack::Stack(size_t maxSize)
 {
+    stackData = new Data[maxSize];
     stackSize = 0;
 }
+
+Stack::~Stack()
+{
+     delete [] stackData;
+}
+
 
 //getting size of stack
 size_t Stack::size() const
@@ -21,7 +28,7 @@ bool Stack::isEmpty() const
 Data Stack::top() const
 {
     if (!isEmpty()) {
-        return stackData.back();
+        return stackData[stackSize -1];
     }
     else {
         std::cout << "Error. Stack is empty";
@@ -30,20 +37,22 @@ Data Stack::top() const
 }
 
 // removing or popping the top element in stack
-void Stack::pop()
+Data Stack::pop()
 {
     if (!isEmpty()){
-        stackData.pop_back();
-        stackSize -= 1;
+         Data elem = stackData[--stackSize];
+        return elem;
     }
     else {
         std::cout << "Error. Stack is empty";
+        return Data("",0);
     }
+   
 }
 
 //adding element in stack
 void Stack::push(const Data elem)
 {
-    stackData.push_back(elem);
-    stackSize += 1;
+    stackData[stackSize] = elem;
+    stackSize++;
 }

@@ -1,9 +1,7 @@
 #ifndef stack_hpp
 #define stack_hpp
 
-#include <vector>
 #include <string>
-//#include <memory>
 #include <iostream>
 
 // A stack element consisting of an expression and the priority of that expression.
@@ -12,18 +10,22 @@ typedef std::pair<std::string, int> Data;
 
 class Stack{
 public:
-    explicit Stack();
-    ~Stack() =  default;
+    Stack(size_t max_size);
+    
+    Stack(const Stack &stack) = delete;
+    Stack& operator=(const Stack&) = delete;
+
+    ~Stack();
     
     //methods for working with stack
     void push(const Data elem);
-    void pop();
+    Data pop();
     Data top() const;
     size_t size() const;
     bool isEmpty() const;
 
 private:
-    std::vector <Data> stackData;
+    Data* stackData;
     std::size_t stackSize;
     
 };

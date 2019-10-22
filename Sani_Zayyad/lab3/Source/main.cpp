@@ -35,8 +35,9 @@ void ReadFromFile(std::string filename)
 }
 
 std::string getInfix(const std::string &postfixExpression){
-    Stack stack;
-    for (auto i = postfixExpression.cbegin(); i < postfixExpression.end(); ++i) {
+    Stack stack(postfixExpression.size());
+    
+    for (auto i = postfixExpression.cbegin(); i < postfixExpression.cend(); ++i) {
        char elem = *i;
         if(elem == ' '){
             continue;
@@ -45,8 +46,8 @@ std::string getInfix(const std::string &postfixExpression){
         // push it to the stack.
        else if (isAlpha(elem) || isDigit(elem)) {
             std::string tmpStr;
-            while (elem != ' ' && i != postfixExpression.end()) {
-             if (!isDigit(elem) && !isAlpha(elem)) {
+            while (elem != ' ' && i != postfixExpression.cend()) {
+               if (!isDigit(elem) && !isAlpha(elem)) {
                     std::cout<< "Error: wrong data!";
                    return "";
                }
