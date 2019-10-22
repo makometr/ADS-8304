@@ -1,0 +1,3 @@
+#! /bin/bash
+make
+./lr2 Tests/inp.txt
