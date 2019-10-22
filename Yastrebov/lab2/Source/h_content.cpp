@@ -2,7 +2,7 @@
 
 std::shared_ptr<Node> h_content::parse_str_into_node(std::string &source_str)
 {
-	std::string tmp_value_str = "";
+	std::string tmp_value_str;
 
 	long long unsigned int tmp_index = 0;
 
@@ -18,8 +18,8 @@ std::shared_ptr<Node> h_content::parse_str_into_node(std::string &source_str)
 
 	int h_index_value = std::stoi(tmp_value_str); // нам нужно последнее число из подстроки формата "число.число.(и тд)"
 
-	std::string title = "";
-	std::string text = "";
+	std::string title;
+	std::string text;
 	
 	while ((tmp_index < source_str.size()) && (source_str[tmp_index] != '['))
 		title += source_str[tmp_index++];
@@ -73,7 +73,7 @@ std::shared_ptr<Node> h_content::insert(std::string &src_str)
 	std::shared_ptr<Node> for_head_inserting;
 	auto current_node = head;
 
-	std::string tmp_value_str = "";
+	std::string tmp_value_str;
 
 	int tmp_index = 0;
 
@@ -195,7 +195,7 @@ std::shared_ptr<Node> h_content::add(std::string &src_str) // работает �
 	std::shared_ptr<Node> for_head_inserting;
 	auto current_node = head;
 
-	std::string tmp_value_str = "";
+	std::string tmp_value_str;
 
 	int tmp_index = 0;
 
@@ -328,7 +328,7 @@ void h_content::normalize(const std::string &start, bool recursive)
 	else {
 		auto current_node = head;
 
-		std::string tmp_value_str = "";
+		std::string tmp_value_str;
 
 		long long unsigned int tmp_index = 0;
 
