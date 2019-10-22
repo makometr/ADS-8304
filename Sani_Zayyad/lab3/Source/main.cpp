@@ -46,8 +46,7 @@ std::string getInfix(const std::string &postfixExpression){
        else if (isAlpha(elem) || isDigit(elem)) {
             std::string tmpStr;
             while (elem != ' ' && i != postfixExpression.end()) {
-               if ((isDigit(elem) && isAlpha(elem)) ||
-                   (!isDigit(elem) && !isAlpha(elem))) {
+             if (!isDigit(elem) && !isAlpha(elem)) {
                     std::cout<< "Error: wrong data!";
                    return "";
                }
