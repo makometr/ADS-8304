@@ -9,11 +9,11 @@
 #include <cctype>
 
 typedef struct Node {
-	int h_index; // "������������� �����" (c)
+	int h_index; // относительный индекс
 	
-	std::string title; // "��������" (c)
+	std::string title; // название
 
-	std::variant < std::shared_ptr<Node>, std::string > list_or_text; // "���� ��������� ����������� �������, ���� �����" (c)
+	std::variant < std::shared_ptr<Node>, std::string > list_or_text; // текст или подсписок
 
 	std::shared_ptr<Node> next;
 }Node;
@@ -26,22 +26,22 @@ public:
 
 	std::shared_ptr<Node> head;
 
-	void load_h_content(std::vector<std::string> &sorted_nodes); // forms a h_list, sets head in h_content::head
+	void load_h_content(std::vector<std::string> &sorted_nodes); //  загружаем файл в список
 
-	void print(std::shared_ptr<Node> head, std::string index_str);
+	void print(std::shared_ptr<Node> head, std::string index_str); // печатание списка
 
-	std::shared_ptr<Node> add(std::string &source_str);
+	std::shared_ptr<Node> add(std::string &source_str); // добавление
 
-	std::shared_ptr<Node> insert(std::string &source_str);
+	std::shared_ptr<Node> insert(std::string &source_str); // вставка
 
 
-	void normalize(const std::string &start, bool recursive);
+	void normalize(const std::string &start, bool recursive); // нормализация индексов
 
 private:
 	
-	void normalize_row(std::shared_ptr<Node> start, bool recursive = false);
+	void normalize_row(std::shared_ptr<Node> start, bool recursive = false); // служебный ф-я для нормализации 
 
-	std::shared_ptr<Node> parse_str_into_node(std::string &source_str);
+	std::shared_ptr<Node> parse_str_into_node(std::string &source_str); // парсер строки в Node
 
 };
 
