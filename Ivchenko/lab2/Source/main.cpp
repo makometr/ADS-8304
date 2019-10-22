@@ -15,8 +15,6 @@ typedef char base;
 	
 	typedef s_expr *hlist;
 
-	void print_s_expr( hlist s );
-
 	hlist head (const hlist s);
 	hlist tail (const hlist s);
 	hlist cons (const hlist h, const hlist t);
@@ -24,22 +22,14 @@ typedef char base;
 	bool isAtom (const hlist s);
 	bool isNull (const hlist s);
 	void destroy (hlist s);
-	
-	base getAtom (const hlist s);
-
 
 	void read_hlist ( hlist& y, std::stringstream& s, int *);			
 	void read_s_expr (base prev, hlist& y, std::stringstream& s, int *); 
 	void read_seq ( hlist& y, std::stringstream& s, int *); 
-	
-
-	void write_hlist (const hlist x, int *a);		
-	void write_seq (const hlist x, int *b); 
-	
 
 hlist head (const hlist s){
 		if (s != NULL) {
-			if (!isAtom(s))	return s->node.next;
+			if (!isAtom(s))	return s->node.list;
 			else { std::cerr << "Error: Head(atom) \n"; exit(1); }
 		}else { 
 			std::cerr << "Error: Head(nil) \n";
@@ -60,7 +50,7 @@ bool isNull (const hlist s){
 hlist tail (const hlist s)
 {
 		if (s != NULL) {
-			if (!isAtom(s))	return s->node.list;
+			if (!isAtom(s))	return s->node.next;
 			else { std::cerr << "Error: Tail(atom) \n"; exit(1); }
 		}else { std::cerr << "Error: Tail(nil) \n";
 			exit(1);
@@ -76,14 +66,10 @@ hlist cons (const hlist h, const hlist t)
 	}
 	else {	
 		p = new s_expr; 
-		if ( p == NULL)	{
-			std::cerr << "Memory not enough\n";
-			exit(1);
-		} 	
-		else {
+		{
 			p->tag = false;
-			p->node.next = h;
-			p->node.list = t;
+			p->node.list = h;
+			p->node.next = t;
 			return p;	
 		}
 	}
