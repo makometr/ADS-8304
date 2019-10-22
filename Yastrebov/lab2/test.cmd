@@ -1,0 +1,1 @@
+lab2.exe Tests/input.txt
