@@ -33,9 +33,9 @@ int main(int argc, char* argv[])
 
 	input.close();
 
-	std::sort(input_nodes.begin(), input_nodes.end());
-
-	h_content hList;
+	std::sort(input_nodes.begin(), input_nodes.end()); // иначе изначальное содержимое не выгрузить в список, ибо по условию
+							   // задания для добавления X.a должен существовать X
+ 	h_content hList;
 	hList.load_h_content(input_nodes);
 	while (true) {
 		std::cout << "______________________" << std::endl;
