@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
-	char tmp;
+	char tmp = 0;
 	std::string processed_string;
 
 	while (input.get(tmp))
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 			"Choose action :\n1 : print\n2 : add\n3 : insert\n4 : normalize"
 			<< std::endl;
 
-		int action;
+		int action = 0;
 
 		std::cin >> action;
 		std::cin.get();
