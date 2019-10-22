@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 	}
 
 	char tmp;
-	std::string processed_string = "";
+	std::string processed_string;
 
 	while (input.get(tmp))
 	{
