@@ -2,17 +2,20 @@
 #include <cstdlib>
 #include <sstream>
 
-typedef char base;	
+typedef char base;
 
+	struct s_expr;	
+	struct pair{
+		s_expr *next = nullptr;
+		s_expr *list = nullptr;
+	};
+	
 	struct s_expr {
 		bool tag; 
-		union{
-			base atom;
-			s_expr *next;
-			s_expr *list;
-		} node;		
+		base atom;
+		pair ptrs;		
 	};			
-	
+			
 	typedef s_expr *hlist;
 
 	hlist head (const hlist s);
@@ -28,8 +31,8 @@ typedef char base;
 	void read_seq ( hlist& y, std::stringstream& s, int *); 
 
 hlist head (const hlist s){
-		if (s != NULL) {
-			if (!isAtom(s))	return s->node.list;
+		if (s != nullptr) {
+			if (!isAtom(s))	return s->ptrs.list;
 			else { std::cerr << "Error: Head(atom) \n"; exit(1); }
 		}else { 
 			std::cerr << "Error: Head(nil) \n";
@@ -38,19 +41,19 @@ hlist head (const hlist s){
 }
 
 bool isAtom (const hlist s){	
-	if(s == NULL) return false;
+	if(s == nullptr) return false;
 	else return (s -> tag);
 }
 
 bool isNull (const hlist s){
-	return s == NULL;
+	return s == nullptr;
 	
 }
 
 hlist tail (const hlist s)
 {
-		if (s != NULL) {
-			if (!isAtom(s))	return s->node.next;
+		if (s != nullptr) {
+			if (!isAtom(s))	return s->ptrs.next;
 			else { std::cerr << "Error: Tail(atom) \n"; exit(1); }
 		}else { std::cerr << "Error: Tail(nil) \n";
 			exit(1);
@@ -68,8 +71,8 @@ hlist cons (const hlist h, const hlist t)
 		p = new s_expr; 
 		{
 			p->tag = false;
-			p->node.list = h;
-			p->node.next = t;
+			p->ptrs.list = h;
+			p->ptrs.next = t;
 			return p;	
 		}
 	}
@@ -79,14 +82,14 @@ hlist make_atom (const base x)
 	{	hlist s;
 		s = new s_expr;
 		s -> tag = true;
-		s->node.atom = x;
+		s->atom = x;
 		return s;
 	}
 
 
 void destroy (hlist s) 
 {
-	if ( s != NULL) {
+	if ( s != nullptr) {
 		if (!isAtom(s)) {
 			destroy ( head (s));
 			destroy ( tail (s));
@@ -94,17 +97,9 @@ void destroy (hlist s)
 		delete s;
 	
 	};
-	}
 
-base getAtom (const hlist s)
-	{
-		if (!isAtom(s)) {
-			 std::cerr << "Error: getAtom(s) for !isAtom(s) \n";
-			 exit(1);
-		}
-		else return (s->node.atom);
-	}
 
+}
 
 void read_hlist ( hlist& y,  std::stringstream& s, int *c)
 	{	base x;
@@ -115,6 +110,8 @@ void read_hlist ( hlist& y,  std::stringstream& s, int *c)
 			exit(1);
 		} 
 		read_s_expr ( x, y, s, c);
+		
+    		
 		
 	}
 void read_s_expr (base prev, hlist& y,  std::stringstream& s, int *c)
@@ -144,7 +141,8 @@ void read_seq ( hlist& y,  std::stringstream& s, int *c) {
 				s >> x;
 
 
-			if ( x == ')' ) y = nullptr;
+			if ( x == ')' ) 
+				y = nullptr;
 			else {
 				read_s_expr ( x, p1, s, c);
 				read_seq ( p2, s, c);
@@ -154,19 +152,24 @@ void read_seq ( hlist& y,  std::stringstream& s, int *c) {
 }
 	
 int main(int argc, char* argv[]){
+
+	hlist hl = new s_expr;	
+	int c = 0;
+	std::stringstream ss;
 	if (argc == 2){
-		std::stringstream str;
-    		str << argv[1];
-		std::cout << "Иерархический список:" << argv[1] << std::endl;
-		int c = 0;	
-		s_expr* hl;
-		std::cout << "Линейный список атомов:";
-		read_hlist(hl, str, &c);
-		std::cout << std::endl;
-		std::cout <<"Количество атомов в иерархическом списке:"<< c << std::endl;
-		destroy(hl);		
-		
+    		ss << argv[1];
+	}else{
+		std::string s;
+		std::cin >> s;
+		ss << s; 
 	}
+
+	std::cout << "Иерархический список:" << ss.str() << std::endl;	
+	std::cout << "Линейный список атомов:";
+	read_hlist(hl, ss, &c);
+	std::cout <<"\nКоличество атомов в иерархическом списке:"<< c << std::endl;
+	destroy(hl);
+		
 	return 0;
 	
 }
