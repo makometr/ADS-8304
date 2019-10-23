@@ -3,15 +3,15 @@
 #include <fstream>
 #include <string>
 
-void ReadFromFile(std::string filename);
+void ReadFromFile(const std::string &filename);
 std::string getInfix(const std::string &input);
-Data makeInfix(char sign, Data firstArg, Data secondArg);
+Data makeInfix(const char &sign, const Data &firstArg, const Data &secondArg);
 bool isAlpha(const char ch);
 bool isDigit(const char ch);
 bool isOperator(const char ch);
 
 
-void ReadFromFile(std::string filename)
+void ReadFromFile(const std::string &filename)
 {
     std::ifstream file(filename);
 
@@ -35,7 +35,7 @@ void ReadFromFile(std::string filename)
 }
 
 std::string getInfix(const std::string &postfixExpression){
-    Stack stack(postfixExpression.size());
+    Stack stack;
     
     for (auto i = postfixExpression.cbegin(); i < postfixExpression.cend(); ++i) {
        char elem = *i;
@@ -106,7 +106,8 @@ std::string getInfix(const std::string &postfixExpression){
     }
 
 }
-Data makeInfix(char sign, Data firstArg, Data secondArg){
+Data makeInfix(const char &sign, const Data &firstArg, const Data &secondArg)
+{
     std::string tmpStr;
 
     int expressionPriority = 0;

@@ -1,9 +1,10 @@
 #include "stack.hpp"
 
-Stack::Stack(size_t maxSize)
+Stack::Stack()
 {
-    stackData = new Data[maxSize];
+    defaultSize = 5;
     stackSize = 0;
+    stackData = new Data[defaultSize];
 }
 
 Stack::~Stack()
@@ -50,9 +51,26 @@ Data Stack::pop()
    
 }
 
+Data* Stack::resize(Data*& stackdata, size_t defaultsize, size_t new_size){
+    Data* new_stackData = new Data[new_size];
+    
+    for (size_t i = 0; i < defaultsize; i++)
+        new_stackData[i] = stackData[i];
+    delete[] stackdata;
+//    std::cout<<"resizing.....\n";
+    
+    return new_stackData;
+}
+
 //adding element in stack
 void Stack::push(const Data elem)
 {
-    stackData[stackSize] = elem;
     stackSize++;
+    if (stackSize >= defaultSize) {
+        size_t increment = 5;
+        stackData = resize(stackData, defaultSize, defaultSize + increment);
+        defaultSize += increment;
+    }
+    stackData[stackSize - 1] = elem;
+    
 }

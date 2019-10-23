@@ -10,7 +10,7 @@ typedef std::pair<std::string, int> Data;
 
 class Stack{
 public:
-    Stack(size_t max_size);
+    Stack();
     
     Stack(const Stack &stack) = delete;
     Stack& operator=(const Stack&) = delete;
@@ -23,10 +23,12 @@ public:
     Data top() const;
     size_t size() const;
     bool isEmpty() const;
-
+    Data* resize(Data*& stackdata, size_t defaultsize, size_t new_size);
+    
 private:
     Data* stackData;
-    std::size_t stackSize;
+    size_t stackSize;
+    size_t defaultSize;
     
 };
 
