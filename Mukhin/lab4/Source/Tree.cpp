@@ -1,22 +1,21 @@
 #include "Tree.h"
-#include <iostream>
-
+#include "Iterator.h"
 Tree::Tree(int root_data) {
-    root = new Node;
+    root = std::make_shared<Node>();
     root->data = root_data;
 }
 
-TreeIterator* Tree::make_iterator_DFS() {
-    return new TreeIteratorDFS(root);
+std::shared_ptr<TreeIterator> Tree::make_iterator_DFS() {
+    return std::make_shared<TreeIteratorDFS>(root);
 }
 
-TreeIterator* Tree::make_iterator_BFS() {
-    return new TreeIteratorBFS(root);
+std::shared_ptr<TreeIterator> Tree::make_iterator_BFS() {
+    return std::make_shared<TreeIteratorBFS>(root);
 }
 
 void Tree::insert(int element) {
     if (root == nullptr) {
-        root = new Node;
+        root = std::make_shared<Node>();
         root->data = element;
     } else {
         if (root->data > element) {
@@ -33,9 +32,9 @@ void Tree::insert(int element) {
     }
 }
 
-void Tree::insert(Node*& parent, int element) {
+void Tree::insert(std::shared_ptr<Node>& parent, int element) {
     if (parent == nullptr) {
-        parent = new Node;
+        parent = std::make_shared<Node>();
         parent->data = element;
     } else {
         if (parent->data > element) {
@@ -53,11 +52,11 @@ void Tree::insert(Node*& parent, int element) {
 }
 
 void Tree::print_tree() {
-    std::map<Node*, int> nodes_and_levels = get_nodes_and_levels();
-    TreeIterator* bfs = this->make_iterator_BFS();
-    int level_of_dip;
+    std::map<std::shared_ptr<Node>, int> nodes_and_levels = get_nodes_and_levels();
+    std::shared_ptr<TreeIterator> bfs = this->make_iterator_BFS();
+    int level_of_dip = 0;
 
-    for (Node* el = bfs->next(); bfs->has_next(); el = bfs->next()) {
+    for (std::shared_ptr<Node> el = bfs->next(); bfs->has_next(); el = bfs->next()) {
         level_of_dip = nodes_and_levels[el];
         std::cout << std::string(level_of_dip * 5, ' ') << el->data << std::endl;
     }
@@ -67,11 +66,13 @@ int Tree::dip() {
     if (root == nullptr) {
         return 0;
     } else {
-        std::map<Node*, int> nodes_and_levels = get_nodes_and_levels();
-        TreeIterator* bfs = this->make_iterator_BFS();
+        std::map<std::shared_ptr<Node>, int> nodes_and_levels = get_nodes_and_levels();
+        if (nodes_and_levels.size() == 1)
+            return 1;
+        std::shared_ptr<TreeIterator> bfs = this->make_iterator_BFS();
         int max_level_of_dip = 0;
 
-        for (Node *el = bfs->next(); bfs->has_next(); el = bfs->next()) {
+        for (std::shared_ptr<Node> el = bfs->next(); bfs->has_next(); el = bfs->next()) {
             if (max_level_of_dip < nodes_and_levels[el]) {
                 max_level_of_dip = nodes_and_levels[el];
             }
@@ -82,8 +83,13 @@ int Tree::dip() {
 }
 
 void Tree::print_leaves() {
-    TreeIterator* dfs = this->make_iterator_DFS();
-    for (Node* el = dfs->next(); dfs->has_next(); el = dfs->next()) {
+    std::map<std::shared_ptr<Node>, int> nodes_and_levels = get_nodes_and_levels();
+    if (nodes_and_levels.size() == 1) {
+        std::cout << "Leaf: " << root->data << std::endl;
+        return;
+    }
+    std::shared_ptr<TreeIterator> dfs = this->make_iterator_DFS();
+    for (std::shared_ptr<Node> el = dfs->next(); dfs->has_next(); el = dfs->next()) {
         if (el->left == nullptr && el->right == nullptr) {
             std::cout << "Leaf: " << el->data << std::endl;
         }
@@ -91,12 +97,14 @@ void Tree::print_leaves() {
 }
 
 int Tree::tree_length() {
-    std::map<Node*, int> nodes_and_levels = get_nodes_and_levels();
-    TreeIterator* bfs = this->make_iterator_BFS();
+    std::map<std::shared_ptr<Node>, int> nodes_and_levels = get_nodes_and_levels();
+    if (nodes_and_levels.size() == 1)
+        return 1;
+    std::shared_ptr<TreeIterator> bfs = this->make_iterator_BFS();
     int max_level = 1;
     int level_of_dip;
 
-    for (Node* el = bfs->next(); bfs->has_next(); el = bfs->next()) {
+    for (std::shared_ptr<Node> el = bfs->next(); bfs->has_next(); el = bfs->next()) {
         level_of_dip = nodes_and_levels[el];
         if (max_level < level_of_dip) {
             max_level = level_of_dip;
@@ -115,12 +123,15 @@ int Tree::count_nodes_in_level(int data) {
     if (root == nullptr) {
         return 0;
     } else {
-        std::map<Node*, int> nodes_and_levels = get_nodes_and_levels();
-        TreeIterator* bfs = this->make_iterator_BFS();
+        std::map<std::shared_ptr<Node>, int> nodes_and_levels = get_nodes_and_levels();
+        if (nodes_and_levels.size() == 1) {
+            return 1;
+        }
+        std::shared_ptr<TreeIterator> bfs = this->make_iterator_BFS();
         int level_of_dip;
         int count = 0;
 
-        for (Node* el = bfs->next(); bfs->has_next(); el = bfs->next()) {
+        for (std::shared_ptr<Node> el = bfs->next(); bfs->has_next(); el = bfs->next()) {
             level_of_dip = nodes_and_levels[el];
             if (level_of_dip == data) {
                 count++;
@@ -131,15 +142,14 @@ int Tree::count_nodes_in_level(int data) {
     }
 }
 
-std::map<Node*, int> Tree::get_nodes_and_levels() {
-    std::map<Node*, int> nodes_and_levels;
+std::map<std::shared_ptr<Node>, int> Tree::get_nodes_and_levels() {
+    std::map<std::shared_ptr<Node>, int> nodes_and_levels;
     if (root == nullptr) {
         std::cout << "Tree is empty" << std::endl;
-        nodes_and_levels[nullptr] = 0;
-        return nodes_and_levels;
+        return std::map<std::shared_ptr<Node>, int>();
     } else {
-        std::map<Node *, bool> is_visit;
-        std::queue<std::pair<Node *, int>> queue;
+        std::map<std::shared_ptr<Node>, bool> is_visit;
+        std::queue<std::pair<std::shared_ptr<Node>, int>> queue;
         queue.push({root, 1});
         is_visit[root] = true;
 
@@ -161,16 +171,4 @@ std::map<Node*, int> Tree::get_nodes_and_levels() {
 
         return nodes_and_levels;
     }
-}
-
-void Tree::clear(Node* current_elem) {
-    if (current_elem != nullptr) {
-        clear(current_elem->left);
-        clear(current_elem->right);
-        delete current_elem;
-    }
-}
-
-Tree::~Tree() {
-    clear(root);
 }

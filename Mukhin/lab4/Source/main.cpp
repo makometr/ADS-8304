@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Tree.h"
 
 int main(int argc, char* argv[]) {
@@ -10,9 +11,9 @@ int main(int argc, char* argv[]) {
             tr.insert(atoi(argv[i]));
         }
         tr.print_tree();
-        std::cout << "Dip: " <<tr.dip() << std::endl;
+        std::cout << "Dip: " << tr.dip() << std::endl;
         tr.print_leaves();
-        std::cout << "Number of elements in the n level: "<< tr.count_nodes_in_level(2) << std::endl;
+        std::cout << "Number of elements in the n level: "<< tr.count_nodes_in_level(1) << std::endl;
         std::cout << "Dip of the tree: "<< tr.tree_length() << std::endl << std::string(40, '_') << std::string(3, '\n');
         return 0;
     }

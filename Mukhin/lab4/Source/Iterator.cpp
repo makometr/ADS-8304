@@ -1,6 +1,8 @@
+#include <queue>
 #include "Iterator.h"
+#include "Tree.h"
 
-TreeIteratorDFS::TreeIteratorDFS(Node* root) {
+TreeIteratorDFS::TreeIteratorDFS(std::shared_ptr<Node> root) {
     if (root != nullptr) {
         path_in_dip.push_back(root);
         go_in_dip(root->left);
@@ -8,7 +10,7 @@ TreeIteratorDFS::TreeIteratorDFS(Node* root) {
     }
 }
 
-void TreeIteratorDFS::go_in_dip(Node* parent) {
+void TreeIteratorDFS::go_in_dip(std::shared_ptr<Node> parent) {
     if (parent == nullptr) {
         return;
     } else {
@@ -19,20 +21,26 @@ void TreeIteratorDFS::go_in_dip(Node* parent) {
 }
 
 bool TreeIteratorDFS::has_next() {
-    return size <= path_in_dip.size();
+    if (size + 1 <= path_in_dip.size()){
+        size++;
+        return true;
+    }
+    return false;
 }
 
-Node* TreeIteratorDFS::next() {
-    return path_in_dip[size++];
+std::shared_ptr<Node> TreeIteratorDFS::next() {
+    if (path_in_dip.size() > size)
+        return path_in_dip[size];
+    return std::shared_ptr<Node>();
 }
 
-TreeIteratorBFS::TreeIteratorBFS(Node* root) {
+TreeIteratorBFS::TreeIteratorBFS(std::shared_ptr<Node> root) {
     if (root != nullptr) {
-        std::queue<Node*> queue;
+        std::queue<std::shared_ptr<Node>> queue;
         queue.push(root);
         is_visit[root] = true;
         while(!queue.empty()) {
-            Node* parent = queue.front();
+            std::shared_ptr<Node> parent = queue.front();
             queue.pop();
             path_in_breadth.push_back(parent);
             if (parent->left != nullptr && !is_visit[parent->left]) {
@@ -48,9 +56,15 @@ TreeIteratorBFS::TreeIteratorBFS(Node* root) {
 }
 
 bool TreeIteratorBFS::has_next() {
-    return size <= path_in_breadth.size();
+    if (size + 1 <= path_in_breadth.size()){
+        size++;
+        return true;
+    }
+    return false;
 }
 
-Node* TreeIteratorBFS::next() {
-    return path_in_breadth[size++];
+std::shared_ptr<Node> TreeIteratorBFS::next() {
+    if (path_in_breadth.size() > size)
+        return path_in_breadth[size];
+    return std::shared_ptr<Node>();
 }

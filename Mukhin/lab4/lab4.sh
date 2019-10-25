@@ -1,4 +1,4 @@
-g++ -Wall -Werror -std=c++17 Source/Iterator.cpp Source/main.cpp Source/Tree.cpp -o lab4
+g++ -Wall -Werror -std=c++17 ./Source/*.cpp -o lab4
 ./lab4 15 7 30 3 11 20 35 10
 ./lab4 30 14 60 6 22 40 70 20
 ./lab4
