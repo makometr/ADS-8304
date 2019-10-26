@@ -1,0 +1,4 @@
+#! /bin/bash
+make
+./lab2 Tests/test
+./lab2 Tests/wrong
