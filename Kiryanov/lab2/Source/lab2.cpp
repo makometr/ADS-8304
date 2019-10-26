@@ -5,14 +5,14 @@
 #include <fstream>
 
 struct binkor {
+	int lenght;
+	std::variant<std::pair<binkor*, binkor*>, int> system;
 	~binkor() {
 		if (std::holds_alternative<std::pair<binkor*, binkor*>>(system)) {
 			delete std::get<std::pair<binkor*, binkor*>>(system).first;
 			delete std::get<std::pair<binkor*, binkor*>>(system).second;
 		}
 	}
-	int lenght;
-	std::variant<std::pair<binkor*, binkor*>, int> system;
 };
 
 bool check(std::string array) {
@@ -38,7 +38,7 @@ bool check(std::string array) {
 	}
 	return true;
 }
-int read(std::string array, long unsigned int index, binkor* kor) {
+int read(std::string &array, long unsigned int index, binkor* kor) {
 	std::pair<binkor*, binkor*> side;
 	if (isdigit(array[index])) {
 		kor->lenght = std::stoi(array.substr(index));
@@ -87,8 +87,6 @@ int count(binkor* kor) {
 	if (std::holds_alternative<std::pair<binkor*, binkor*>>(kor->system)) {
 		result += count(std::get<std::pair<binkor*, binkor*>>(kor->system).first);
 		result += count(std::get<std::pair<binkor*, binkor*>>(kor->system).second);
-		//delete std::get<std::pair<binkor*, binkor*>>(kor->system).first;
-		//delete std::get<std::pair<binkor*, binkor*>>(kor->system).second;
 	}
 	else {
 		result++;
@@ -96,6 +94,27 @@ int count(binkor* kor) {
 	return result;
 }
 
+int stackcount(binkor* kor) {
+	std::stack <binkor*> Stackich;
+	int result = 0;
+	while (1) {
+		if (std::holds_alternative<std::pair<binkor*, binkor*>>(kor->system)) {
+			Stackich.push(kor);
+			kor = std::get<std::pair<binkor*, binkor*>>(kor->system).first;
+		}
+		else {
+			result++;
+			if (!Stackich.empty()) {
+				kor = Stackich.top();
+				Stackich.pop();
+				kor = std::get<std::pair<binkor*, binkor*>>(kor->system).second;
+			}
+			else
+				break;
+		}
+	}
+	return result;
+}
 
 int main(int argc, char* argv[]){
 	std::string array;
@@ -109,6 +128,7 @@ int main(int argc, char* argv[]){
 		kor->lenght = 0;
 		read(array, 0, kor);
 		std::cout << count(kor) << std::endl;
+		std::cout << stackcount(kor) << std::endl;
 		delete kor;
 	}
 	else {
