@@ -1,0 +1,14 @@
+a
+a b -
+a b * c +
+a b c + *
+a b c ^ d ^ e * +
+b c d e + + *
+a b c d e + + * +
+a b c d ^ - *
+r k + x * g ^
+A B + C D + *
+a b + c * d + e f * -
+2 3 4 5 + * +
+a 2 3 4 ^ - *
+23 67 90 - + 9 ^

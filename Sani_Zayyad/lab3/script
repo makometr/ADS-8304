@@ -1,0 +1,4 @@
+#!/bin/bash
+make
+./lab3 Test/test3.txt
+rm -rf *.o
