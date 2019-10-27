@@ -12,27 +12,46 @@ struct list {
 	list* child;
 };
 
-list* readlist(std::string s1, unsigned int *i, list* parent) {
+bool checkstr(std::string s1) {
+	if (s1.length() == 0) {
+		std::cout << "> Wrong list";
+		return false;
+	}
+	for (size_t i = 0; i < s1.length(); i++) {
+		if (s1.at(i) == ' ') {
+			std::cout << "> Wrong list";
+			return false;
+		}
+	}
+	if (s1.at(0) == ')') {
+		std::cout << "> Wrong list";
+		return false;
+	}
+	
+	return true;
+}
+
+list* readlist(std::string s1, unsigned int* i, list* parent) {
 	list* head = new list;
 	list* cur = head;
 	while (*i < s1.length()) {
-		if (s1[*i] == '(') {
+		if (s1.at(*i) == '(') {
 			(*i) += 1;
 			cur->child = readlist(s1, i, cur);
 			cur->ellem = '1';
 		}
-		else if (s1[*i] == ')') {
+		else if (s1.at(*i) == ')') {
 			(*i)++;
 			cur->next = nullptr;
 			return head;
 		}
 		else {
-			cur->ellem = s1[*i];
+			cur->ellem = s1.at(*i);
 			cur->child = nullptr;
 			cur->parent = parent;
 			(*i)++;
 		}
-		if (*i < s1.length() && s1[*i] != ')') {
+		if (*i < s1.length() && s1.at(*i) != ')') {
 			cur->next = new list;
 			cur = cur->next;
 		}
@@ -62,7 +81,6 @@ list* deleteellem(list** head, list** cur) {
 }
 
 list* checklist(list* head, char ellemfordel) {
-	//list* ptr;
 	list* cur = head;
 	while (cur != NULL) {
 		if (cur->ellem == ellemfordel) {
@@ -143,9 +161,13 @@ void ReadFromFile(std::string filename)
 		std::cout << "Reading from file:" << "\n\n";
 		int count = 0;
 		std::string listStr;
-		while (getline(file, listStr))
+		while (std::getline(file, listStr))
 		{
 			count++;
+			std::cout << listStr << std::endl;
+			if (!checkstr(listStr)) {
+				continue;
+			}
 			std::cout << "test #" << count << " \"" + listStr + "\"" << "\n";
 			execute(listStr);
 		}
@@ -166,26 +188,36 @@ int main(int argc, char* argv[])
 	std::cout << "> Any other to Exit" << std::endl;
 	std::cout << "> ";
 	char command = '3';
-	std::cin >> command;
+	std::cin.get(command);
+	std::cin.get();
 
 	switch (command) {
 	case '0': {
 		std::string input;
-		std::cout << "> Enter List: ";
-		std::cin >> input;
+		std::cout << "> Enter the List without spaces: ";
+		std::getline(std::cin, input);
+		if (!checkstr(input)) {
+			return 1;
+		}
 		execute(input);
 		break;
 	}
 	case '1': {
 		std::cout << "> FilePath: ";
-		std::string filePath = argv[1];
+		std::string filePath;
+		if (argc > 1) {
+			filePath = argv[1];
+			std::cout << filePath << std::endl;
+		}
+		else
+			std::cin >> filePath;
 		ReadFromFile(filePath);
 		break;
 
 	}
 	case '3':
 	default:
-		std::cout << "> Error comand \n> end\n";
+		std::cout << "> Error command \n> end\n";
 	}
 	return 0;
 }
