@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <time.h>
 #include <memory>
+#include <fstream>
+
 
 namespace sorts
 {
@@ -16,7 +18,7 @@ namespace sorts
 	}
 
 	template<typename T, typename FUNC_T>
-	void quickRecSort(std::vector<T>& arr, FUNC_T const& cmp)
+	void quickRecSort(std::vector<T>& arr, FUNC_T const& cmp, std::ofstream& out, int n = 0)
 	{
 		if (arr.size() <= 1)
 			return;
@@ -24,9 +26,7 @@ namespace sorts
 		std::vector<T> smaller;
 		std::vector<T> bigger;
 		std::vector<T> equal;
-
-		size_t supportIndex = rand() % arr.size();
-		T supportingElement = arr[supportIndex];
+		T supportingElement = arr[arr.size() / 2];
 
 		for (auto i : arr)
 		{
@@ -38,8 +38,39 @@ namespace sorts
 				smaller.push_back(i);
 		}
 
-		quickRecSort(smaller, cmp);
-		quickRecSort(bigger, cmp);
+
+		//отладочные выводы
+		out << "Formed bigger, equal and smaller arrays for stage №" + std::to_string(n) + ":\n";
+
+		for (auto i : arr)
+			out << i << ' ';
+		out << "\nBig:\n";
+
+		if (bigger.empty())
+			out << "Empty";
+		else
+		{
+			for (auto i : bigger)
+				out << i << ' ';
+		}
+		out << "\nEqual:\n";
+
+		for (auto i : equal)
+			out << i << ' ';
+		out << "\nSmall:\n";
+
+		if (smaller.empty())
+			out << "Empty";
+		else
+		{
+			for (auto i : smaller)
+				out << i << ' ';
+		}
+		out << "\n";
+		//
+
+		quickRecSort(smaller, cmp, out, ++n);
+		quickRecSort(bigger, cmp, out, ++n);
 
 		smaller += equal;
 		smaller += bigger;
@@ -167,8 +198,7 @@ namespace sorts
 			}
 			else
 			{
-				size_t supportIndex = rand() % arr.size();
-				T supportingElement = arr[supportIndex];
+				T supportingElement = arr[arr.size() / 2];
 
 				leftIndex = leftBorder;
 				rightIndex = rightBorder;

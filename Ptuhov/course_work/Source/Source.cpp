@@ -1,10 +1,14 @@
 ﻿#include "Header.h"
 
+// Demonstration
+
+//проверка входных потоков на корректность
 ReturnType streamsCheck(std::ifstream& in, std::ofstream& out)
 {
 	return (in && out) ? ReturnType::Correct : ReturnType::IncorrectStreams;
 }
 
+//определение типа, хранящегося в считанном ранее массиве
 TypeCode determineType(std::string const& checkString)
 {
 	TransformPair<int> intTransform = from_string<int>(checkString);
@@ -22,6 +26,7 @@ TypeCode determineType(std::string const& checkString)
 	return TypeCode::TypeString;
 }
 
+//чтение очередных входных данных и запись их в массив
 StringVector readFileData(std::ifstream& in)
 {
 	StringVector fileData;
@@ -40,8 +45,6 @@ StringVector readFileData(std::ifstream& in)
 
 int main(int argc, char** argv)
 {
-	srand(time(0));
-
 	if (argc > 2)
 	{
 		std::ifstream in(argv[1]);
@@ -58,27 +61,31 @@ int main(int argc, char** argv)
 
 		StringVector fileData = readFileData(in);
 
+
 		for (auto it = fileData.begin(); it != fileData.end(); ++it)
 		{
 			std::string& arrStringForm = *it;
 
+			out << "Entered array:\n" << arrStringForm << "\n\n";
+
+			//считывание первого эл-та массива и определение его типа
 			auto searchResult = std::find(arrStringForm.begin(), arrStringForm.end(), ' ');
-			if (searchResult == arrStringForm.end())
-			{
-				out << arrStringForm << '\n';
-				continue;
-			}
 
 			std::string firstELement(arrStringForm.begin(), searchResult);
 			TypeCode type = determineType(firstELement);
+			//
+
+			// измняемый компаратор для эл-ов массива
 			auto cmp = [](auto a, auto b) {return a < b; };
-			//		auto reverseCmp = [](auto a, auto b) {return a > b; };
 
 			switch (type)
 			{
 			case TypeCode::TypeInt:
 			{
 				std::vector<int> arr;
+
+				//преобразование строки массив с ранее определеенным типом первого эл-та 
+				//аналогично для остальных ветвей
 				ReturnType formResult = formArr(arr, arrStringForm);
 				if (formResult == ReturnType::IncorrectFileData)
 				{
@@ -86,10 +93,14 @@ int main(int argc, char** argv)
 					continue;
 				}
 
-				quickRecSort(arr, cmp);
+				//сортировка массива
+				//аналогично для остальных ветвей
+				quickRecSort(arr, cmp, out);
+				
+				out << "Sorted array:\n";
 				for (auto i : arr)
 					out << i << ' ';
-				out << '\n';
+				out << "\n\n\n";
 
 				break;
 			}
@@ -103,10 +114,12 @@ int main(int argc, char** argv)
 					continue;
 				}
 
-				quickRecSort(arr, cmp);
+				quickRecSort(arr, cmp, out);
+
+				out << "Sorted array:\n";
 				for (auto i : arr)
 					out << i << ' ';
-				out << '\n';
+				out << "\n\n\n";
 
 				break;
 			}
@@ -120,10 +133,12 @@ int main(int argc, char** argv)
 					continue;
 				}
 
-				quickRecSort(arr, cmp);
+				quickRecSort(arr, cmp, out);
+
+				out << "Sorted array:\n";
 				for (auto i : arr)
 					out << i << ' ';
-				out << '\n';
+				out << "\n\n\n";
 
 				break;
 			}
@@ -137,10 +152,12 @@ int main(int argc, char** argv)
 					continue;
 				}
 
-				quickRecSort(arr, cmp);
+				quickRecSort(arr, cmp, out);
+
+				out << "Sorted array:\n";
 				for (auto i : arr)
 					out << i << ' ';
-				out << '\n';
+				out << "\n\n\n";
 
 				break;
 			}

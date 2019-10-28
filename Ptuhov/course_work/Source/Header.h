@@ -1,13 +1,13 @@
 #pragma once
 #include "SortsHeader.h"
 #include <iostream>
-#include <fstream>
 #include <sstream>
 #include <string>
 
 using namespace sorts;
 using StringVector = std::vector<std::string>;
 
+//возможные коды завершения ф-ий
 enum class ReturnType
 {
 	IncorrectStreams,
@@ -16,6 +16,7 @@ enum class ReturnType
 	Correct
 };
 
+//возможные типы данных хранящихся в массивах
 enum class TypeCode
 {
 	TypeInt,
