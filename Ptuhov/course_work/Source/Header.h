@@ -4,8 +4,9 @@
 #include <sstream>
 #include <string>
 
-using namespace sorts;
+qusing namespace sorts;
 using StringVector = std::vector<std::string>;
+
 
 //возможные коды завершения ф-ий
 enum class ReturnType
