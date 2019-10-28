@@ -18,7 +18,7 @@ namespace sorts
 	}
 
 	template<typename T, typename FUNC_T>
-	void quickRecSort(std::vector<T>& arr, FUNC_T const& cmp, std::ofstream& out, int n = 0)
+	void quickRecSort(std::vector<T>& arr, FUNC_T const& cmp, std::ostream& out, int n = 0)
 	{
 		if (arr.size() <= 1)
 			return;

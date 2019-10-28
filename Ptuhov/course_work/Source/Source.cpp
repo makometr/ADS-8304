@@ -61,6 +61,12 @@ int main(int argc, char** argv)
 
 		StringVector fileData = readFileData(in);
 
+		std::cout << "Sorts variant: ";
+		std::cout << "\n\t1) Iter merge sort\n\t2) Rec merge sort\n\t3) Iter quick sort\n\t4) Rec quick sort\n\n";
+		std::cout << "Enter your variant: ";
+		int sortChoise = 0;
+		std::cin >> sortChoise;
+
 
 		for (auto it = fileData.begin(); it != fileData.end(); ++it)
 		{
@@ -75,8 +81,6 @@ int main(int argc, char** argv)
 			TypeCode type = determineType(firstELement);
 			//
 
-			// измняемый компаратор для эл-ов массива
-			auto cmp = [](auto a, auto b) {return a < b; };
 
 			switch (type)
 			{
@@ -95,7 +99,7 @@ int main(int argc, char** argv)
 
 				//сортировка массива
 				//аналогично для остальных ветвей
-				quickRecSort(arr, cmp, out);
+				chooseSortVariant(sortChoise, arr, out);
 				
 				out << "Sorted array:\n";
 				for (auto i : arr)
@@ -114,7 +118,7 @@ int main(int argc, char** argv)
 					continue;
 				}
 
-				quickRecSort(arr, cmp, out);
+				chooseSortVariant(sortChoise, arr, out);
 
 				out << "Sorted array:\n";
 				for (auto i : arr)
@@ -133,7 +137,7 @@ int main(int argc, char** argv)
 					continue;
 				}
 
-				quickRecSort(arr, cmp, out);
+				chooseSortVariant(sortChoise, arr, out);
 
 				out << "Sorted array:\n";
 				for (auto i : arr)
@@ -152,7 +156,7 @@ int main(int argc, char** argv)
 					continue;
 				}
 
-				quickRecSort(arr, cmp, out);
+				chooseSortVariant(sortChoise, arr, out);
 
 				out << "Sorted array:\n";
 				for (auto i : arr)

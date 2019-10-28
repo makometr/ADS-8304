@@ -96,3 +96,25 @@ void sortArr(std::vector<T>& arr, FUNC_T const& cmp)
 {
 	quickItSort(arr, cmp);
 }
+
+template<typename T>
+void chooseSortVariant(int sortChoise, std::vector<T>& arr, std::ostream& out)
+{
+	auto cmp = [](auto a, auto b) {return a < b; };
+
+	switch (sortChoise)
+	{
+	case 1:
+		mergeItSort(arr, cmp);
+		break;
+	case 2:
+		mergeRecSort(arr, cmp);
+		break;
+	case 3:
+		quickItSort(arr, cmp);
+		break;
+	default:
+		quickRecSort(arr, cmp, out);
+		break;
+	}
+}
