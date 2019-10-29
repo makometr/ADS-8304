@@ -23,7 +23,7 @@ class vector
 public:
 	vector() = default;
 
-	bool is_empty() {
+	bool is_empty() const{
 		return _veclength == 0;
 	}
 
@@ -41,7 +41,7 @@ public:
 		}
 	}
 
-	size_t get_length() {
+	size_t get_length() const{
 		return _veclength;
 	}
 
@@ -59,7 +59,7 @@ public:
 		return _data[element_index];
 	}
 
-	friend std::ostream& operator<<(std::ostream& os, vector<T>& stack) {
+	friend std::ostream& operator<<(std::ostream& os, const vector<T>& stack) {
 		for (size_t i = 0; i < stack.get_length(); i++) {
 			os << stack._data[i] << " ";
 		}
@@ -99,15 +99,15 @@ public:
 		throw std::out_of_range("Stack is empty");
 	}
 
-	bool is_empty() {
+	bool is_empty() const {
 		return _stack.is_empty();
 	}
 
-	size_t get_length() {
+	size_t get_length() const {
 		return _stack.get_length();
 	}
 
-	friend std::ostream& operator<<(std::ostream& os, Stack<T>& stack) {
+	friend std::ostream& operator<<(std::ostream& os, const Stack<T>& stack) {
 		return os << stack._stack;
 	}
 
