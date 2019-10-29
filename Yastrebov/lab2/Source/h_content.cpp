@@ -1,3 +1,4 @@
+
 #include "h_content.h"
 
 std::shared_ptr<Node> h_content::parse_str_into_node(std::string &source_str)
@@ -36,6 +37,7 @@ std::shared_ptr<Node> h_content::parse_str_into_node(std::string &source_str)
 
 		result->next = nullptr;
 
+		std::cout << "Parsed line : " << source_str << std::endl;
 		return result;
 	}
 
@@ -53,6 +55,7 @@ std::shared_ptr<Node> h_content::parse_str_into_node(std::string &source_str)
 
 		result->next = nullptr;
 
+		std::cout << "Parsed line : " << source_str << std::endl;
 		return result;
 	}
 }
@@ -62,6 +65,7 @@ void h_content::load_h_content(std::vector<std::string> &sorted_nodes)
 	if (std::find(sorted_nodes[0].begin(), sorted_nodes[0].end(), '.')
 		<= std::find(sorted_nodes[0].begin(), sorted_nodes[0].end(), ' ')) {
 
+		std::cout << "Input must contain at least one zero-level head node" << std::endl;
 		return;
 	}
 
@@ -80,6 +84,7 @@ std::shared_ptr<Node> h_content::insert(std::string &src_str)
 		if (std::find(src_str.begin(), src_str.end(), '.')
 			< std::find(src_str.begin(), src_str.end(), ' ')) {
 
+			std::cout << "Non-zero-level  node cant be inserted as head (empty list)" << std::endl;
 			return nullptr;
 		}
 
@@ -104,17 +109,25 @@ std::shared_ptr<Node> h_content::insert(std::string &src_str)
 			int current_h_index = std::stoi(tmp_value_str);
 
 			while (current_node->h_index != current_h_index) {
-				if (current_node->next == nullptr)
+				if (current_node->next == nullptr) {
+
+					std::cout << "Non-existent prefix" << std::endl;
 					return nullptr;
+				}
 				current_node = current_node->next;
 			}
 
-			if (current_node->list_or_text.index() == 1)
-				return nullptr;
+			if (current_node->list_or_text.index() == 1) {
 
+				std::cout << "Prefix is not a list" << std::endl;
+				return nullptr;
+			}
 			if (!std::get<0>(current_node->list_or_text)) {
 				if ((std::find(src_str.begin() + tmp_index + 1, src_str.end(), '.')) < (std::find(src_str.begin() + tmp_index + 1, src_str.end(), ' ')))
+				{
+					std::cout << "Non-existent prefix" << std::endl;
 					return nullptr;
+				}
 				else
 				{
 					current_node->list_or_text = parse_str_into_node(src_str);
@@ -245,6 +258,7 @@ std::shared_ptr<Node> h_content::add(std::string &src_str)
 		if (std::find(src_str.begin(), src_str.end(), '.')
 			<= std::find(src_str.begin(), src_str.end(), ' ')) {
 
+			std::cout << "Head must be a zero-leve node" << std::endl;
 			return nullptr;
 		}
 
@@ -269,17 +283,26 @@ std::shared_ptr<Node> h_content::add(std::string &src_str)
 			int current_h_index = std::stoi(tmp_value_str);
 
 			while (current_node->h_index != current_h_index) {
-				if (current_node->next == nullptr)
+				if (current_node->next == nullptr) {
+
+					std::cout << "Non-existent prefix";
 					return nullptr;
+				}
 				current_node = current_node->next;
 			}
 
 			if (current_node->list_or_text.index() == 1)
+			{
+				std::cout << "Non-existent prefix" << std::endl;
 				return nullptr;
+			}
 
 			if (!std::get<0>(current_node->list_or_text)) {
 				if ((std::find(src_str.begin() + tmp_index + 1, src_str.end(), '.')) < (std::find(src_str.begin() + tmp_index + 1, src_str.end(), ' ')))
+				{
+					std::cout << "Non-existent prefix" << std::endl;
 					return nullptr;
+				}
 				else
 				{
 					current_node->list_or_text = parse_str_into_node(src_str);
@@ -303,7 +326,10 @@ std::shared_ptr<Node> h_content::add(std::string &src_str)
 			if (current_node->next->h_index < current_h_index)
 				current_node = current_node->next;
 			else if (current_node->next->h_index == current_h_index)
+			{
+				std::cout << "Node already exists" << std::endl;
 				return nullptr;
+			}
 			else if (current_node->next->h_index > current_h_index)
 			{
 				auto tmp = current_node->next;
@@ -326,6 +352,13 @@ std::shared_ptr<Node> h_content::add(std::string &src_str)
 
 
 	if (for_head_inserting) {
+
+		if (current_node->h_index == current_h_index)
+		{
+			std::cout << "Node already exists" << std::endl;
+			return nullptr;
+		}
+
 		for_head_inserting->list_or_text = parse_str_into_node(src_str);
 
 		std::get<0>(for_head_inserting->list_or_text)->next = current_node;
@@ -333,6 +366,11 @@ std::shared_ptr<Node> h_content::add(std::string &src_str)
 		return std::get<0>(for_head_inserting->list_or_text);
 	}
 	else {
+		if (head->h_index == current_h_index)
+		{
+			std::cout << "Node already exists" << std::endl;
+			return nullptr;
+		}
 		auto tmp = head;
 
 		head = parse_str_into_node(src_str);
@@ -385,7 +423,7 @@ void h_content::normalize(const std::string &start, bool recursive)
 {
 	if (!head)
 	{
-		std::cout << "Failed" << std::endl;
+		std::cout << "Failed, empty list" << std::endl;
 		return;
 	}
 	if (!start.size())
@@ -418,7 +456,7 @@ void h_content::normalize(const std::string &start, bool recursive)
 				while (current_node->h_index != current_h_index) {
 					if (current_node->next == nullptr)
 					{
-						std::cout << "Failed" << std::endl;
+						std::cout << "Non-existent prefix" << std::endl;
 						return;
 					}
 					current_node = current_node->next;
@@ -426,19 +464,19 @@ void h_content::normalize(const std::string &start, bool recursive)
 
 				if (current_node->list_or_text.index() == 1)
 				{
-					std::cout << "Failed" << std::endl;
+					std::cout << "Non-existent prefix" << std::endl;
 					return;
 				}
 
 				if (!std::get<0>(current_node->list_or_text)) {
 					if ((std::find(start.begin() + tmp_index + 1, start.end(), '.')) < (std::find(start.begin() + tmp_index + 1, start.end(), ' ')))
 					{
-						std::cout << "Failed" << std::endl;
+						std::cout << "Non-existent prefix" << std::endl;
 						return;
 					}
 					else
 					{
-						std::cout << "Failed" << std::endl;
+						std::cout << "Non-existent prefix" << std::endl;
 						return;
 					}
 				}
@@ -470,14 +508,14 @@ void h_content::normalize(const std::string &start, bool recursive)
 				}
 				else if (current_node->next->h_index > current_h_index)
 				{
-					std::cout << "Failed" << std::endl;
+					std::cout << "Non-existent prefix" << std::endl;
 					return;
 				}
 			}
 
 			else
 			{
-				std::cout << "Failed" << std::endl;
+				std::cout << "Non-existent prefix" << std::endl;
 				return;
 			}
 		}

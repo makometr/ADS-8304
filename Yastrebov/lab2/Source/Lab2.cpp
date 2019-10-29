@@ -19,6 +19,14 @@ int main(int argc, char* argv[])
 		freopen(argv[2], "w", stdout);
 	}
 
+	if (argc == 4) {
+		input.open(argv[1]);
+
+		freopen(argv[2], "w", stdout);
+
+		freopen(argv[3], "r", stdin);
+	}
+
 
 	if (!input) {
 		std::cout << "Couldn't open source file";
@@ -60,6 +68,8 @@ int main(int argc, char* argv[])
 
 		if (action == 1)
 		{
+			std::cout << "Printing list :\n_________________\n" << std::endl;
+
 			if (hList.head) {
 				hList.print(hList.head, "");
 			}
@@ -75,8 +85,7 @@ int main(int argc, char* argv[])
 
 			std::getline(std::cin, tmp);
 
-			if (!hList.add(tmp))
-				std::cout << "Failed" << std::endl;
+			hList.add(tmp);
 		}
 
 		if (action == 3) {
