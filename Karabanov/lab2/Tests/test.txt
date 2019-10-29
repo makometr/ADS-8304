@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 aba
 a(b(a))a
 a((a)b)a
@@ -8,12 +7,3 @@ abc((bcd))e
 (   )
 abde(fjbaj(
 abcd()fjnal
-=======
-((a))
-abc(def(f))fdfafasfasfbakjfbkjadbgfkjbakjgfb
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaabaaaaaaaaaaa
-a(aaa(aaa)aaa)aaaa
-gtrfdsdfdgdgs
-fre(aaa)frerer
->>>>>>> 523c3fcad06a5c552a1f7e125cddf499227e3036
