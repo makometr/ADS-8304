@@ -7,8 +7,6 @@
 #include <regex.h>
 #include "Queue.cpp"
 
-#define SIZE 1000
-
 unsigned char IsStringOK(char* str){
 	unsigned char i = 0;
 	for(i = 0; i<strlen(str); i++){
@@ -216,8 +214,12 @@ int main(int argc, char *argv[])
         return 0;
     }
 	func1(people, parents, children, relationsCount, fout, queue, 0);
-
-
+	people.clear();
+	parents.clear();
+	children.clear();
+	
+	delete queue;
+	
 	return 0;
 }
 

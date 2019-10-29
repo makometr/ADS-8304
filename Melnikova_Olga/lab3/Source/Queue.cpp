@@ -1,7 +1,7 @@
 #include <iostream>
 #define START_SIZE 10
 
-
+using namespace std;
 
 class Queue{
 	public:
@@ -24,6 +24,10 @@ class Queue{
 
 		int pop()	//Поп первогоэлемента со смещением всех элементов влево
 		{
+			if(!_size){
+				std::cerr << "Очередь пуста!\n";
+				exit(1);
+			}
 			int poped = data[0];
 			for(int i = 0; i < _size - 1; i++) data[i] = data[i+1];
 			_size--;
@@ -32,6 +36,10 @@ class Queue{
 
 		int get_elem(int index)	//Поп первогоэлемента со смещением всех элементов влево
 		{
+			if(!_size){
+				std::cerr << "Очередь пуста!\n";
+				exit(1);
+			}
 			return data[index];
 		}
 
