@@ -1,2 +1,2 @@
 all: 
-	g++ ./Source/ADS2.cpp -o ADS_lab2
+	g++ ./Source/ADS2.cpp -Wall -Werror -o ADS_lab2

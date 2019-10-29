@@ -1,155 +1,236 @@
 ﻿#include <iostream>
-#include <cstring>
+#include <string>
+#include <fstream>
 
-//структура для элемента списка
-typedef struct list {
-	struct list* parent;
-	struct list* child;
-	struct list* next;
-	char elem;
-}list;
+typedef char base;
 
-/*рекурсивная функция создания списка*/
-list* createlist(char* str, int* i, list* parent);
-//функция удаления заданного элемента из списка
-list* CheckAndDelete(list* head, char x);
-//функция вывода на экра обработанного списка
-void PrintList(list* head);
+struct list {
+	base ellem;
+	list* next;
+	list* parent;
+	list* child;
+};
 
-int main(int argc, char* argv[]) {
-	char* str = (char*)calloc(200, sizeof(char)); 
-	char c;
-	// если не указана папка с тестами, то пользователь вводи строку
-	if (argc == 1){ 
-		printf("Введите иерархический список: ");
-		std::cin >> str;
-		std::cout << "Введите эллемент для удаления" << std::endl;
-		std::cin >> c;
-	}
-	else {
-		char* path = (char*)calloc(strlen(argv[1]) + 8, sizeof(char)); // строка для открытия файла
-		char* estr; // указатель для отслеживания конца файла
-		strcat(path, "Tests/");  
-		strcat(path, argv[1]); 
-		FILE* fileTests = fopen(path, "r"); // открываем файл
-		if (!fileTests){ 
-			printf("Ошибка открытия файла\n");
+/* Проверка строки, введённой пользователем на корректность */
+unsigned int CheckStr(std::string s1) {
+	bool AlphaInScope = false;
+	unsigned int i = 0;
+	for (; i < s1.length(); i++) {
+		AlphaInScope = false;
+		if (s1.at(i) == '(') {
+			while (i < s1.length()) {
+				if (s1.at(i) == ' ') {
+					return 0;
+				}
+				else if (s1.at(i) == ')' && !AlphaInScope) {
+					return 0;
+				}
+				else {
+					AlphaInScope = true;
+				}
+				i++;
+			}
+		}
+		else if (s1.at(i) == ' ' || s1.at(i) == ')') {
 			return 0;
 		}
-		estr = fgets(str, 199, fileTests); // считываем строку из файла
-		// если указатель NULL то проверяем на ошибку или конец файла
-		if (estr == NULL){ 
-			if (feof(fileTests) != 0){
-				printf("Конец файла\n");
-			}
-			else {
-				printf("Ошибка чтения файла\n");
-			}
-		}
-		//считываем символ, который необходимо удалить из списка
-		c = getc(fileTests);
-		free(path);
-		fclose(fileTests);
 	}
-	int i = 0;
-	list* Ierlist = createlist(str, &i, NULL);
-	Ierlist = CheckAndDelete(Ierlist, c);
-	std::cout << "Список после удаления\n";
-	PrintList(Ierlist);
-	std::cout << std::endl;
-	free(str);
-	return 0;
+	return i;
 }
-/*функция принимает указатель на строку, указатель на индекс 
-(был выбран во избежание глобальной переменной) 
-элемент списка которым были порождены создаваемые*/
-list* createlist(char* str, int* i, list* parent) {
-	list* head = (list*)malloc(sizeof(list));
+
+/* Рекурсивное создание иерархического списка, 
+использование unsigned int* i - для избежания глобальной переменной */
+list* ReadList(std::string s1, unsigned int* i, list* parent) {
+	list* head = new list;
 	list* cur = head;
-	//пока не конец строки обрабатываем её
-	while (str[*i] != '\0' && str[*i] != '\n') {
-// заходим на уровень ниже, создаём порождаемый список 		
-		if (str[*i] == '(') {
-			(*i)++;
-			cur->child = createlist(str, i, cur);
-// для определённости обозначим в "указательном" элементе значение хранящегося символа			
-			cur->elem = '\0';
+	while (*i < s1.length()) {
+		if (s1.at(*i) == '(') {
+			(*i) += 1;
+			cur->child = ReadList(s1, i, cur);
+			cur->ellem = '1';
 		}
-// выходим из данного уровня рекурсии		
-		else if (str[*i] == ')') {
+		else if (s1.at(*i) == ')') {
 			(*i)++;
-			cur->next = NULL;
+			cur->next = nullptr;
 			return head;
 		}
-// добавляем элемент в список		
 		else {
-			cur->elem = str[*i];
-			cur->child = NULL;
+			cur->ellem = s1.at(*i);
+			cur->child = nullptr;
 			cur->parent = parent;
 			(*i)++;
 		}
-// доп. проверка для выделения памяти.		
-		if (str[*i] != '\0' && str[*i] != ')' && str[*i] != '\n') {
-			cur->next = (list*)malloc(sizeof(list));
+		if (*i < s1.length() && s1.at(*i) != ')') {
+			cur->next = new list;
 			cur = cur->next;
 		}
 	}
-// обозначения конца списка		
-	cur->next = NULL;
-// возвращаем указатель на 1й элемент
+	cur->next = nullptr;
 	return head;
 }
 
-/*функция принимаем указатель на первый элемент в списке,
-и символ для удаления*/
-list* CheckAndDelete(list* head, char x) {
-// вспомогательный указатель	
+/* Функция удаления эллемента из списка */
+list* DeleteEllem(list** head, list** cur) {
 	list* ptr;
+	if (*cur == *head) {
+		*head = (*head)->next;
+		delete(*cur);
+		(*cur) = nullptr;
+		*cur = *head;
+	}
+	else {
+		ptr = *head;
+		while (ptr->next != *cur) {
+			ptr = ptr->next;
+		}
+		ptr->next = (*cur)->next;
+		delete(*cur);
+		*cur = ptr;
+	}
+	return *head;
+}
+
+/* Функция поиска и удаления эллемента списка, удовлетворяющего условиям*/
+list* CheckList(list* head, char ellemfordel) {
 	list* cur = head;
-// пока не конец списка	
-	while (cur != NULL) {
-		if (cur->elem == x) {
-// удаления 1го элемента списка			
+	while (cur != nullptr) {
+		if (cur->ellem == ellemfordel) {
 			if (cur == head) {
-				cur = cur->next;
-				free(head);
-				head = cur;
+				head = DeleteEllem(&head, &cur);
 				continue;
 			}
-// удаления элемента			
 			else {
-				ptr = head;
-				while (ptr->next != cur) {
-					ptr = ptr->next;
-				}
-				ptr->next = cur->next;
-				free(cur);
-				cur = ptr;
+				head = DeleteEllem(&head, &cur);
 			}
 		}
-// если от элемент является "указательным"		
-		else if (cur->child != NULL) {
-			cur->child = CheckAndDelete(cur->child, x);
+		else if (cur->child != nullptr) {
+			cur->child = CheckList(cur->child, ellemfordel);
+			if (cur->child == nullptr) {
+				if (cur == head) {
+					head = DeleteEllem(&head, &cur);
+					continue;
+				}
+				else {
+					head = DeleteEllem(&head, &cur);
+				}
+			}
 		}
 		cur = cur->next;
 	}
-// возвращаем указатель на 1й элемент
 	return head;
 }
 
-// выводим список
+
 void PrintList(list* head) {
 	list* cur = head;
-	while (cur != NULL) {
-		if (cur->child != NULL) {
+	while (cur != nullptr) {
+		if (cur->child != nullptr) {
 			std::cout << '(';
 			PrintList(cur->child);
 			std::cout << ')';
-			cur = cur->next;
 		}
 		else {
-			std::cout << cur->elem;
-			cur = cur->next;
+			std::cout << cur->ellem;
+		}
+		cur = cur->next;
+	}
+}
+
+
+void destroy(list** head) {
+	list* cur = *head;
+	while (*head != nullptr) {
+		if ((*head)->child != nullptr) {
+			destroy(&(cur->child));
+		}
+		else {
+			cur = (*head)->next;
+			delete(*head);
+			*head = cur;
 		}
 	}
+}
+
+void execute(std::string listStr) {
+	unsigned int i = 0;
+	list* head = ReadList(listStr, &i, nullptr);
+	std::cout << "> Enter ellement for delete : ";
+	char ellemfordel;
+	std::cin >> ellemfordel;
+	head = CheckList(head, ellemfordel);
+	std::cout << "> list after delete : \"";
+	PrintList(head);
+	std::cout << "\"" << std::endl;
+	destroy(&head);
+}
+
+void ReadFromFile(std::string filename)
+{
+	std::ifstream file(filename);
+	if (file.is_open())
+	{
+		std::cout << "Reading from file:" << "\n\n";
+		int count = 0;
+		std::string listStr;
+		while (std::getline(file, listStr))
+		{
+			count++;
+			std::cout << listStr << std::endl;
+			if (!CheckStr(listStr)) {
+				std::cout << "> Wrong List" << std::endl;
+				continue;
+			}
+			std::cout << "test #" << count << " \"" + listStr + "\"" << "\n";
+			execute(listStr);
+		}
+	}
+	else
+	{
+		std::cout << "File not opened" << "\n";
+	}
+}
+
+
+
+int main(int argc, char* argv[])
+{
+	std::cout << "> Choose your input" << std::endl;
+	std::cout << "> 0 - from console" << std::endl;
+	std::cout << "> 1 - from file" << std::endl;
+	std::cout << "> Any other to Exit" << std::endl;
+	std::cout << "> ";
+	char command = '3';
+	std::cin.get(command);
+	std::cin.get();
+
+	switch (command) {
+	case '0': {
+		std::string input;
+		std::cout << "> Enter the List without spaces: ";
+		std::getline(std::cin, input);
+		if (!CheckStr(input)) {
+			std::cout << "> Wrong List" << std::endl;
+			return 1;
+		}
+		execute(input);
+		break;
+	}
+	case '1': {
+		std::cout << "> FilePath: ";
+		std::string filePath;
+		if (argc > 1) {
+			filePath = argv[1];
+			std::cout << filePath << std::endl;
+		}
+		else
+			std::cin >> filePath;
+		ReadFromFile(filePath);
+		break;
+
+	}
+	case '3':
+	default:
+		std::cout << "> Error command \n> end\n";
+	}
+	return 0;
 }
