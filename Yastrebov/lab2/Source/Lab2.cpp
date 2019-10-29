@@ -7,8 +7,18 @@ int main(int argc, char* argv[])
 	std::vector<std::string> input_nodes;
 
 	std::ifstream input;
-	
-	input.open(argv[1]);
+	if (argc == 1)
+		input.open("input.txt");
+
+	if (argc == 2)
+		input.open(argv[1]);
+
+	if (argc == 3) {
+		input.open(argv[1]);
+
+		freopen(argv[2], "w", stdout);
+	}
+
 
 	if (!input) {
 		std::cout << "Couldn't open source file";
@@ -33,14 +43,14 @@ int main(int argc, char* argv[])
 
 	input.close();
 
-	std::sort(input_nodes.begin(), input_nodes.end()); // иначе изначальное содержимое не выгрузить в список, ибо по условию
-							   // задания для добавления X.a должен существовать X
- 	h_content hList;
+	std::sort(input_nodes.begin(), input_nodes.end());
+
+	h_content hList;
 	hList.load_h_content(input_nodes);
 	while (true) {
 		std::cout << "______________________" << std::endl;
-		std::cout << 
-			"Choose action :\n1 : print\n2 : add\n3 : insert\n4 : normalize"
+		std::cout <<
+			"Choose action :\n1 : print\n2 : add\n3 : insert\n4 : normalize\n5 : exit"
 			<< std::endl;
 
 		int action = 0;
@@ -50,7 +60,12 @@ int main(int argc, char* argv[])
 
 		if (action == 1)
 		{
-			hList.print(hList.head, "");
+			if (hList.head) {
+				hList.print(hList.head, "");
+			}
+			else {
+				std::cout << "Empty list" << std::endl;
+			}
 		}
 
 		if (action == 2) {
@@ -90,6 +105,11 @@ int main(int argc, char* argv[])
 			std::cin >> recursive;
 
 			hList.normalize(start, recursive);
+		}
+
+		if (action == 5)
+		{
+			return 0;
 		}
 	}
 }
