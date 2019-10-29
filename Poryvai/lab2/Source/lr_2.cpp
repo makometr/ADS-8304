@@ -2,6 +2,7 @@
 #include<cstdlib>
 #include<string>//getline()
 #include<fstream>//ifstream()
+#include<conio.h>
 //VAR 3 Считаю сумму длин всех плеч бк
 //using namespace std;
 typedef int base;	// базовый тип элементов (атомов)
@@ -9,8 +10,8 @@ typedef int base;	// базовый тип элементов (атомов)
 struct s_expr;
 struct  two_ptr
 {
-	s_expr* hd;//не могу инициализировать
-	s_expr* tl;//не могу инициализировать
+	s_expr* hd;
+	s_expr* tl;
 };	//end two_ptr;
 
 struct s_expr {
@@ -37,8 +38,9 @@ void read_lisp(lisp& y, std::ifstream& data);
 void read_s_expr(char prev, lisp& y, std::ifstream& data);
 void read_seq(lisp& y, std::ifstream& data);
 void is_bink1(lisp& y, bool &is_bk);
+short Lenght(const lisp p);
 void destroy(lisp s);
-
+void sum(lisp p, short* s);
 // функции вывода:
 void write_lisp(const lisp x);		// основная
 void write_seq(const lisp x);
@@ -119,15 +121,16 @@ lisp cons(const lisp h, const lisp t)
 }
 void destroy(lisp s)
 {
-	if (s != nullptr) {
-		//std::cout << "del tail: \n";
-		destroy(tail(s));
+	if (s->tag == false) {
 
-		delete s->node.pair.hd;
-		//std::cout << "del node: \n";
-		delete s;
-		// s = NULL;
-	};
+		if (s->node.pair.hd != nullptr)
+			destroy(s->node.pair.hd);
+
+		if (s->node.pair.tl != nullptr)
+			destroy(s->node.pair.tl);
+	}
+
+	delete s;
 }
 void read_lisp(lisp& y)
 {
@@ -280,7 +283,7 @@ void write_seq(const lisp x, std::ofstream& out)
 	}
 }
 
-void sum(lisp p, int* s) {
+void sum(lisp p, short* s) {
 
 	if (isAtom(p))
 		* s += p->node.atom;
@@ -294,6 +297,14 @@ void sum(lisp p, int* s) {
 
 }
 
+short Lenght(const lisp p) {
+
+	short total = 0;
+	sum(p, &total);
+
+	return total;
+
+}
 
 void is_bink1(lisp& y,  bool& is_bk) {
 
@@ -325,7 +336,7 @@ void is_bink1(lisp& y,  bool& is_bk) {
 
 
 
-int main(int argc, char *argv[]) {//добавить argc argv
+int main(int argc, char *argv[]) {
 
 	setlocale(LC_ALL, "Russian");
 	std::cout << "Ввод из файла или из консоли? (f , c)\n";
@@ -370,12 +381,12 @@ int main(int argc, char *argv[]) {//добавить argc argv
 					is_bk = false;
 				
 
-				int total = 0;
+				short total = 0;
 				if (is_bk == true) {
 					
 					write_lisp(bin_k, fout);
 					write_lisp(bin_k);
-					sum(bin_k, &total);
+					total = Lenght(bin_k);
 					std::cout << " sum = " << total << "\n";
 					fout << " sum = ";
 					fout << total;
@@ -386,8 +397,10 @@ int main(int argc, char *argv[]) {//добавить argc argv
 					std::cout << "Бк введено неверно\n";
 					fout << "Бк введено неверно\n";
 				}
+				if(bin_k != nullptr)
+					destroy(bin_k);
 				is_bk = true;
-				destroy(bin_k);//освобождение памяти
+				//освобождение памяти
 				bin_k = nullptr;
 
 			}
@@ -419,12 +432,9 @@ int main(int argc, char *argv[]) {//добавить argc argv
 				read_lisp(bin_k);
 
 
-				if (bin_k->node.pair.hd != nullptr && bin_k->node.pair.tl != nullptr) {
-					if (bin_k->node.pair.hd->tag == false && bin_k->node.pair.tl->node.pair.hd->tag == false)//если у нач указателя голова или хвост грузик
-						is_bink1(bin_k, is_bk);
-					else
-						is_bk = false;
-				}
+
+				if (bin_k->node.pair.hd->tag == false && bin_k->node.pair.tl->node.pair.hd->tag == false)//если у нач указателя голова или хвост грузик
+					is_bink1(bin_k, is_bk);
 				else
 					is_bk = false;
 			}
@@ -432,14 +442,14 @@ int main(int argc, char *argv[]) {//добавить argc argv
 				is_bk = false;
 			}
 
-			int total = 0;
+			short total = 0;
 
 			if (is_bk == true) {
 
 				write_lisp(bin_k, fout);
 				write_lisp(bin_k);
 
-				sum(bin_k, &total);
+				total = Lenght(bin_k);
 
 				std::cout << " sum = " << total << "\n";
 				fout << " sum = ";
@@ -448,8 +458,9 @@ int main(int argc, char *argv[]) {//добавить argc argv
 			}
 			else
 				std::cout << "Бк введено неверно\n";
+			if (bin_k != nullptr)
+				destroy(bin_k);
 			is_bk = true;
-			destroy(bin_k);//delete
 			bin_k = nullptr;
 			
 
