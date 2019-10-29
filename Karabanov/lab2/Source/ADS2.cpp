@@ -2,7 +2,6 @@
 #include <string>
 #include <fstream>
 
-using namespace std;
 typedef char base;
 
 struct list {
@@ -12,32 +11,41 @@ struct list {
 	list* child;
 };
 
-bool checkstr(std::string s1) {
-	if (s1.length() == 0) {
-		std::cout << "> Wrong list";
-		return false;
-	}
-	for (size_t i = 0; i < s1.length(); i++) {
-		if (s1.at(i) == ' ') {
-			std::cout << "> Wrong list";
-			return false;
+/* Проверка строки, введённой пользователем на корректность */
+int CheckStr(std::string s1) {
+	bool AlphaInScope = false;
+	int i = 0;
+	for (; i < s1.length(); i++) {
+		if (s1.at(i) == '(') {
+			while (i < s1.length()) {
+				if (s1.at(i) == ' ') {
+					return 0;
+				}
+				else if (s1.at(i) == '(' && !AlphaInScope) {
+					return 0;
+				}
+				else {
+					AlphaInScope = true;
+				}
+				i++;
+			}
+		}
+		else if (s1.at(i) == ' ' || s1.at(i) == ')') {
+			return 0;
 		}
 	}
-	if (s1.at(0) == ')') {
-		std::cout << "> Wrong list";
-		return false;
-	}
-	
-	return true;
+	return i;
 }
 
-list* readlist(std::string s1, unsigned int* i, list* parent) {
+/* Рекурсивное создание иерархического списка, 
+использование unsigned int* i - для избежания глобальной переменной */
+list* ReadList(std::string s1, unsigned int* i, list* parent) {
 	list* head = new list;
 	list* cur = head;
 	while (*i < s1.length()) {
 		if (s1.at(*i) == '(') {
 			(*i) += 1;
-			cur->child = readlist(s1, i, cur);
+			cur->child = ReadList(s1, i, cur);
 			cur->ellem = '1';
 		}
 		else if (s1.at(*i) == ')') {
@@ -60,10 +68,11 @@ list* readlist(std::string s1, unsigned int* i, list* parent) {
 	return head;
 }
 
-list* deleteellem(list** head, list** cur) {
+/* Функция удаления эллемента из списка */
+list* DeleteEllem(list** head, list** cur) {
 	list* ptr;
 	if (*cur == *head) {
-		(*head) = (*head)->next;
+		*head = (*head)->next;
 		delete(*cur);
 		(*cur) = nullptr;
 		*cur = *head;
@@ -80,27 +89,28 @@ list* deleteellem(list** head, list** cur) {
 	return *head;
 }
 
-list* checklist(list* head, char ellemfordel) {
+/* Функция поиска и удаления эллемента списка, удовлетворяющего условиям*/
+list* CheckList(list* head, char ellemfordel) {
 	list* cur = head;
-	while (cur != NULL) {
+	while (cur != nullptr) {
 		if (cur->ellem == ellemfordel) {
 			if (cur == head) {
-				head = deleteellem(&head, &cur);
+				head = DeleteEllem(&head, &cur);
 				continue;
 			}
 			else {
-				head = deleteellem(&head, &cur);
+				head = DeleteEllem(&head, &cur);
 			}
 		}
 		else if (cur->child != nullptr) {
-			cur->child = checklist(cur->child, ellemfordel);
+			cur->child = CheckList(cur->child, ellemfordel);
 			if (cur->child == nullptr) {
 				if (cur == head) {
-					head = deleteellem(&head, &cur);
+					head = DeleteEllem(&head, &cur);
 					continue;
 				}
 				else {
-					head = deleteellem(&head, &cur);
+					head = DeleteEllem(&head, &cur);
 				}
 			}
 		}
@@ -110,12 +120,12 @@ list* checklist(list* head, char ellemfordel) {
 }
 
 
-void printlist(list* head) {
+void PrintList(list* head) {
 	list* cur = head;
 	while (cur != nullptr) {
 		if (cur->child != nullptr) {
 			std::cout << '(';
-			printlist(cur->child);
+			PrintList(cur->child);
 			std::cout << ')';
 		}
 		else {
@@ -124,6 +134,7 @@ void printlist(list* head) {
 		cur = cur->next;
 	}
 }
+
 
 void destroy(list** head) {
 	list* cur = *head;
@@ -141,13 +152,13 @@ void destroy(list** head) {
 
 void execute(std::string listStr) {
 	unsigned int i = 0;
-	list* head = readlist(listStr, &i, nullptr);
+	list* head = ReadList(listStr, &i, nullptr);
 	std::cout << "> Enter ellement for delete : ";
 	char ellemfordel;
 	std::cin >> ellemfordel;
-	head = checklist(head, ellemfordel);
+	head = CheckList(head, ellemfordel);
 	std::cout << "> list after delete : \"";
-	printlist(head);
+	PrintList(head);
 	std::cout << "\"" << std::endl;
 	destroy(&head);
 }
@@ -155,7 +166,6 @@ void execute(std::string listStr) {
 void ReadFromFile(std::string filename)
 {
 	std::ifstream file(filename);
-
 	if (file.is_open())
 	{
 		std::cout << "Reading from file:" << "\n\n";
@@ -165,7 +175,8 @@ void ReadFromFile(std::string filename)
 		{
 			count++;
 			std::cout << listStr << std::endl;
-			if (!checkstr(listStr)) {
+			if (!CheckStr(listStr)) {
+				std::cout << "> Wrong List" << std::endl;
 				continue;
 			}
 			std::cout << "test #" << count << " \"" + listStr + "\"" << "\n";
@@ -196,7 +207,8 @@ int main(int argc, char* argv[])
 		std::string input;
 		std::cout << "> Enter the List without spaces: ";
 		std::getline(std::cin, input);
-		if (!checkstr(input)) {
+		if (!CheckStr(input)) {
+			std::cout << "> Wrong List" << std::endl;
 			return 1;
 		}
 		execute(input);
