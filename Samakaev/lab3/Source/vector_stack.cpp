@@ -79,8 +79,9 @@ void file_input(char* &argv) {
 		getline(file, str);
 		
 		fill_stack(stack, str);
-		calculate(stack, depth);
-
+		try{
+			calculate(stack, depth);
+		}
 		if (stack.get_length() == 1 && isdigit(stack.get_high()))
 			std::cout << str << " = " << stack << std::endl;
 		else std::cout << str << " is incorrect expression!" << std::endl;
@@ -98,8 +99,9 @@ void console_input()
 	std::cin >> str;
 
 	fill_stack(stack, str);
-	calculate(stack, depth);
-
+	try{
+		calculate(stack, depth);
+	}
 	if (stack.get_length() == 1 && isdigit(stack.get_high()))
 		std::cout << str << " = " << stack << std::endl;
 	else std::cout << str << " is incorrect expression!" << std::endl;
