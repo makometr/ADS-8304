@@ -384,7 +384,7 @@ std::shared_ptr<Node> h_content::add(std::string &src_str)
 void h_content::normalize_row(std::shared_ptr<Node> start, bool recursive)
 {
 	if (!recursive) {
-		int i = 0;
+		int i = 1;
 
 		while (start->next)
 		{
@@ -398,7 +398,7 @@ void h_content::normalize_row(std::shared_ptr<Node> start, bool recursive)
 	}
 	else
 	{
-		int i = 0;
+		int i = 1;
 
 		while (start->next)
 		{
@@ -499,7 +499,7 @@ void h_content::normalize(const std::string &start, bool recursive)
 				{
 					auto tmp = head;
 
-					head = std::get<0>(current_node->next->list_or_text);
+					head = current_node->next;
 
 					normalize("", recursive);
 
