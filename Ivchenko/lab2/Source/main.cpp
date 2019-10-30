@@ -11,13 +11,13 @@ struct pair{
 		s_expr *next = nullptr;
 		s_expr *list = nullptr;
 };
-	
+
 struct s_expr {
 		bool tag; 
 		base atom;
 		pair ptrs;		
 };			
-			
+
 typedef s_expr *hlist;
 
 hlist head (const hlist s);
@@ -49,7 +49,7 @@ bool isAtom (const hlist s){
 
 bool isNull (const hlist s){
 	return s == nullptr;
-	
+
 }
 
 hlist tail (const hlist s){
@@ -84,7 +84,7 @@ hlist make_atom (const base x){
 		s -> tag = true;
 		s->atom = x;
 		return s;
-	
+
 }
 
 
@@ -95,7 +95,7 @@ void destroy (hlist s) {
 			destroy (tail (s));
 		}
 		delete s;
-	
+
 	}
 
 
@@ -110,9 +110,9 @@ void read_hlist ( hlist& y,  std::stringstream& ss, int *ctr, std::vector<char> 
 			exit(1);
 		} 
 		read_s_expr ( input, y, ss, ctr, llist);
-		
-    		
-		
+
+
+
 }
 void read_s_expr (base prev, hlist& y,  std::stringstream& ss, int *ctr, std::vector<char> *llist){ 
 		if ( prev == ')' ) {
@@ -125,7 +125,7 @@ void read_s_expr (base prev, hlist& y,  std::stringstream& ss, int *ctr, std::ve
 			 (*ctr)++;
 		}
 		else read_seq (y, ss, ctr, llist);
-	
+
 }
 void read_seq ( hlist& y,  std::stringstream& ss, int *ctr,std::vector<char> *llist) {	
 		base input; 
@@ -150,10 +150,11 @@ void read_seq ( hlist& y,  std::stringstream& ss, int *ctr,std::vector<char> *ll
 			} 
 		}
 }
-	
+
 int main(int argc, char* argv[]){
 
-	hlist hl = new s_expr;	
+
+	hlist hl;	
 	int ctr = 0;
 	std::vector<char> llist;
 	std::stringstream ss;
@@ -161,8 +162,10 @@ int main(int argc, char* argv[]){
     		ss << argv[1];
 	}else{
 		std::string s;
+		std::cout << "Введите данные:";
 		std::cin >> s;
 		ss << s; 
+		
 	}
 
 	std::cout << "Иерархический список:" << ss.str() << std::endl;	
@@ -172,11 +175,13 @@ int main(int argc, char* argv[]){
 		std::cout << el; 
 	std::cout <<"\nКоличество атомов в иерархическом списке:"<< ctr << std::endl;
 	destroy(hl);
-		
+
 	return 0;
-	
+
 }
-	
+
+
+
 
 
 

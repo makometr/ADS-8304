@@ -1,2 +1,4 @@
-lab1: 
+lab2: 
 	g++ -Wall -Werror Source/main.cpp -o lab2
+clean:
+	rm lab2
