@@ -9,34 +9,35 @@ struct ptr{
 };
 
 struct s_expr{
-	bool tag;
+    bool tag;
 	union{
-		base atom;
-		ptr pair;
+    base atom;
+    ptr pair;
 	} node;
 };
 
+bool compareHierarchicalResult = true;
 typedef s_expr* lisp;
 void read_lisp (lisp& y);
 void read_s_expr(base prev, lisp& y);
 void read_seq(lisp& y);
 void write_seq(const lisp x);
-bool compareS_expr(const lisp lispFirst, const lisp lispSecond, bool &flag);
-bool helpCompare(const lisp x, const lisp y, bool &flag);
+bool compareS_expr(const lisp lispFirst, const lisp lispSecond);
+bool helpCompare(const lisp x, const lisp y);
 
 bool isAtom (const lisp s) {
-	if(s == NULL)
+	if(s == nullptr)
 		return false;
 	else return
 		(s -> tag);
 }
 
-bool isNull (const lisp s) {
-	return s == NULL;
+bool isnullptr (const lisp s) {
+	return s == nullptr;
 }
 
 lisp head(const lisp s) {
-    if (s != NULL)
+    if (s != nullptr)
         if (!isAtom(s))
             return s->node.pair.hd;
         else {
@@ -50,7 +51,7 @@ lisp head(const lisp s) {
 }
 
 lisp tail(const lisp s) {
-    if (s != NULL)
+    if (s != nullptr)
         if (!isAtom(s))
             return s->node.pair.tl;
         else{
@@ -64,7 +65,7 @@ lisp tail(const lisp s) {
 }
 
 void destroy(lisp s) {
-    if (s != NULL) {
+    if (s != nullptr) {
         if (!isAtom(s)) {
             destroy(head(s));
             destroy(tail(s));
@@ -119,7 +120,7 @@ void read_seq(lisp& y) {
 	lisp p1, p2;
 	std::cin >> x;
 	if(x == ')') {
-		y = NULL;
+		y = nullptr;
 	}
 	else{
 		read_s_expr(x, p1);
@@ -130,7 +131,7 @@ void read_seq(lisp& y) {
 	
 	
 void write_lisp (const lisp x) {
-	if(isNull(x))
+	if(isnullptr(x))
 		std::cout << "()";
 	else if(isAtom(x))
 		std::cout << x->node.atom;
@@ -142,67 +143,65 @@ void write_lisp (const lisp x) {
 }
 
 void write_seq (const lisp x) {
-	if (!isNull(x)){
+	if (!isnullptr(x)){
 		write_lisp(head (x)); 
 		write_seq(tail (x));
 	}
 }
 	
-bool compareS_expr(const lisp lispFirst, const lisp lispSecond, bool &flag) {
-	if(flag == false)
+bool compareS_expr(const lisp lispFirst, const lisp lispSecond) {
+	if(compareHierarchicalResult == false)
 		return false;
 	if(isAtom(lispFirst) || isAtom(lispSecond)) {
 		if(isAtom(lispSecond) && isAtom(lispSecond)) {
 			if(!(lispSecond->node.atom == lispFirst->node.atom)) {
-				flag = false;
+				compareHierarchicalResult = false;
 			}
 		}
 		else{
-			flag = false;
+			compareHierarchicalResult = false;
 		}
 	}
 	else if(!(isAtom(lispFirst)) && !(isAtom(lispSecond))) {
-		if(helpCompare(lispFirst, lispSecond, flag) == false)
-			flag = false;
+		if(helpCompare(lispFirst, lispSecond) == false)
+			compareHierarchicalResult = false;
 	}
 	else{
-		flag = false;
+		compareHierarchicalResult = false;
 	}
-	return flag;
+	return compareHierarchicalResult;
 }
 
-bool helpCompare(const lisp x, const lisp y, bool &flag) {
-	if(!isNull(x)) {
-		if(isNull(x) || isNull(y))
+bool helpCompare(const lisp x, const lisp y) {
+	if(!isnullptr(x)) {
+		if(isnullptr(x) || isnullptr(y))
 			return false;
-		compareS_expr(head(x), head(y), flag);
-		if(isNull(x) || isNull(y))
+		compareS_expr(head(x), head(y));
+		if(isnullptr(x) || isnullptr(y))
 			return false;
-		helpCompare(tail(x), tail(y), flag);
+		helpCompare(tail(x), tail(y));
 	}
 	return true;
 }
 
 int main() {
-	lisp lst1 = new s_expr;
-	lisp lst2 = new s_expr;
-	bool compareHierarchicalResult = true;
-	bool *compareHierarchicalResultPointer = &compareHierarchicalResult;
+    lisp lst1;
+    lisp lst2;
     
 	read_lisp(lst1);
-	read_lisp(lst2);
+    read_lisp(lst2);
 	std::cout << "1-st lisp is: ";
 	write_lisp(lst1);
 	std::cout << std::endl << "2-nd lisp is: ";
 	write_lisp(lst2);
 	
-	if(compareS_expr(lst1, lst2, *compareHierarchicalResultPointer))
+	if(compareS_expr(lst1, lst2))
 		std::cout << std::endl << "Result: They are equal" << std::endl;
 	else
 		std::cout << std::endl << "Result: They are not equal" << std::endl;
 
 	destroy(lst1);
-	destroy(lst2);
+    destroy(lst2);
     
     return 0;
 }
