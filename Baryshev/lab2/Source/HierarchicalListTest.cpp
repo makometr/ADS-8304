@@ -11,8 +11,8 @@ struct ptr{
 struct s_expr{
     bool tag;
 	union{
-    base atom;
-    ptr pair;
+  	  base atom;
+    	  ptr pair;
 	} node;
 };
 
@@ -185,11 +185,11 @@ bool helpCompare(const lisp x, const lisp y) {
 }
 
 int main() {
-    lisp lst1;
-    lisp lst2;
+    	lisp lst1;
+    	lisp lst2;
     
 	read_lisp(lst1);
-    read_lisp(lst2);
+  	read_lisp(lst2);
 	std::cout << "1-st lisp is: ";
 	write_lisp(lst1);
 	std::cout << std::endl << "2-nd lisp is: ";
@@ -201,7 +201,8 @@ int main() {
 		std::cout << std::endl << "Result: They are not equal" << std::endl;
 
 	destroy(lst1);
-    destroy(lst2);
+	destroy(lst2);
     
     return 0;
 }
+
