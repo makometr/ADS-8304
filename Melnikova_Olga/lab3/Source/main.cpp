@@ -50,7 +50,12 @@ void ConsoleReadAndWritePeople(std::vector<std::string>* people, std::vector<int
 		{
 			int flag = 1;
 			for(int i = 0; i < *peopleCount; i++){
-				if(strcmp(name, (*people)[i].c_str()) == 0) { flag = 0;	break; }
+				if(strcmp(name, (*people)[i].c_str()) == 0) { 
+					flag = 0;
+					break;
+					delete cstr;
+					delete name;
+				}
 			}
 			if(flag){
 				people->push_back(name);
@@ -73,6 +78,8 @@ void ConsoleReadAndWritePeople(std::vector<std::string>* people, std::vector<int
 			name = strtok (NULL, " ");
 			flagChild = 1;
 		}
+		delete cstr;
+		delete name;
 	}
 	std::cout<<"Введите имя, для которого совершать поиск";
 	std::string name1;
@@ -120,7 +127,13 @@ void ReadAndWritePeople(std::vector<std::string>* people, std::vector<int>* pare
 		{
 			int flag = 1;
 			for(int i = 0; i < *peopleCount; i++){
-				if(strcmp(name, (*people)[i].c_str()) == 0) { flag = 0;	break; }
+				if(strcmp(name, (*people)[i].c_str()) == 0) { 
+					flag = 0;	
+					break;
+					delete cstr;
+					delete name;
+				}
+				
 			}
 			if(flag){
 				people->push_back(name);
@@ -144,6 +157,8 @@ void ReadAndWritePeople(std::vector<std::string>* people, std::vector<int>* pare
 			name = strtok (NULL, " ");
 			flagChild++;
 		}
+		delete cstr;
+		delete name;
 	}
 	std::string name1;
 	getline(fin, name1);  // если не удалось - выход
@@ -214,9 +229,6 @@ int main(int argc, char *argv[])
         return 0;
     }
 	func1(people, parents, children, relationsCount, fout, queue, 0);
-	people.clear();
-	parents.clear();
-	children.clear();
 	
 	delete queue;
 	
