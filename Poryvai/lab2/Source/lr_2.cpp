@@ -1,10 +1,9 @@
-﻿#include<iostream>
+#include<iostream>
 #include<cstdlib>
 #include<string>//getline()
 #include<fstream>//ifstream()
-#include<conio.h>
+#include<stdlib.h>
 //VAR 3 Считаю сумму длин всех плеч бк
-//using namespace std;
 typedef int base;	// базовый тип элементов (атомов)
 
 struct s_expr;
@@ -31,18 +30,18 @@ lisp cons(const lisp h, const lisp t);
 lisp make_atom(int x);
 bool isAtom(const lisp s);
 bool isNull(const lisp s);
-void read_lisp(lisp& y);			// основная
-void read_s_expr(char prev, lisp& y);
-void read_seq(lisp& y);
-void read_lisp(lisp& y, std::ifstream& data);
-void read_s_expr(char prev, lisp& y, std::ifstream& data);
-void read_seq(lisp& y, std::ifstream& data);
-void is_bink1(lisp& y, bool &is_bk);
+
+void read_lisp(lisp& y, std::string data);
+void read_s_expr(char prev, lisp& y, std::string data, int& i);
+void read_seq(lisp& y, std::string data, int& i);
+
+void is_bink1(lisp& y, bool& is_bk);
 short Lenght(const lisp p);
 void destroy(lisp s);
 void sum(lisp p, short* s);
-// функции вывода:
-void write_lisp(const lisp x);		// основная
+void create_check_write(std::string data_str, std::ofstream& fout);
+
+void write_lisp(const lisp x);		
 void write_seq(const lisp x);
 void write_lisp(const lisp x, std::ofstream& out);
 void write_seq(const lisp x, std::ofstream& out);
@@ -84,7 +83,6 @@ lisp make_atom(int x)
 	s = new s_expr;
 	s->tag = true;
 	s->node.atom = x;
-	//std::cout << x<<"\n";
 	return s;
 
 }
@@ -119,6 +117,8 @@ lisp cons(const lisp h, const lisp t)
 
 	}
 }
+
+
 void destroy(lisp s)
 {
 	if (s->tag == false) {
@@ -132,111 +132,70 @@ void destroy(lisp s)
 
 	delete s;
 }
-void read_lisp(lisp& y)
+
+
+void read_lisp(lisp& y, std::string data)
 {
 	char x;
-	do
-		std::cin >> x;
-	while (x == ' ');
+	int i;
+	i = 0;
 
+	do {
+		x = data[i];
+		i++;
+	} while (x == ' ');
 
-	read_s_expr(x, y);
-	
-} //end read_lisp
-//...........................
-void read_s_expr(char prev, lisp& y)
-{ //prev - ранее прочитанный символ}
-	
-	if (prev == ')') {
-
-		std::cerr << " ! List.Error 1\n"; exit(1);
-
-	}
-	else if (prev != '(') {
-
-		std::cin.putback(prev);
-		int digit;
-		std::cin >> digit;
-		y = make_atom(digit);
-	}
-	else read_seq(y);
-}
-
-void read_seq(lisp& y)
-{
-	char x;
-	lisp p1, p2;
-	
-	if (!(std::cin >> x)) {
-		std::cerr << " ! List.Error 2 \n"; exit(1);
-	}
-	else {
-		//std::cout << x;
-		while (x == ' ') {
-			std::cin >> x;
-		}
-		if (x == ')')
-			y = nullptr;
-		else {
-			read_s_expr(x, p1);
-			read_seq(p2);
-			y = cons(p1, p2);
-
-		}
-	}
-	
-	
-} //end read_seq
-
-void read_lisp(lisp& y, std::ifstream& data)
-{
-	char x;
-	do
-		data >> x;
-	while (x == ' ');
-	//cout << "1";
-	read_s_expr(x, y, data);
+	read_s_expr(x, y, data, i);
 
 } //end read_lisp
 //...........................
-void read_s_expr(char prev, lisp& y, std::ifstream& data)
+void read_s_expr(char prev, lisp& y, std::string data, int& i)//data[i-1] == prev
 { //prev - ранее прочитанный символ}
-	//cout << "2";
-	if (prev == ')') {
 
-		std::cerr << " ! List.Error 1 \n"; exit(1);
-	}
-	else if (prev != '(') {
-		data.putback(prev);
-		int digit;
-		data >> digit;
+	if (prev != '(') {
+		//data.putback(prev);
+		int len = 1;
+		int k = i - 1;//сохраняем положение элемента prev в data
+
+		while (data[i] != ' ' && data[i] != '(' && data[i] != ')') {
+			i++;
+			len++;
+		}
+
+		std::string str_digit = data.substr(k, len);
+
+
+		int digit = atoi(str_digit.c_str());
 		y = make_atom(digit);
 
 	}
-	else read_seq(y, data);
+	else read_seq(y, data, i);
+
+
 } //end read_s_expr
 
-void read_seq(lisp& y, std::ifstream& data)
+void read_seq(lisp& y, std::string data, int& i)
 {
-	//cout << "3";
 	char x;
 	lisp p1, p2;
+	x = data[i];
+	i++;
 
-	if (!(data >> x)) {
-		std::cerr << " ! List.Error 2 \n"; exit(1);
+	while (x == ' ') {
+		x = data[i];
+		i++;
+
 	}
+
+
+	if (x == ')')
+		y = nullptr;
 	else {
-		while (x == ' ')
-			data >> x;
-		if (x == ')')
-			y = nullptr;
-		else {
-			//cout << x << endl;
-			read_s_expr(x, p1, data);
-			read_seq(p2, data);
-			y = cons(p1, p2);
-		}
+		read_s_expr(x, p1, data, i);
+		read_seq(p2, data, i);
+		y = cons(p1, p2);
 	}
+
 } //end read_seq
 //...........................
 // Процедура вывода списка с обрамляющими его скобками - write_lisp,
@@ -306,7 +265,7 @@ short Lenght(const lisp p) {
 
 }
 
-void is_bink1(lisp& y,  bool& is_bk) {
+void is_bink1(lisp& y, bool& is_bk) {
 
 	int i = 1;
 	lisp p = y;
@@ -331,12 +290,55 @@ void is_bink1(lisp& y,  bool& is_bk) {
 	else
 		is_bk = false;
 
-	
+
 }
 
+void create_check_write(std::string data_str, std::ofstream &fout) {//создает список,проверяет список на бк,выводит результат 
+
+	lisp bin_k = nullptr;
+	bool is_bk = true;
+	short total = 0;
 
 
-int main(int argc, char *argv[]) {
+	if (data_str != "(" && data_str != ")" && data_str != "" && data_str != " ") {//is_bink1 не подразумевает проверку строки на эти символы
+
+		read_lisp(bin_k, data_str);
+
+		if (bin_k->node.pair.hd != nullptr && bin_k->node.pair.tl != nullptr) {
+			if (bin_k->node.pair.hd->tag == false && bin_k->node.pair.tl->node.pair.hd->tag == false)//если у нач указателя голова или хвост грузик
+				is_bink1(bin_k, is_bk);
+			else
+				is_bk = false;
+		}
+		else
+			is_bk = false;
+	}
+	else
+		is_bk = false;
+
+
+
+	if (is_bk == true) {
+
+		write_lisp(bin_k, fout);
+		write_lisp(bin_k);
+		total = Lenght(bin_k);
+		std::cout << " sum = " << total << "\n";
+		fout << " sum = ";
+		fout << total;
+		fout << "\n";
+
+	}
+	else {
+		std::cout << "Бк введено неверно\n";
+		fout << "Бк введено неверно\n";
+	}
+
+	if (bin_k != nullptr)
+		destroy(bin_k);
+}
+
+int main(int argc,char *argv[]) {
 
 	setlocale(LC_ALL, "Russian");
 	std::cout << "Ввод из файла или из консоли? (f , c)\n";
@@ -350,58 +352,15 @@ int main(int argc, char *argv[]) {
 
 		if (data) {
 
-			lisp bin_k = nullptr;
-			bool is_bk = true;
-			std::string str = "";
+			
+			std::string data_str = "";
 			char ch;
-			
-			
-		
-			while (!data.eof()) {
-				
-				getline(data, str);
-				//след. констр if - ввод и проверка бк
-				if (str != "(" && str != ")" && str != "") {//is_bink1 не подразумевает проверку строки на эти символы
 
-					for (int i = str.length() - 1; i >= 0; i--) 
-						data.putback(str[i]);
+			while (!data.get(ch).eof()) {
+				data.putback(ch);
+				std::getline(data, data_str);
 
-					read_lisp(bin_k, data);
-					
-					if (bin_k->node.pair.hd != nullptr && bin_k->node.pair.tl != nullptr) {
-						if (bin_k->node.pair.hd->tag == false && bin_k->node.pair.tl->node.pair.hd->tag == false)//если у нач указателя голова или хвост грузик
-							is_bink1(bin_k, is_bk);
-						else
-							is_bk = false;
-					}
-					else
-						is_bk = false;
-				}
-				else 
-					is_bk = false;
-				
-
-				short total = 0;
-				if (is_bk == true) {
-					
-					write_lisp(bin_k, fout);
-					write_lisp(bin_k);
-					total = Lenght(bin_k);
-					std::cout << " sum = " << total << "\n";
-					fout << " sum = ";
-					fout << total;
-					fout << "\n";
-					//read_lisp(bin_k, data);
-				}
-				else {
-					std::cout << "Бк введено неверно\n";
-					fout << "Бк введено неверно\n";
-				}
-				if(bin_k != nullptr)
-					destroy(bin_k);
-				is_bk = true;
-				//освобождение памяти
-				bin_k = nullptr;
+				create_check_write(data_str, fout);
 
 			}
 		}
@@ -411,63 +370,18 @@ int main(int argc, char *argv[]) {
 	else if (arg == "c") {
 
 		char ch;
-		std::string  str ;
-		lisp bin_k = nullptr;
-		bool is_bk = true;
-
-
+		std::string  data_str;
+	
 		std::ofstream fout("out.txt");
 		while (!std::cin.get(ch).eof()) {
 
 			std::cin.putback(ch);
-			getline(std::cin, str);
-			//след. констр if - ввод и проверка бк
-			if (str != "(" && str != ")" && str != "") {//тк  is_bink1 не подразумевает проверку строки на эти символы
-
-				for (int i = str.length()-1; i >= 0; i--) {
-					std::cin.putback(str[i]);
-					//std::cout << str[i];
-				}
-
-				read_lisp(bin_k);
-
-
-
-				if (bin_k->node.pair.hd->tag == false && bin_k->node.pair.tl->node.pair.hd->tag == false)//если у нач указателя голова или хвост грузик
-					is_bink1(bin_k, is_bk);
-				else
-					is_bk = false;
-			}
-			else {
-				is_bk = false;
-			}
-
-			short total = 0;
-
-			if (is_bk == true) {
-
-				write_lisp(bin_k, fout);
-				write_lisp(bin_k);
-
-				total = Lenght(bin_k);
-
-				std::cout << " sum = " << total << "\n";
-				fout << " sum = ";
-				fout << total;
-				fout << "\n";
-			}
-			else
-				std::cout << "Бк введено неверно\n";
-			if (bin_k != nullptr)
-				destroy(bin_k);
-			is_bk = true;
-			bin_k = nullptr;
+			std::getline(std::cin,data_str);
 			
-
-
+			create_check_write(data_str, fout);
 		}
-		
+
 	}
-	
+
 	return 0;
 }
