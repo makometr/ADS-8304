@@ -198,6 +198,7 @@ int func1(std::vector<std::string> people, std::vector<int> parents, std::vector
 	}
 	k++;
 	func1(people, parents, children, relationsCount, fout, queue, k);
+	delete queue;
 }
 
 
