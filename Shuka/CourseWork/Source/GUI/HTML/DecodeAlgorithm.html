@@ -1,0 +1,9 @@
+<h2 style="text-align: center;"><strong>Decoding algorithm</strong></h2>
+<p>For decoding, you can use the constructed tree or get character codes from a file. Decoding Algorithm:</p>
+<ol>
+<li>It is created using a tree, or a dictionary of the form "symbol_code, symbol" is read from a file</li>
+In the loop:
+<li>The next bit is read, placed in the line-buffer.</li>
+<li>Go to the next bit.</li>
+<li>If there is an existing character code in the buffer line: the symbol from the dictionary with the given code is read and written to the de-encoding result, the buffer line is cleared.</li>
+</ol>
