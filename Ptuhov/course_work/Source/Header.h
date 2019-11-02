@@ -3,10 +3,10 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <chrono>
 
-qusing namespace sorts;
+using namespace sorts;
 using StringVector = std::vector<std::string>;
-
 
 //возможные коды завершения ф-ий
 enum class ReturnType
@@ -42,6 +42,8 @@ void readFileData(std::ifstream&, StringVector&);
 ReturnType streamsCheck(std::ifstream&, std::ofstream&);
 TypeCode determineType(std::string const&);
 
+// данная шаблонная функция пытается превратить переданную строку в шаблонный тип
+// результат работы функции хранится в переменная transformResult
 template <typename T>
 TransformPair<T> from_string(std::string const& checkString)
 {
@@ -55,11 +57,12 @@ TransformPair<T> from_string(std::string const& checkString)
 	return TransformPair<T>(value, true);
 }
 
+// данная шаблонная функция формирует из строкового представления массива сам массив
+// путем последовательного преобразования каждого из эл-ов массива к переданному шаблонному типу
 template <typename T>
 ReturnType reformArr(std::vector<T>& arr, std::string const& arrStringForm)
 {
 	auto startPosition = arrStringForm.begin();
-
 	while (1)
 	{
 		auto searchResult = std::find(startPosition, arrStringForm.end(), ' ');
@@ -92,17 +95,13 @@ ReturnType formArr(std::vector<T>& arr, std::string const& arrStringForm)
 	return ReturnType::Correct;
 }
 
-template <typename T, typename FUNC_T>
-void sortArr(std::vector<T>& arr, FUNC_T const& cmp)
-{
-	quickItSort(arr, cmp);
-}
 
 template<typename T>
 void chooseSortVariant(int sortChoise, std::vector<T>& arr, std::ostream& out)
 {
 	auto cmp = [](auto a, auto b) {return a < b; };
 
+	auto start = std::chrono::system_clock::now();
 	switch (sortChoise)
 	{
 	case 1:
@@ -118,4 +117,6 @@ void chooseSortVariant(int sortChoise, std::vector<T>& arr, std::ostream& out)
 		quickRecSort(arr, cmp, out);
 		break;
 	}
+	auto end = std::chrono::system_clock::now();
+	out << "Sort time: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << " microseconds\n\n";
 }

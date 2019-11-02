@@ -72,7 +72,7 @@ int main(int argc, char** argv)
 		{
 			std::string& arrStringForm = *it;
 
-			out << "Entered array:\n" << arrStringForm << "\n\n";
+			out << "Test #" + std::to_string(it - fileData.begin() + 1) << "\nEntered array:\n" << arrStringForm << "\n\n";
 
 			//считывание первого эл-та массива и определение его типа
 			auto searchResult = std::find(arrStringForm.begin(), arrStringForm.end(), ' ');
@@ -93,7 +93,7 @@ int main(int argc, char** argv)
 				ReturnType formResult = formArr(arr, arrStringForm);
 				if (formResult == ReturnType::IncorrectFileData)
 				{
-					out << "Array elements don't have same type\n";
+					out << "Array elements don't have same type\n\n";
 					continue;
 				}
 
@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 				out << "Sorted array:\n";
 				for (auto i : arr)
 					out << i << ' ';
-				out << "\n\n\n";
+				out << "\n\n";
 
 				break;
 			}
@@ -123,7 +123,7 @@ int main(int argc, char** argv)
 				out << "Sorted array:\n";
 				for (auto i : arr)
 					out << i << ' ';
-				out << "\n\n\n";
+				out << "\n\n";
 
 				break;
 			}
@@ -142,7 +142,7 @@ int main(int argc, char** argv)
 				out << "Sorted array:\n";
 				for (auto i : arr)
 					out << i << ' ';
-				out << "\n\n\n";
+				out << "\n\n";
 
 				break;
 			}
@@ -161,7 +161,7 @@ int main(int argc, char** argv)
 				out << "Sorted array:\n";
 				for (auto i : arr)
 					out << i << ' ';
-				out << "\n\n\n";
+				out << "\n\n";
 
 				break;
 			}
