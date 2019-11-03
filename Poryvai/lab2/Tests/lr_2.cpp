@@ -371,17 +371,16 @@ int main(int argc,char *argv[]) {
 
 		char ch;
 		std::string  data_str;
-		std::cout<<"Введите бк или \n";
-		std::ofstream fout("out.txt");
+		std::cout<<"Введите бк или последовательность для окончания ввода\n";
 
+		std::ofstream fout("out.txt");
 		while (!std::cin.get(ch).eof()) {
 
 			std::cin.putback(ch);
 			std::getline(std::cin,data_str);
-
+			
 			create_check_write(data_str, fout);
-
-			std::cout<<"Введите бк\n";
+			std::cout<<"Введите бк или последовательность для окончания ввода\n";
 		}
 
 	}
