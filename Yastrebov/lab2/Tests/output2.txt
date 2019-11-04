@@ -1,0 +1,215 @@
+Input must contain at least one zero-level head node
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+Printing list :
+_________________
+
+Empty list
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+where to start? press enter to normalize from head
+recursive? 1 - yes, 0 - no
+Failed, empty list
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+enter new node
+Head must be a zero-leve node
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+enter new node
+Parsed line : 4 this [will be head]
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+Printing list :
+_________________
+
+4  this  [will be head]
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+enter new node
+Parsed line : 4 this [will be new head]
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+Printing list :
+_________________
+
+4  this  [will be new head]
+5  this  [will be head]
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+where to start? press enter to normalize from head
+recursive? 1 - yes, 0 - no
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+Printing list :
+_________________
+
+0  this  [will be new head]
+1  this  [will be head]
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+enter new node
+Parsed line : 2 inner list 
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+Printing list :
+_________________
+
+0  this  [will be new head]
+1  this  [will be head]
+2  inner list  
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+enter new node
+Non-existent prefix
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+Printing list :
+_________________
+
+0  this  [will be new head]
+1  this  [will be head]
+2  inner list  
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+enter new node
+Parsed line : 2.1 inner [head]
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+Printing list :
+_________________
+
+0  this  [will be new head]
+1  this  [will be head]
+2  inner list  
+2.1  inner  [head]
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+enter new node
+Parsed line : 2.1 new [inner head]
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+Printing list :
+_________________
+
+0  this  [will be new head]
+1  this  [will be head]
+2  inner list  
+2.1  new  [inner head]
+2.2  inner  [head]
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+where to start? press enter to normalize from head
+recursive? 1 - yes, 0 - no
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
+Printing list :
+_________________
+
+0  this  [will be new head]
+1  this  [will be head]
+2  inner list  
+2.0  new  [inner head]
+2.1  inner  [head]
+______________________
+Choose action :
+1 : print
+2 : add
+3 : insert
+4 : normalize
+5 : exit
