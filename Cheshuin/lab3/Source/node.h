@@ -33,7 +33,7 @@ void Node<T>::setData(T data)
 }
 
 template<typename T>
-T Node<T>::data(void)
+T Node<T>::data()
 {
     return data_;
 }

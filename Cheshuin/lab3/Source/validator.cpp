@@ -4,27 +4,27 @@ Validator::Types Validator::typeOf(char character)
 {
     if(character == '(')
     {
-        return ROBRACKET;
+        return ROUND_OPEN;
     }
     if(character == '[')
     {
-        return QOBRACKET;
+        return QUAD_OPEN;
     }
     if(character == '{')
     {
-        return FOBRACKET;
+        return FIGURE_OPEN;
     }
     if(character == ')')
     {
-        return RCBRACKET;
+        return ROUND_CLOSE;
     }
     if(character == ']')
     {
-        return QCBRACKET;
+        return QUAD_CLOSE;
     }
     if(character == '}')
     {
-        return FCBRACKET;
+        return FIGURE_CLOSE;
     }
 
     return CHARACTER;
@@ -43,6 +43,7 @@ int Validator::check(std::istream& stream)
         if(stack.isEmpty())
         {
             std::cout << "Incorrect syntax - excess characters." << std::endl;
+            std::cout << "-------------------------------------------" << std::endl;
 
             return position;
         }
@@ -72,6 +73,7 @@ int Validator::check(std::istream& stream)
             else
             {
                 std::cout << "Incorrect syntax - syntax rule not founded." << std::endl;
+                std::cout << "-------------------------------------------" << std::endl;
 
                 return position;
             }
@@ -84,10 +86,12 @@ int Validator::check(std::istream& stream)
         if(stack.size() > 1 || stack.onTop() != TEXT)
         {
             std::cout << "Incorrect syntax - early end of string." << std::endl;
+            std::cout << "-------------------------------------------" << std::endl;
 
             return position;
         }
     }
 
+    std::cout << "-------------------------------------------" << std::endl;
     return VALID;
 }

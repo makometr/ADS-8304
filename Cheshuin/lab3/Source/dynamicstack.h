@@ -2,6 +2,7 @@
 #define DYNAMICSTACK_H
 
 #include<memory>
+#include <iostream>
 #include"node.h"
 
 template <typename T>
@@ -19,11 +20,11 @@ public:
     DynamicStack() = default;
     DynamicStack(std::initializer_list<T> init);
 
-    void push(T data);
-    void push(DynamicStack stack);
+    void push(const T& data);
+    void push(const DynamicStack& stack);
 
-    void pushBack(T data);
-    void pushBack(DynamicStack stack);
+    void pushBack(const T& data);
+    void pushBack(const DynamicStack& stack);
 
     T pop();
     T onTop();
@@ -43,7 +44,7 @@ DynamicStack<T>::DynamicStack(std::initializer_list<T> init)
 }
 
 template <typename T>
-void DynamicStack<T>::push(T data)
+void DynamicStack<T>::push(const T& data)
 {
     typename Node<T>::NodeP newNode(new Node<T>);
     newNode->setData(data);
@@ -64,7 +65,7 @@ void DynamicStack<T>::push(T data)
 }
 
 template <typename T>
-void DynamicStack<T>::push(DynamicStack stack)
+void DynamicStack<T>::push(const DynamicStack& stack)
 {
     typename Node<T>::NodeP buf = stack.tail_;
     while(buf != nullptr)
@@ -78,7 +79,7 @@ void DynamicStack<T>::push(DynamicStack stack)
 }
 
 template <typename T>
-void DynamicStack<T>::pushBack(T data)
+void DynamicStack<T>::pushBack(const T& data)
 {
     typename Node<T>::NodeP newNode(new Node<T>);
     newNode->setData(data);
@@ -99,7 +100,7 @@ void DynamicStack<T>::pushBack(T data)
 }
 
 template <typename T>
-void DynamicStack<T>::pushBack(DynamicStack stack)
+void DynamicStack<T>::pushBack(const DynamicStack& stack)
 {
     typename Node<T>::NodeP buf = stack.head_;
     while(buf != nullptr)
