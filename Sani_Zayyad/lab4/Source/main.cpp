@@ -38,17 +38,17 @@ bool isBST(std::shared_ptr<Node> root, std::shared_ptr<Node> l=nullptr, std::sha
     // if left node exist then check it has
     // correct data or not i.e. left node's data
     // should be less than root's data
-    if (l != nullptr and root->data <= l->data)
+    if (l != nullptr && root->data <= l->data)
         return false;
   
     // if right node exist then check it has
     // correct data or not i.e. right node's data
     // should be greater than root's data
-    if (r != nullptr and root->data >= r->data)
+    if (r != nullptr && root->data >= r->data)
         return false;
   
     // check recursively for every node.
-    return isBST(root->left, l, root) and isBST(root->right, root, r);
+    return isBST(root->left, l, root) && isBST(root->right, root, r);
 }
 
 bool isPyramid(std::shared_ptr<Node> root) 
