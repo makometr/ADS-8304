@@ -18,6 +18,27 @@ public:
 		index = -1;
 	}
 
+	Vec_Stack& operator=(const Vec_Stack &assignee) {
+
+		stack = new int[assignee.size];
+
+		index = assignee.index;
+
+		size = assignee.size;
+
+		return *this;
+
+	}
+
+	Vec_Stack(const Vec_Stack &copy) {
+		
+		stack = new int[copy.size];
+
+		index = copy.index;
+
+		size = copy.size;
+	}
+
 	void push(int element) {
 		
 		if (index == (size - 1))
