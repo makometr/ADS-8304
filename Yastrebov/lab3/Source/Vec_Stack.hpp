@@ -32,11 +32,13 @@ public:
 
 	Vec_Stack(const Vec_stack &copy) {
 		
-		stack = new int[assignee.size];
+		stack = new int[copy.size];
 
-		index = assignee.index;
+		index = copy.index;
 
-		size = assignee.size;
+		size = copy.size;
+		
+		std::copy(copy.stack, copy.stack + size, stack);
 	}
 
 	Vec_Stack& operator=(const Vec_Stack &assignee) {
@@ -46,6 +48,8 @@ public:
 		index = assignee.index;
 
 		size = assignee.size;
+		
+		std::copy(assignee.stack, assignee.stack + size, stack);
 
 		return *this;
 
