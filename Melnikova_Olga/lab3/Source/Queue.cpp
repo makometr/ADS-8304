@@ -10,8 +10,10 @@ class Queue{
 			_size = 0;
 			data = new int[START_SIZE];
 		}
-		~Queue() {}
-		//в функциях используется шаблонный стандартный класс
+		~Queue() {
+			delete[] data;
+		}
+		//Деструктор пуст,так как подается в функции.
 
 		void push(int val)	//Пуш элемента
 		{

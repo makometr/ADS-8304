@@ -40,8 +40,10 @@ void ConsoleReadAndWritePeople(std::vector<std::string>* people, std::vector<int
 		std::string parent = str.substr(0, spacePos);
 		std::string child = str.substr(spacePos + 1, str.length() - spacePos -1);
 
-		if (!(IsStringOK(parent.c_str()) && IsStringOK(child.c_str())))
+		if (!(IsStringOK(parent.c_str()) && IsStringOK(child.c_str()))){
+			std::cout<<"Неверный ввод\n";
 			exit(1);
+		}
 
 		int parentID;
 		int childID;
