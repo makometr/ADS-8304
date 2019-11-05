@@ -17,7 +17,7 @@ public:
     Node() = default;
 
     void setData(T data);
-    T data();
+    T data() const;
 
     void setPrev(NodeP node);
     NodeP prev();
@@ -33,7 +33,7 @@ void Node<T>::setData(T data)
 }
 
 template<typename T>
-T Node<T>::data()
+T Node<T>::data() const
 {
     return data_;
 }

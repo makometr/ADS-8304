@@ -27,10 +27,10 @@ public:
     void pushBack(const DynamicStack& stack);
 
     T pop();
-    T onTop();
+    T onTop() const;
 
-    size_t size();
-    bool isEmpty();
+    size_t size() const;
+    bool isEmpty() const;
     void clear();
 };
 
@@ -134,13 +134,13 @@ T DynamicStack<T>::pop()
 }
 
 template <typename T>
-T DynamicStack<T>::onTop()
+T DynamicStack<T>::onTop() const
 {
     return head_->data();
 }
 
 template <typename T>
-bool DynamicStack<T>::isEmpty()
+bool DynamicStack<T>::isEmpty() const
 {
     return (elementsCount_ == 0);
 }
@@ -154,7 +154,7 @@ void DynamicStack<T>::clear()
 }
 
 template <typename T>
-size_t DynamicStack<T>::size()
+size_t DynamicStack<T>::size() const
 {
     return elementsCount_;
 }
