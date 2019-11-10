@@ -2,8 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <sstream>
-enum infoIndex {realArrSize, maxArrSize};
+
+enum infoIndex {realArrSize, maxArrSize}; //сколько занято памяти и сколько выделено
 
 template <typename T>
 struct Elem{
@@ -40,22 +40,22 @@ public:
     T getRoot() const;
     BinaryTree<T> getLeftTree();
     BinaryTree<T> getRightTree();
-    void setLeft();
+    void setLeft(); //инициализация без установки значения
     void setRight();
     void setLeft(T newValue);
     void setRight(T newValue);
     void setRoot(T newValue);
     void printTree();
-    bool readTree(std::istringstream& inputStream);
+    bool readTree(std::ifstream& inputStream);
     int calcHeight();
     int pathLength(int level=1);
-    void printLeaves();
+    void printLeaves(std::ofstream& outputF);
     int countNodesOnLevel(int level);
 };
 
 template <typename T>
 BinaryTree<T>::~BinaryTree(){
-    if (isMainTree && arr){
+    if (isMainTree && arr){ //чтобы поддерево случайно не удалило все
         delete[] arr;
         delete[] infoArr;
         arr = nullptr;
@@ -77,13 +77,13 @@ void BinaryTree<T>::resize(){
 template <typename T>
 bool BinaryTree<T>::isEmptyTree() const {
 
-    return !infoArr[realArrSize];
+    return !infoArr[realArrSize]; //инициализировано ли дерево
 }
 
 template <typename T>
 bool BinaryTree<T>::isEmptyElem() const {
 
-    return (curIndex == -1);
+    return (curIndex == -1); //есть ли что-нибудь по этому индексу
 }
 template <typename T>
 Elem<T> BinaryTree<T>::getLeftElem() const {
@@ -93,7 +93,7 @@ Elem<T> BinaryTree<T>::getLeftElem() const {
     }
     else {
         //пустой элем
-        std::cout << "8080Пустой элемент был возвращен!\n";
+        std::cout << "Пустой элемент был возвращен!\n";
         return Elem<T>();
     }
 }
@@ -106,7 +106,7 @@ Elem<T> BinaryTree<T>::getRightElem() const {
     }
     else {
         //пустой элем
-        std::cout << "9090Пустой элемент был возвращен!\n";
+        std::cout << "Пустой элемент был возвращен!\n";
         return Elem<T>();
     }
 }
@@ -119,7 +119,7 @@ T BinaryTree<T>::getRoot() const {
     }
     else {
         //пустой элем
-        std::cout << "00Пустой элемент был возвращен!\n";
+        std::cout << "Пустой элемент был возвращен!\n";
         return 0;
     }
 }
@@ -131,7 +131,7 @@ BinaryTree<T> BinaryTree<T>::getLeftTree() {
         return BinaryTree<T>(arr, arr[curIndex].left, infoArr);
     }
     else {
-        std::cout << "88Левое поддерево не существует\n";
+        std::cout << "Левое поддерево не существует\n";
         return BinaryTree<T>();
     }
 }
@@ -143,7 +143,7 @@ BinaryTree<T> BinaryTree<T>::getRightTree() {
         return BinaryTree<T>(arr, arr[curIndex].right, infoArr);
     }
     else {
-        std::cout << "99Правое поддерево не существует\n";
+        std::cout << "Правое поддерево не существует\n";
         return BinaryTree<T>();
     }
 }
@@ -216,7 +216,7 @@ void BinaryTree<T>::setRoot(T newValue){
 }
 
 
-void destroySpaces(std::istringstream& inputStream){
+void destroySpaces(std::ifstream& inputStream){
     char c ='\0';
     while ((inputStream >> c) && (c==' ')){}
     if (c!=' ')
@@ -224,23 +224,29 @@ void destroySpaces(std::istringstream& inputStream){
 }
 
 template <typename T>
-bool BinaryTree<T>::readTree(std::istringstream& inputStream){
+bool BinaryTree<T>::readTree(std::ifstream& inputStream){
 
     destroySpaces(inputStream);
     char c = '\0';
-    if ((inputStream >> c) && (c=='(')){
+    if ((inputStream >> c) && (c=='(')){ //считывание узла
+
         destroySpaces(inputStream);
         T inputVal;
+
         if (inputStream>>inputVal){
+
             this->setRoot(inputVal);
             destroySpaces(inputStream);
-            if ((inputStream >> c) && (c=='(')){
+
+            if ((inputStream >> c) && (c=='(')){ //считывание левого поддерева
+
                 inputStream.unget();
                 this->setLeft();
+
                 if (this->getLeftTree().readTree(inputStream)){}
                 else return false;
 
-                if ((inputStream >> c) && (c=='(')){
+                if ((inputStream >> c) && (c=='(')){ //считывание правого поддерева (если есть)
                     inputStream.unget();
                     this->setRight();
                     if (this->getRightTree().readTree(inputStream)){}
@@ -248,16 +254,16 @@ bool BinaryTree<T>::readTree(std::istringstream& inputStream){
                 else
                     inputStream.unget();
             }
-            else if (c=='#') {
+            else if (c=='#') { //если нет скобки, то может левое поддерево отсутствует?
                 destroySpaces(inputStream);
-                if ((inputStream >> c) && (c=='(')){
+                if ((inputStream >> c) && (c=='(')){ //видимо да, считываем правое (если есть)
                     inputStream.unget();
                     this->setRight();
                     if (this->getRightTree().readTree(inputStream)){}
                     else return false;
                 }
                 else {
-                    std::cout << "11Лишний #\n";
+                    std::cout << "Лишний #\n";
                     return false;
                 }
             }
@@ -267,18 +273,18 @@ bool BinaryTree<T>::readTree(std::istringstream& inputStream){
 
         }
         else {
-            std::cout << "22Нет значения узла\n";
+            std::cout << "Нет значения узла\n";
             return false;
         }
     }
     else {
-        std::cout << "33Нет открывающей скобки\n";
+        std::cout << "Нет открывающей скобки\n";
         return false;
     }
     destroySpaces(inputStream);
     if ((inputStream >> c) && (c==')')){}
     else {
-        std::cout << "44Нет закрывающей скобки\n";
+        std::cout << "Нет закрывающей скобки\n";
         return false;
     }
 
@@ -326,17 +332,19 @@ int BinaryTree<T>::pathLength(int level){
 }
 
 template <typename T>
-void BinaryTree<T>::printLeaves(){
+void BinaryTree<T>::printLeaves(std::ofstream& outputF){
 
     if (isEmptyElem())
         return;
-    if ((this->arr[curIndex].left == -1) && (this->arr[curIndex].right == -1))
+    if ((this->arr[curIndex].left == -1) && (this->arr[curIndex].right == -1)){
         std::cout << this->getRoot() << " ";
+		outputF << this->getRoot() << " ";
+	}
     else {
         if (this->arr[curIndex].left != -1)
-            this->getLeftTree().printLeaves();
+            this->getLeftTree().printLeaves(outputF);
         if (this->arr[curIndex].right != -1)
-            this->getRightTree().printLeaves();
+            this->getRightTree().printLeaves(outputF);
     }
 }
 
@@ -344,8 +352,10 @@ template <typename T>
 int BinaryTree<T>::countNodesOnLevel(int level){
 
     level--;
-    if (isEmptyElem())
+    if (isEmptyElem()){
         return 0;
+	}
+	//std::cout << "Обработка уровня " << level+1 << ". Значение узла: " << this->getRoot() <<((level==0) ? ". +1 к счетчику.\n" : ".\n");
     if (level == 0){
         return 1;
     }
