@@ -3,10 +3,11 @@
 #include <fstream>
 #include <cstdlib>
 #include <string>
+#include<assert.h>
 // интерфейс АТД "Стек" (см. Седжвик - Sedgewick) 
 // шаблонный класс. Без некоторых проверок...
 // и интерфейс, и реализация в этом заголовочном файле 
-
+void inp(std::string str);
 
 
 template <class Item>
@@ -17,7 +18,9 @@ private:
 public:
 	STACK(int maxN)
 	{
-		s = new Item[maxN]; N = 0; N1 = maxN;
+		s = new Item[maxN];
+		N = 0;
+ 		N1 = maxN;
 	}  // my N1
 	bool empty() const
 	{
@@ -26,8 +29,9 @@ public:
 	void push(Item elem)
 	{
 		s[N++] = elem;
-		if (N > N1)
-			 std::cout << "ошибка!!!" << "\n"; // my N1
+		if(N>N1)
+			assert(1);
+			
 	}
 	~STACK(){
 		delete [] s;
@@ -35,8 +39,11 @@ public:
 		N = 0;
 	}
 	Item pop()
-	{
-		return s[--N];
+	{	
+		if(N!=0)
+			return s[--N];
+		else
+			assert(1);
 	}
 	
 };
@@ -97,54 +104,40 @@ int main(int argc,char *argv[])
 {
 	setlocale(LC_ALL, "Russian");
 	std::string str;
-	int flag;
+//	int flag;
 	std::cout<<"Ввод из консоли или из файла?(c,f)"<<"\n";
 	std::string arg;
 	getline(std::cin,arg);
-	std::ofstream fout("out_wrong.txt");
+//	std::ofstream fout("out_wrong.txt");
 	if(arg == "f"){
 
 		std::ifstream fin(argv[1]);
-	
+		std::cout<<"Введите строку или комбинацию для выхода\n";
+
 		while (getline(fin, str)) {
-
-			if (str != " " && str != "") {
-
-				flag = analizator(str);
-				if (flag == 1){
-					std::cout<<str<<"\n";
-                			std::cout << "Cтрока задана верно" << "\n";
-					std::cout<<"\n";
-                                        fout<<str<<"\n";
-                                        fout << "Cтрока задана верно" << "\n";
-                                        fout<<"\n";
-				}
-        			else{
-					std::cout<<str<<"\n";
-                			std::cout << "Строка задана неверно" << "\n";
-					std::cout<<"\n";
-                                        fout<<str<<"\n";
-                                        fout << "Строка задана неверно" << "\n";
-                                        fout<<"\n";
-				}
-
-
-			}
-			else{
-				std::cout << "Пустая строка" << "\n";
-				std::cout<<"\n";
-				fout<<"Пустая строка"<<"\n";
-                                fout<<"\n";
-
-			}
+				std::cout<<"Введите строку или комбинацию для выхода\n";
+				inp(str);
 
 		}
 	}
 	else if( arg == "c"){
-
+		std::cout<<"Введите строку или комбинацию для выхода\n";
 		while(getline(std::cin, str)){
+				std::cout<<"Введите строку или комбинацию для выхода\n";
+      				inp(str);                      
+		}
 
-			if (str != " " && str != "") {
+
+        }
+
+
+}
+
+void inp( std::string str ){
+	
+	std::ofstream fout("out_wrong.txt");
+	int flag;
+	 if (str != " " && str != "") {
 
                                 flag = analizator(str);
 
@@ -160,23 +153,19 @@ int main(int argc,char *argv[])
                                         std::cout<<str<<"\n";
                                         std::cout << "Строка задана неверно" << "\n";
                                         std::cout<<"\n";
-					fout<<str<<"\n";
+                                        fout<<str<<"\n";
                                         fout << "Строка задана неверно" << "\n";
                                         fout<<"\n";
 
                                 }
 
 
-                        }
-                        else{
-                                std::cout << "Пустая строка" << "\n";
-                                std::cout<<"\n";
-				fout<<"Пустая строка"<<"\n";
-				fout<<"\n";
-                        }
-
-
-                }
+        }
+      	else{
+        	std::cout << "Пустая строка" << "\n";
+                std::cout<<"\n";
+                fout<<"Пустая строка"<<"\n";
+                fout<<"\n";
         }
 
 
