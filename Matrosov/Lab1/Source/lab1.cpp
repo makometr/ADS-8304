@@ -38,9 +38,6 @@ double det(vector<vector<double>> matrix) {
 
 int main()
 {
-	ofstream fout; 
-	fout.open("result.txt");
-
 	string input_file_name; //имя файла ввода
 	cin >> input_file_name;
 	ifstream fin;
@@ -66,7 +63,7 @@ int main()
 			line.clear();
 		}
 
-		fout<<"DetA = " << det(matrix) << endl;
+		cout<<"DetA = " << det(matrix) << endl;
 
 
 	}
