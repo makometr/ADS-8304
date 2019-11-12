@@ -39,7 +39,7 @@ double det(vector<vector<double>> matrix) {
 
 int main()
 {
-	ofstream fout("result.txt");
+	cout << "Enter full name of imput file: ";
 
 	string input_file_name; //имя файла ввода
 	cin >> input_file_name;
