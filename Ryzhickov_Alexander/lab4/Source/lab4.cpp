@@ -27,6 +27,17 @@ public:
         treeDataProcessing(myString);
     }
 
+    BinaryTree(const BinaryTree &obj)
+    {
+        //cout << "\nКонструктор копирования\n";
+        maxSize_ = obj.maxSize_;
+        array = new Element[maxSize_];
+        for (int i = 0; i < maxSize_; ++i) {
+            array[i]=obj.array[i];
+        }
+        //obj.array = new Element[maxSize_];
+    }
+
     int findParent(int num, int your_deep) {
         for (int i = num; i > -1; --i) {
             if (array[i].deep + 1 == your_deep) {
@@ -93,10 +104,11 @@ public:
                     vector.erase(vector.begin());
                 }
 
-                //для отладки
-                /*std::cout << "!!!!!!!!!!!\n";
+                /*//для отладки
+                std::cout << "!!!!!!!!!!!\n";
                 printlnTree();
                 std::cout << "!!!!!!!!!!!\n";*/
+
             }
         }
     }
@@ -135,6 +147,25 @@ public:
                     std::cout << array[j].value;
                 }
             }
+        }
+        std::cout << "\n";
+    }
+
+    void printGoodViewTree() {
+        int max_deep = 1;
+        for (int j = 0; j < maxSize_; ++j) {
+            if (array[j].deep > max_deep) {
+                max_deep = array[j].deep;
+            }
+        }
+
+        for (int i = 1; i <= max_deep; ++i) {
+            for (int j = 0; j < maxSize_; ++j) {
+                if (i == array[j].deep) {
+                    std::cout << array[j].value;
+                }
+            }
+            std::cout << "\n";
         }
         std::cout << "\n";
     }
@@ -208,6 +239,7 @@ int mainCheck(std::string &expression) {
     //std::string expression = "(a(b)(c(e)(f))(d)),(g(k(m)(n))(l)),(o)";
     if (checkExpression(countAlpha, expression)) {
         BinaryTree<char> binaryTree(expression, countAlpha);
+        BinaryTree<char> kek = binaryTree;
         //разкомент для детального вывода
         //binaryTree.printlnTree();
         //std::cout << "\n";
@@ -217,7 +249,9 @@ int mainCheck(std::string &expression) {
         //binaryTree.printlnTree();
         std::cout << "Output binareThree: ";
         binaryTree.printResult(-1);
-        std::cout << "\n";
+        std::cout << "\nGood View: \n";
+        binaryTree.printGoodViewTree();
+        //std::cout << "\n";
     } else {
         std::cout << "not correct. String is incorrect" << "\n";
     }
