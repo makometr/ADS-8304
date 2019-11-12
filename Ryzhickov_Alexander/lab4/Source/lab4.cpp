@@ -239,7 +239,6 @@ int mainCheck(std::string &expression) {
     //std::string expression = "(a(b)(c(e)(f))(d)),(g(k(m)(n))(l)),(o)";
     if (checkExpression(countAlpha, expression)) {
         BinaryTree<char> binaryTree(expression, countAlpha);
-        BinaryTree<char> kek = binaryTree;
         //разкомент для детального вывода
         //binaryTree.printlnTree();
         //std::cout << "\n";
