@@ -1,3 +1,0 @@
-#! /bin/bash
-make
-./lr3 Tests/right_test.txt
