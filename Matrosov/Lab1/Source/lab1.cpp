@@ -1,5 +1,9 @@
 #include <stdio.h>
-#include "stdafx.h"
+#include <tchar.h>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -13,9 +17,6 @@ vector<vector<double>> minor(vector<vector<double>> matrix, int number) {
 		minor.push_back(matrix[i]);
 		minor[i-1].erase(minor[i-1].begin() + number);
 	}
-
-	cout << endl;
-
 	return minor;
 }
 
@@ -38,8 +39,7 @@ double det(vector<vector<double>> matrix) {
 
 int main()
 {
-	ofstream fout; 
-	fout.open("result.txt");
+	ofstream fout("result.txt");
 
 	string input_file_name; //имя файла ввода
 	cin >> input_file_name;
@@ -66,16 +66,17 @@ int main()
 			line.clear();
 		}
 
-		fout<<"DetA = " << det(matrix) << endl;
+		cout <<"DetA = " << det(matrix) << endl;
 
 
 	}
 	else {
-		fout << "File " << input_file_name << " can't be opened for reading!";
+		cout << "File " << input_file_name << " can't be opened for reading!";
 	}
 
 	fin.close();
 	fout.close();
+	system("pause");
     return 0;
 }
 
