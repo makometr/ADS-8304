@@ -1,0 +1,1 @@
+lab3.exe Tests/test.txt

@@ -1,0 +1,9 @@
+aba
+a(b(a))a
+a((a)b)a
+b(b)b
+abc((bcd))e
+)(
+(   )
+abde(fjbaj(
+abcd()fjnal
