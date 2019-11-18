@@ -10,37 +10,43 @@ class stack {
 private:
     char *ptrStack; 
     int top;        
-    int maxSize;    
-    inline char getTop();
-    inline void expError();
-    inline void resize();
-    inline void push(char value);
-    inline char pop();
+    int maxSize;  
+    /* Копирование и присвание не реализовано.
+    Обьявлены private, чтобы предотвратить использование */
+    stack (const stack &);              
+    stack & operator = (const stack &);
 public:
-    inline stack(int = 20);
-    inline ~stack();
-    void execute(std::string, unsigned int *i, char brackets);
-    inline void isEmpty();
+    stack(int = 20);
+    char getTop();
+    void resize();
+    void push(char value);
+    char pop();
+    void isEmpty();
+
+    ~stack() {
+        delete[] ptrStack;  
+    }
+
+    void expError() {
+        std::cout << "> Wrong exp\n";
+    }
+
+    char *getPtrStack(){
+        return ptrStack;
+    }
+
     void init(){
         top = 0;
     }
 };
 
-inline stack::stack(int size) {
+stack::stack(int size) {
     maxSize = size;
     top = 0;
     ptrStack = new char[size];
 }
 
-inline stack::~stack() {
-    delete[] ptrStack;
-}
-
-inline void stack::expError() {
-    std::cout << "> Wrong exp\n";
-}
-
-inline char stack::getTop() {
+char stack::getTop() {
 	if (top != 0)
 		return ptrStack[top - 1];
 	else {
@@ -49,7 +55,7 @@ inline char stack::getTop() {
 	}
 }
 
-inline char stack::pop() {
+char stack::pop() {
     if (top < 0){
         std::cout << "> Wrong exp\n";
         delete[] ptrStack;
@@ -59,19 +65,19 @@ inline char stack::pop() {
     return ptrStack[top];
 }
 
-inline void stack::push(char value) {
+void stack::push(char value) {
     if (top == maxSize)
         resize();
     ptrStack[top] = value;
     top++;
 }
 
-inline void stack::resize() {
+void stack::resize() {
     ptrStack = (char*)realloc(ptrStack, maxSize * 2);
     maxSize *= 2;
 }
 
-inline void stack::isEmpty() {
+void stack::isEmpty() {
     if (top == 0){
         std::cout << "> Correct exp\n";
         return;
@@ -85,34 +91,34 @@ bool pairBrackets(char openBrackets, char closedBrackets) {
     return false;
 }
 
-void stack::execute(std::string str, unsigned int *i, char brackets = '0') {
+void execute(std::string str, unsigned int *i, stack &s, char brackets = '0') {
     for (; *i < str.length(); (*i)++){
         if (str.at(*i) == 'x' || str.at(*i) == 'y' || str.at(*i) == 'z') {
-            push(str.at(*i));
+            s.push(str.at(*i));
         }
         else if (str.at(*i) == '(' || str.at(*i) == '[' || str.at(*i) == '{') {
-            push(str.at(*i));
+            s.push(str.at(*i));
             (*i)++;
-            execute(str, i, str.at(*i));
+            execute(str, i, s, str.at(*i));
         }
         else if (str.at(*i) == '+' || str.at(*i) == '-') {
-            pop();
+            s.pop();
         }
         else if (str.at(*i) == ')' || str.at(*i) == ']' || str.at(*i) == '}') {
-            pop();
+            s.pop();
             if (brackets != '0') {
-				if (pairBrackets(getTop(), str.at(*i)))
+				if (pairBrackets(s.getTop(), str.at(*i)))
 					return;
                 else{
-                    std::cout << "> Wrong exp\n";
-                    delete[] ptrStack; // непарные скобки, завершается работа.
+                    s.expError();
+                    delete[] s.getPtrStack(); // непарные скобки, завершается работа.
                     exit(1);
                 }
 			}
         }
     }
     if (brackets == '0')
-        pop();
+        s.pop();
 }
 
 void readFromFile(std::string filename, unsigned int *i, stack &s) {
@@ -129,7 +135,7 @@ void readFromFile(std::string filename, unsigned int *i, stack &s) {
 			count++;
 			std::cout << exp << std::endl;
             std::cout << "test #" << count << " \"" + exp + "\"" << "\n";
-			s.execute(exp, i);
+			execute(exp, i, s);
             s.isEmpty();
 		}
 	}
@@ -156,7 +162,7 @@ int main(int argc, char* argv[]) {
 		std::string input;
 		std::cout << "> Enter the string : ";
 		std::getline(std::cin, input);
-		s.execute(input, &i);
+		execute(input, &i, s);
         s.isEmpty();
 		break;
 	}
