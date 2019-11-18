@@ -1,0 +1,8 @@
+(!false)
+(false V true)
+(false^(false^true))
+(!(false^false))
+((!true) V (!(falseVtrue)))
+(true ^ (!(falseV(!true))))
+((true^false) V (false V true))
+((!false)V(true^(!((false^(!true))V(!true)))))
