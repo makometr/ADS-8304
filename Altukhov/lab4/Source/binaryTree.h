@@ -46,7 +46,7 @@ public:
     void setRight(T newValue);
     void setRoot(T newValue);
     void printTree();
-    bool readTree(std::ifstream& inputStream);
+    bool readTree(std::istringstream& inputStream);
     int calcHeight();
     int pathLength(int level=1);
     void printLeaves(std::ofstream& outputF);
@@ -216,7 +216,7 @@ void BinaryTree<T>::setRoot(T newValue){
 }
 
 
-void destroySpaces(std::ifstream& inputStream){
+void destroySpaces(std::istringstream& inputStream){
     char c ='\0';
     while ((inputStream >> c) && (c==' ')){}
     if (c!=' ')
@@ -224,7 +224,7 @@ void destroySpaces(std::ifstream& inputStream){
 }
 
 template <typename T>
-bool BinaryTree<T>::readTree(std::ifstream& inputStream){
+bool BinaryTree<T>::readTree(std::istringstream& inputStream){
 
     destroySpaces(inputStream);
     char c = '\0';
