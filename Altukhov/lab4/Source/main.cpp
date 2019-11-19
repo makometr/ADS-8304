@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 	int level = 1;
 	inputF >> level;
 	std::istringstream inputString(binTreeString);//на всякий разделим на разные потоки
-    bool readRes = bt.readTree(binTreeString);
+    bool readRes = bt.readTree(inputString);
 	if (!readRes)
 		return 0;
 
