@@ -7,7 +7,7 @@ typedef char base;
 typedef unsigned int unInt;
 
 struct node {
-	base info;
+	base info = -1;
 	node* lt;
 	node* rt;
 	// constructor
@@ -34,6 +34,14 @@ void print_cons_write_file(std::string bin_tree, int i, std::ofstream& out);
 void print_tree(binTree b, std::ofstream& out);
 void print_forest(binTree b, std::ofstream& out);
 
+bool is_bt(std::string bin_tree,int i);
+
+//void is_btree(binTree b, bool &flag){
+//	if( b != nullptr)
+//		return true;
+//	else
+//		return false;
+//}
 binTree Create()
 {
 	return nullptr;
@@ -50,7 +58,8 @@ base RootBT(binTree b)			// для непустого бин.дерева
 
 		std::cerr << "Error: RootBT(null) \n"; exit(1); 
 	}
-	else return b->info;
+	else 	
+		return b->info;
 }
 //-------------------------------------	
 binTree Left(binTree b)		// для непустого бин.дерева
@@ -59,7 +68,8 @@ binTree Left(binTree b)		// для непустого бин.дерева
 
 		std::cerr << "Error: Left(null) \n"; exit(1);
 	}
-	else return b->lt;
+	else 	
+		return b->lt;
 }
 //-------------------------------------	
 binTree Right(binTree b)		// для непустого бин.дерева
@@ -67,7 +77,8 @@ binTree Right(binTree b)		// для непустого бин.дерева
 	if (b == nullptr) { 
 		std::cerr << "Error: Right(null) \n"; exit(1); 
 	}
-	else return b->rt;
+	else
+		 return b->rt;
 }
 //-------------------------------------		
 binTree ConsBT(const base& x, binTree& lst, binTree& rst)
@@ -98,18 +109,25 @@ void destroy(binTree& b)
 }
 binTree enterBT(std::string str,int &i)
 {
-	char ch;
+ 	char ch;//сюда добавить условие для неверного задания бинарного дерева
 	binTree p, q;
 	ch = str[i];
 	i++;
-	if (ch == '/') 
-		return nullptr;
-	else {
+	if(i <= str.length()){
 
-		p = enterBT(str,i);
-		q = enterBT(str, i );
-		return ConsBT(ch, p, q);
+		if (ch == '/') 
+			return nullptr;
+		else {
+
+			p = enterBT(str,i);
+			q = enterBT(str, i );
+			return ConsBT(ch, p, q);
+		}
 	}
+	else{
+		return nullptr;//если не хватает '/'
+	}
+		
 }
 //---------------------------------------
 void outBT(binTree b)
@@ -195,6 +213,8 @@ void print_tree(binTree b, std::ofstream &out) {
 		out << " )";
 	}
 }
+
+
 void print_forest(binTree b, std::ofstream &out) {
 
 	binTree p = b;
@@ -208,31 +228,47 @@ void print_forest(binTree b, std::ofstream &out) {
 
 void print_cons_write_file(std::string bin_tree, int i,std::ofstream& out) {
 
-	binTree b = enterBT(bin_tree, i);
+		binTree b = enterBT(bin_tree, i);
 
+		if(is_bt(bin_tree,i) == true){
 
-	std::cout << "Бинарное дерево (повернутое): " << "\n";
-	out<< "Бинарное дерево (повернутое): " << "\n";
-	displayBT(b, 1, out);
+			std::cout << "Бинарное дерево (повернутое): " << "\n";
+			out<< "Бинарное дерево (повернутое): " << "\n";
+			displayBT(b, 1, out);
 
-	std::cout << "Размер (число узлов) дерева = " << sizeBT(b) << "\n";
-	out<< "Размер (число узлов) дерева = " << sizeBT(b) << "\n";
+			std::cout << "Размер (число узлов) дерева = " << sizeBT(b) << "\n";
+			out<< "Размер (число узлов) дерева = " << sizeBT(b) << "\n";
 
-	std::cout << "Бинарное дерево в КЛП-порядке: " << "\n";
-	out<< "Бинарное дерево в КЛП-порядке: " << "\n";
-	printKLP(b, out);
-	std::cout << "\n";
-	out<< "\n";
-	std::cout << "Лес соответствующий данному бинарному дереву\n";
-	out<< "Лес соответствующий данному бинарному дереву\n";
-	print_forest(b, out);
+			std::cout << "Бинарное дерево в КЛП-порядке: " << "\n";
+			out<< "Бинарное дерево в КЛП-порядке: " << "\n";
+			printKLP(b, out);
+			std::cout << "\n";
+			out<< "\n";
+			std::cout << "Лес соответствующий данному бинарному дереву\n";
+			out<< "Лес соответствующий данному бинарному дереву\n";
+			print_forest(b, out);
 
-	destroy(b);
+			destroy(b);
 	
-	std::cout << "\n";
-	std::cout << "\n";
-	out << "\n";
-	out << "\n";
+			std::cout << "\n";
+			std::cout << "\n";
+			out << "\n";
+			out << "\n";
+		}
+		else{
+			
+			std::cout<<"Бинарное дерево задано неверно\n"<<bin_tree<<"\n";
+			out<<"Бинарное дерево задано неверно\n"<<bin_tree<<"\n";
+		}
+}
+
+bool is_bt(std::string bin_tree,int i){
+	
+	if(bin_tree[0] == '/' || bin_tree == " " || bin_tree == "" || bin_tree.length() != i )
+		return false;
+	else
+		return true;
+
 }
 
 int main(int argc, char *argv[]) {
@@ -242,18 +278,17 @@ int main(int argc, char *argv[]) {
 	std::string arg, bin_tree;
 	int i = 0;
 	std::cin >> arg;
-	std::ofstream out("right_out.txt");
+	std::ofstream out("wrong_out.txt");
 	if (arg == "f") {
 		std::ifstream infile(argv[1]);
 		while (getline(infile, bin_tree)) {
-
-			print_cons_write_file(bin_tree, i, out);
+				print_cons_write_file(bin_tree, i, out);
 		}
 	}
 	else if (arg == "c") {
 		while (getline(std::cin, bin_tree)) {
-
-			print_cons_write_file(bin_tree, i, out);
+				print_cons_write_file(bin_tree, i, out);
+			
 		}
 	}
 	else

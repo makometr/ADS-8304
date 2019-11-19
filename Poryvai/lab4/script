@@ -1,0 +1,3 @@
+#! /bin/bash
+make
+./lr4 Tests/KLP_right.txt
