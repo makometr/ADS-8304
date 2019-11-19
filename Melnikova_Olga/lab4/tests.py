@@ -7,7 +7,7 @@ if out==0:
 	for f in os.listdir("Tests"):
 		print("\n╒═══════════════════════════════════════════════════════════════════════════════")
 		print("│ " + f + ":")
-		shutil.copy("Tests/" + f, "./Source/input.txt")
+		shutil.copy("Tests/" + f, "./input.txt")
 		
-		subprocess.call("./a.out input.txt", shell=True, cwd="./Source")
+		subprocess.call("./a.out input.txt", shell=True, cwd=".")
 		
