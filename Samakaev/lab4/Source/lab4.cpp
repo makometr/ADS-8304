@@ -1,7 +1,7 @@
 ﻿#include "lab.h"
 
 
-void delete_space_symbols(std::string& expression) {
+void delete_space_symbols(std::string & expression) {
 	expression.erase(std::remove_if(expression.begin(), expression.end(), &isspace), expression.end());
 }
 
@@ -51,14 +51,17 @@ void file_input(char* argv) {
 		std::cout << "Error! File isn't open" << std::endl;
 		return;
 	}
+	
+	size_t i = 1;
 
 	std::string expression;
 
 	while (!file.eof()) {
+
 		BinTree tree;
 		getline(file, expression);
 
-		std::cout << expression << std::endl;
+		std::cout << i << ": " << expression << std::endl;
 		if (is_brackets_correct(expression)) {
 
 			delete_space_symbols(expression);
@@ -68,8 +71,9 @@ void file_input(char* argv) {
 			std::cout << std::endl;
 		}
 		else std::cout << "check if the brackets are correct" << std::endl;
+		i++;
 	}
-
+	
 }
 
 int main(int argc, char** argv) {
@@ -78,5 +82,4 @@ int main(int argc, char** argv) {
 		console_input();
 	}
 	else file_input(argv[1]);
-
 }
