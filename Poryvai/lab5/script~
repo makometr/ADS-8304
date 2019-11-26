@@ -1,3 +1,0 @@
-#! /bin/bash
-make
-./lr4 Tests/KLP_wrong.txt
