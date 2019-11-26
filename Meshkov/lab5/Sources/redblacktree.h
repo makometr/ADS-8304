@@ -186,7 +186,8 @@ private:
             g->color = Node::Color::RED;
 
             if (m_eventInfoOutput != nullptr)
-                *m_eventInfoOutput << "Inserting case 3: The uncle and the parent is recolored to black, the grandparent is recolored to red. Start working with the grandparent:" << std::endl;
+                *m_eventInfoOutput << "Inserting case 3: The uncle and the parent is recolored to black, "
+                    "the grandparent is recolored to red. Start working with the grandparent:" << std::endl;
 
             insertCase1(g);
         }
