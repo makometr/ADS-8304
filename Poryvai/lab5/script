@@ -1,0 +1,3 @@
+#! /bin/bash
+make
+./lr5 Tests/right_inp.txt
