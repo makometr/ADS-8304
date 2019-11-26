@@ -33,7 +33,6 @@ def test_with_file(path):
             
             out, _ = p.communicate(values)
 
-            #out = out.replace('Enter a bin tree: ', f'Tree: {tree_expr}')
             colon_pos = out.find(':') + len(':\n')
             out = out[:colon_pos] + values + out[colon_pos:]
             
