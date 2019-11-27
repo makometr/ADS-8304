@@ -43,18 +43,22 @@ public:
 	}
 
 	Node(const Node<Elem> &copy) {
+		left = copy.left;
+
+		right = copy.right;
+
 		value = copy.value;
-
-		left = new nodePtr<Elem>;
-		*left = *(copy.left);
-
-		right = new nodePtr<Elem>;
-		*right = *(copy.right);
 	}
 
-	Node<Elem>& operator=(const Node<Elem>& copy)
+	Node<Elem>& operator=(const Node<Elem> &copy)
 	{
+		left = copy.left;
 
+		right = copy.right;
+
+		value = copy.value;
+
+		return *this;
 	}
 
 	Node() = default;
@@ -77,6 +81,16 @@ public:
 
 	BinTree() = default;
 	~BinTree() = default;
+
+	BinTree(const BinTree<Elem> &copy) {
+		head = copy.head;
+	}
+
+	BinTree<Elem>& operator=(const BinTree<Elem> &copy) {
+		head = copy.head;
+
+		return *this;
+	}
 
 	nodePtr<Elem> head;
 
