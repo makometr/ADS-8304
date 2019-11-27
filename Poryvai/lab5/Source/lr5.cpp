@@ -1,7 +1,7 @@
-﻿#include <iostream>
+#include <iostream>
 #include <cstdlib>
 #include <fstream>
-#include<string>
+#include <string>
 
 typedef int base;
 typedef unsigned int unInt;
@@ -31,7 +31,7 @@ unInt sizeBT(binTree b);
 void printKLP(binTree b, std::ofstream& out);
 
 void print_cons_write_file(std::string bin_tree, int i, std::ofstream& out);
-
+bool check(std::istream& inp);
 
 binTree Create()
 {
@@ -95,22 +95,7 @@ void destroy(binTree& b)
 
 	}
 }
-/*binTree enterBT(std::string str,int &i)
-{
-	char ch;
-	binTree p, q;
-	ch = str[i];
-	i++;
-	if (ch == '/') 
-		return nullptr;
-	else {
 
-		p = enterBT(str,i);
-		q = enterBT(str, i );
-		return ConsBT(ch, p, q);
-	}
-}*/
-//---------------------------------------
 void outBT(binTree b)
 {
 	if (b != nullptr) {
@@ -170,17 +155,16 @@ void printKLP(binTree b, std::ofstream & out)
 		printKLP(Right(b), out);
 
 	}
-	//else
-		//std::cout << "null";
+
 }
 
 void print(binTree b, std::ofstream& out) {
 
 	if (!isNull(b)) {
 
-		
+
 		print(Left(b), out);
-		
+
 		std::cout << RootBT(b) << " ";
 		out << RootBT(b);
 		out << " ";
@@ -192,17 +176,17 @@ void print(binTree b, std::ofstream& out) {
 
 
 void insert_key(binTree &bt, int key) {
-
+//	std::cout<<"insert key";
 	if (bt == nullptr) {
 
 		bt = new node;
 		(bt)->info = key;
 		bt->lt = nullptr;
 		bt->rt = nullptr;
-		
+
 	}
 	else if ((bt)->info > key) {
-	
+
 		insert_key( bt->lt, key);
 	
 	}
@@ -214,58 +198,124 @@ void insert_key(binTree &bt, int key) {
 }
 void inp_bts( binTree& bt,std::ifstream& inp) {
 	int key;
+	
 	while (inp.peek() != '\n' && !inp.eof()) {
 		inp >> key;
 		insert_key(bt, key);
 	}
+	
 }
 
 void inp_bts(binTree& bt, std::istream& inp) {
 	int key;
+	
 	while (inp.peek() != '\n' && !inp.eof()) {
 		inp >> key;
 		insert_key(bt, key);
 	}
+		
 }
 
+bool check(std::string str){
+
+
+	int i = 0;
+	if(str == "" || str ==" ")
+		return false;
+	while( i < str.length() ){
+
+
+		if( str[i] != '1' && str[i] !='0' && str[i] !='2' && str[i] !='3' && str[i] !='4' && str[i] !='5' && str[i] !='6' && str[i] !='7' && str[i] !='8' && str[i] !='9'  )
+			if(str[i] != ' ')
+				return false;
+
+		i++;
+	}
+
+
+	return true;
+
+}
+
+
+
+
 int main(int argc, char *argv[]) {
-	 
+ 
 	setlocale(LC_ALL, "Russian");
 	std::cout << "Ввод бинарного дерева из файла или консоли(f,c)?\n";
 	std::string arg, bin_tree;
 	int i = 0;
 	char ch = '0';
-	std::cin >> arg;
-
+	getline(std::cin ,  arg);
+	std::string str;
 	
-	std::ofstream out("right_out.txt");
+	std::ofstream out("wrong_out.txt");
 
 	if (arg == "f") {
-		std::ifstream inp("KLP_right.txt");
-		while (!inp.eof()) {
 
-			binTree bt = nullptr;
-			inp_bts(bt, inp);
-			print(bt, out);
-			destroy(bt);
-			inp.get(ch);
-			std::cout << "\n";
-			out << "\n";
+		std::ifstream inp(argv[1]);
+
+
+		while (!inp.eof()) {
+			getline(inp,str);
+
+			if( check(str) == true){
+
+                        	inp.putback('\n');
+
+                       		for(i = str.length() -1; i >= 0; i--)
+                         		inp.putback(str[i]);
+
+				binTree bt = nullptr;
+				inp_bts(bt, inp);
+				print(bt, out);
+				destroy(bt);
+				getline(inp , str);
+				std::cout << "\n";
+				out << "\n";
+			}
+			else{	
+				if(!inp.eof()){
+
+					std::cout<<str<<"\n";
+                			std::cout<<"Неверно введено дерево\n\n";
+					out<<str<<"\n";
+                        		out<<"Неверно введено дерево\n\n";}
+                	}
+
 		}
+
+
+
 	}
 	else if (arg == "c") {
 		while (!std::cin.eof()) {
+			getline(std::cin , str);
 
-			binTree bt = nullptr;
-			inp_bts(bt, std::cin);
-			print(bt, out);
-			destroy(bt);
-			std::cin.get(ch);
-			std::cout << "\n";
-			out << "\n";
+			if(check(str) == true){
+
+				std::cin.putback('\n');
+				for(i = str.length() -1; i >= 0; i--)
+					std::cin.putback(str[i]);
+				
+				binTree bt = nullptr;
+				inp_bts(bt, std::cin);
+				print(bt, out);
+				destroy(bt);
+				std::cin.get(ch);
+				std::cout << "\n";
+				out << "\n";
+			}
+			else{
+				if(!std::cin.eof()){
+					std::cout<<"Неверно введено дерево\n";
+					out << "Неверно введено дерево\n";
+				}
+			}
 		}
-		
-	
+
+
 	}
 	else
 		std::cout << "Аргумент задан неверно\n";
