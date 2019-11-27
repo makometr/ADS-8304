@@ -43,18 +43,22 @@ public:
 	}
 
 	Node(const Node<Elem> &copy) {
-		left = copy.left;
+		left = std::make_shared<Node<Elem>>();
+		*left = *(copy.left);
 
-		right = copy.right;
+		right = std::make_shared<Node<Elem>>();
+		*right = *(copy.right);
 
 		value = copy.value;
 	}
 
 	Node<Elem>& operator=(const Node<Elem> &copy)
 	{
-		left = copy.left;
+		left = std::make_shared<Node<Elem>>();
+		*left = *(copy.left);
 
-		right = copy.right;
+		right = std::make_shared<Node<Elem>>();
+		*right = *(copy.right);
 
 		value = copy.value;
 
@@ -83,11 +87,15 @@ public:
 	~BinTree() = default;
 
 	BinTree(const BinTree<Elem> &copy) {
-		head = copy.head;
+		head = std::make_shared<Node<Elem>>();
+
+		*head = *(copy.head);
 	}
 
 	BinTree<Elem>& operator=(const BinTree<Elem> &copy) {
 		head = copy.head;
+
+		*head = *(copy.head);
 
 		return *this;
 	}
