@@ -3,6 +3,8 @@
 #include <memory>
 #include <string>
 
+
+
 typedef std::string::iterator sIter;
 
 template <typename Elem>
@@ -13,6 +15,40 @@ class BinTree;
 
 template<typename Elem>
 using nodePtr = std::shared_ptr<Node<Elem>>;
+
+#define COUNT 10  
+
+template<typename Elem>
+void print2DUtil(nodePtr<Elem> root, int space)
+{
+	// Base case  
+	if (root == NULL)
+		return;
+
+	// Increase distance between levels  
+	space += COUNT;
+
+	// Process right child first  
+	print2DUtil(root->right, space);
+
+	// Print current node after space  
+	// count  
+	std::cout << std::endl;
+	for (int i = COUNT; i < space; i++)
+		std::cout << " ";
+	std::cout << root->value << "\n";
+
+	// Process left child  
+	print2DUtil(root->left, space);
+}
+
+// Wrapper over print2DUtil()  
+template<typename Elem>
+void print2D(nodePtr<Elem> root)
+{
+	// Pass initial space count as 0  
+	print2DUtil(root, 0);
+}
 
 sIter bracket_closer(sIter begin)
 {
@@ -285,3 +321,4 @@ void BinTree<Elem>::printTreeNLR(nodePtr<Elem> root)
 
 	std::cout << ')';
 }
+
