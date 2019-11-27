@@ -12,7 +12,7 @@ template <typename Elem>
 class BinTree;
 
 template<typename Elem>
-using nodePtr = Node<Elem>*;
+using nodePtr = std::shared_ptr<Node<Elem>>;
 
 sIter bracket_closer(sIter begin)
 {
@@ -40,6 +40,21 @@ class Node
 public:
 	Node(Elem value) {
 		this->value = value;
+	}
+
+	Node(const Node<Elem> &copy) {
+		value = copy.value;
+
+		left = new nodePtr<Elem>;
+		*left = *(copy.left);
+
+		right = new nodePtr<Elem>;
+		*right = *(copy.right);
+	}
+
+	Node<Elem>& operator=(const Node<Elem>& copy)
+	{
+
 	}
 
 	Node() = default;
@@ -86,7 +101,7 @@ nodePtr<Elem> BinTree<Elem>::readTreeFromStringNLR(std::string &source, sIter be
 	while ((*tmp != '(') && (*tmp != '#') && (*tmp != ')'))
 		root += *(tmp++);
 
-	nodePtr<Elem> res = new Node<Elem>;
+	auto res = std::make_shared<Node<Elem>>();
 	res->value = (Elem)root;
 
 
@@ -121,7 +136,7 @@ nodePtr<Elem> BinTree<Elem>::readTreeFromStringNLR(std::string &source, sIter be
 template<typename Elem>
 nodePtr<Elem> BinTree<Elem>::readTreeFromStringLNR(std::string &source, sIter begin, sIter end)
 {
-	nodePtr<Elem> res = new Node<Elem>;
+	auto res = std::make_shared<Node<Elem>>();
 
 	sIter tmp = begin;
 
@@ -160,7 +175,7 @@ inline nodePtr<Elem> BinTree<Elem>::readTreeFromStringLRN(std::string &source, s
 {
 	sIter tmp = begin;
 
-	nodePtr<Elem> res = new Node<Elem>;
+	auto res = std::make_shared<Node<Elem>>();
 
 
 	if (*tmp == '#')
