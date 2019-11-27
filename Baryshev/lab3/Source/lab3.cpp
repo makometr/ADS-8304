@@ -114,7 +114,13 @@ void CloseBrackets(std::string textExpression){
 	}	
 }
 
+void function(Stack<int> stack){
+	std::cout << "Here is FUNCTION: " << stack.pop() << std::endl;
+	stack.push(243);
+}
+
 int main(){
+	/*
 	std::ifstream fEnter("Tests/TestData.txt");
 	fOut.open("Result.txt");
 	std::string textExpression;
@@ -127,6 +133,14 @@ int main(){
 	}
 	fEnter.close();
 	fOut.close();
+	return 0;
+	*/
+	Stack<int> stack(10);
+	stack.push(34);
+	stack.push(33);
+	stack.push(32);
+	function(stack);
+	std::cout << "Here is MAIN: " << stack.pop() << " and " << stack.pop() << " and " << stack.pop() << std::endl;
 	return 0;
 }
 
