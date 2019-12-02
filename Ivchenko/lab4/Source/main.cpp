@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <cstdlib>
+#include <cctype>
 #include <vector>
 #include "btree.h"
 
@@ -20,7 +21,6 @@ void createTree(std::string lkp, std::string lpk, char node, std::vector<char>& 
 
 	int index = lkp.find(node);
 	
-	
 	std::string leftlkp = lkp.substr(0, index);
 	std::string leftlpk = lpk.substr(0, index);
 	std::string rightlkp = lkp.substr(index + 1);
@@ -30,16 +30,17 @@ void createTree(std::string lkp, std::string lpk, char node, std::vector<char>& 
 	
 	
 	if (index!= 0){
-		
-		createTree(leftlkp, leftlpk, leftlpk[leftlpk.size() - 1], klp, leftSubTree);
+
+
+			createTree(leftlkp, leftlpk, leftlpk[leftlpk.size() - 1], klp, leftSubTree);
+	
 	}
 
-	
+
 	createTree(rightlkp, rightlpk, rightlpk[rightlpk.size() - 1], klp, rightSubTree);
 
-	BinTree = consBT(node, leftSubTree, rightSubTree);
-
 	
+	BinTree = consBT(node, leftSubTree, rightSubTree);
 	return;
 }
 void readFromFile(std::ifstream &file){
