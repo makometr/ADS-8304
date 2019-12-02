@@ -20,7 +20,18 @@ int main(int argc, char** argv)
         stream->seekg(0);
 
         VBinaryTree<int>* bt = parse(*stream);
-        if(isSearchTree(bt))
+		if(bt == nullptr)
+		{
+			result += " | invalid input";
+			
+			ioManager.writeLine(result);
+
+			delete stream;
+			stream = ioManager.nextStream();
+			
+			continue;
+		}
+        else if(isSearchTree(bt))
         {
             result += " | search tree";
         }
@@ -87,7 +98,16 @@ VBinaryTree<int>* parse(std::istream& input)
         }
         else
         {
-            bt->setValue(stoi(buf));
+			try
+			{
+				bt->setValue(stoi(buf));
+			}
+			catch(...)
+			{
+				delete bt;
+				
+				return nullptr;
+			}
         }
     }
 
