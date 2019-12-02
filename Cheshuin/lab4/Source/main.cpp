@@ -32,6 +32,8 @@ int main(int argc, char** argv)
         {
             result += " | simple binary tree";
         }
+		
+		delete bt;
 
         ioManager.writeLine(result);
 
@@ -70,8 +72,6 @@ VBinaryTree<int>* parse(std::istream& input)
         }
         else if(buf == "^")
         {
-            bt->toParent();
-
             if(bt->left() == -1)
             {
                 bt->addLeft();
@@ -82,6 +82,8 @@ VBinaryTree<int>* parse(std::istream& input)
                 bt->addRight();
                 bt->toRight();
             }
+			
+			bt->toParent();
         }
         else
         {
@@ -94,6 +96,7 @@ VBinaryTree<int>* parse(std::istream& input)
 
 bool isSearchTree(VBinaryTree<int>* bt)
 {
+    std::cout << "Checking on search tree." << std::endl;
 
     bool isSearch = true;
     int base = bt->current();
@@ -108,6 +111,8 @@ bool isSearchTree(VBinaryTree<int>* bt)
 
         int value = bt->getValue();
 
+        std::cout << "Cur node value - " << value  << std::endl;
+
         if(bt->left() != -1){
             bt->toLeft();
             if(!bt->isEmpty())
@@ -116,11 +121,21 @@ bool isSearchTree(VBinaryTree<int>* bt)
 
                 if(bt->getValue() > value)
                 {
+                    std::cout << "Left node is bigger! - FAIL" << std::endl;
                     isSearch = false;
                     break;
                 }
+                std::cout << "Left node lesser or equal! - OK" << std::endl;
+            }
+            else
+            {
+                std::cout << "Left node is empty! - OK" << std::endl;
             }
             bt->toParent();
+        }
+        else
+        {
+            std::cout << "Left node is not exist! - OK" << std::endl;
         }
 
         if(bt->right() != -1)
@@ -132,11 +147,23 @@ bool isSearchTree(VBinaryTree<int>* bt)
 
                 if(bt->getValue() <= value)
                 {
+                    std::cout << "Right node is lesser or equal! - FAIL" << std::endl;
                     isSearch = false;
                     break;
                 }
+                std::cout << "Right node bigger! - OK" << std::endl;
+            }
+            else
+            {
+                std::cout << "Right node is empty! - OK" << std::endl;
             }
         }
+        else
+        {
+            std::cout << "Right node is not exist! - OK" << std::endl;
+        }
+
+        std::cout << "----------------------step----------------------" << std::endl;
     }
 
     bt->toPos(base);
@@ -146,6 +173,8 @@ bool isSearchTree(VBinaryTree<int>* bt)
 
 bool isPyramid(VBinaryTree<int>* bt)
 {
+    std::cout << "Checking on pyramid." << std::endl;
+
     bool isPyramid = true;
     int base = bt->current();
 
@@ -159,6 +188,8 @@ bool isPyramid(VBinaryTree<int>* bt)
 
         int value = bt->getValue();
 
+        std::cout << "Cur node value - " << value  << std::endl;
+
         if(bt->left() != -1){
             bt->toLeft();
             if(!bt->isEmpty())
@@ -167,11 +198,21 @@ bool isPyramid(VBinaryTree<int>* bt)
 
                 if(bt->getValue() > value)
                 {
+                    std::cout << "Left node is bigger! - FAIL" << std::endl;
                     isPyramid = false;
                     break;
                 }
+                std::cout << "Left node lesser or equal! - OK" << std::endl;
+            }
+            else
+            {
+                std::cout << "Left node is empty! - OK" << std::endl;
             }
             bt->toParent();
+        }
+        else
+        {
+            std::cout << "Left node is not exist! - OK" << std::endl;
         }
 
         if(bt->right() != -1)
@@ -183,11 +224,23 @@ bool isPyramid(VBinaryTree<int>* bt)
 
                 if(bt->getValue() > value)
                 {
+                    std::cout << "Right node is bigger! - FAIL" << std::endl;
                     isPyramid = false;
                     break;
                 }
+                std::cout << "Right node lesser or equal! - OK" << std::endl;
+            }
+            else
+            {
+                std::cout << "Right node is empty! - OK" << std::endl;
             }
         }
+        else
+        {
+            std::cout << "Right node is not exist! - OK" << std::endl;
+        }
+
+        std::cout << "----------------------step----------------------" << std::endl;
     }
 
     bt->toPos(base);
