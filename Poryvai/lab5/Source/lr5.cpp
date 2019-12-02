@@ -8,6 +8,7 @@ typedef unsigned int unInt;
 
 struct node {
 	base info;
+	int count;
 	node* lt;
 	node* rt;
 	// constructor
@@ -69,12 +70,12 @@ binTree Right(binTree b)		// для непустого бин.дерева
 	else return b->rt;
 }
 //-------------------------------------		
-binTree ConsBT(const base& x, binTree& lst, binTree& rst)
+binTree ConsBT(const base& info, binTree& lst, binTree& rst)
 {
 	binTree p;
 	p = new node;
 	if (p != nullptr) {
-		p->info = x;
+		p->info = info;
 		p->lt = lst;
 		p->rt = rst;
 		return p;
@@ -183,6 +184,7 @@ void insert_key(binTree &bt, int key) {
 		(bt)->info = key;
 		bt->lt = nullptr;
 		bt->rt = nullptr;
+		bt->count = 0;
 
 	}
 	else if ((bt)->info > key) {
@@ -195,6 +197,8 @@ void insert_key(binTree &bt, int key) {
 		insert_key(bt->rt, key);
 	
 	}
+	else if( bt->info == key )
+		bt->count++;
 }
 void inp_bts( binTree& bt,std::ifstream& inp) {
 	int key;
