@@ -1,5 +1,4 @@
-﻿
-#include <iostream>
+﻿#include <iostream>
 #include <string>
 #include <stack>
 #include <fstream>
@@ -30,17 +29,16 @@ public:
 		bintree* right = nullptr;
 		bintree* left = nullptr;
 		~bintree() {
-			if (right)
-				delete right;
-			if (left)
-				delete left;
+			delete right;
+			delete left;
 		}
 	};
 	struct tree {
 		type value;
 		std::vector <tree*> branches;
 		~tree() {
-			branches.erase(branches.begin(), branches.end());
+			for (int i = 0; i < branches.size(); i++)
+				delete branches[i];
 		}
 	};
 	std::vector <tree*> forest;
@@ -132,7 +130,8 @@ public:
 
 	~Forest() {
 		delete mybin;
-		forest.erase(forest.begin(), forest.end());
+		for (int i = 0; i < forest.size(); i++)
+			delete forest[i];
 	}
 };
 
