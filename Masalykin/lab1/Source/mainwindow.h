@@ -2,8 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QDebug>
-#include <QTextStream>
+#include <QDir>
+#include <QFile>
+#include <QString>
 #include <QMessageBox>
 #include <iostream>
 #include <string>
@@ -21,7 +22,6 @@ public:
     ~MainWindow();
 
 private slots:
-    //void on_lineEdit_editingFinished();
 
     void on_pushButton_2_clicked();
 
@@ -30,12 +30,15 @@ private slots:
     void on_pushButton_3_clicked();
 
 public:
-    bool is_brackets(std::string inp, unsigned long long i, int br_cntr, bool flag);
+    bool is_brackets(std::string inp, unsigned int i, int br_cntr, bool flag);
+
+    bool test(QString way, bool expected_result);
 
 private:
     Ui::MainWindow *ui;
-    QTextStream *inp;
     std::string res;
+    QDir *dir;
+    //QFile* file;
 };
 
 #endif // MAINWINDOW_H
