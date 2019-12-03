@@ -76,6 +76,7 @@ public:
 			if (start != array.end())
 				++start;
 		}
+		return res;
 	}
 	void printforest(std::vector <tree*> forest) {
 		std::queue<tree*> qu;
@@ -91,16 +92,16 @@ public:
 		}
 	}
 	bintree* mybin = new bintree;
-	void createtree(std::vector <tree*> forest, bintree* mybin, int index) {
+	void createbintree(std::vector <tree*> forest, bintree* mybin, long unsigned int index) {
 		mybin->value = forest[index]->value;
 		if ((forest[index]->branches).size() != 0) {
 			mybin->left = new bintree;
-			createtree(forest[index]->branches, mybin->left, 0);
+			createbintree(forest[index]->branches, mybin->left, 0);
 		}
 
 		if (index != forest.size()-1) {
 			mybin->right = new bintree;
-			createtree(forest, mybin->right, index+1);
+			createbintree(forest, mybin->right, index+1);
 		}
 	}
 	void printtree(bintree* mybin) {
@@ -114,24 +115,18 @@ public:
 		printtree(mybin->right);
 		std::cout << ')';
 	}
-	void print2DUtil(bintree* root, int space)
-	{ 
+	void print2DUtil(bintree* root, int space){ 
 		if (root == nullptr)
 			return;
-
 		space += COUNT;
- 
 		print2DUtil(root->right, space);
- 
 		std::cout << std::endl;
 		for (int i = COUNT; i < space; i++)
 			std::cout << " ";
 		std::cout << root->value << "\n";
- 
 		print2DUtil(root->left, space);
 	}
-	void print2D(bintree* root)
-	{ 
+	void print2D(bintree* root){ 
 		print2DUtil(root, 0);
 	}
 
@@ -188,7 +183,7 @@ int main(int argc, char* argv[]) {
 		myForest.input(array);
 		myForest.printforest(myForest.forest);
 		std::cout << std::endl;
-		myForest.createtree(myForest.forest, myForest.mybin, 0);
+		myForest.createbintree(myForest.forest, myForest.mybin, 0);
 		myForest.printtree(myForest.mybin);
 		myForest.print2D(myForest.mybin);
 	}
@@ -199,17 +194,17 @@ int main(int argc, char* argv[]) {
 			return 0;
 		}
 		while (std::getline(in, array)) {
-			array.erase(std::remove(array.begin(), array.end(), ' '), array.end());
 			if (!check(array)) {
 				std::cout << "Wrong input" << std::endl;
-				return 0;
+				continue;
 			}
+			array.erase(std::remove(array.begin(), array.end(), ' '), array.end());
 			std::cout << array << "\n";
 			Forest<char>  myForest;
 			myForest.input(array);
 			myForest.printforest(myForest.forest);
 			std::cout << std::endl;
-			myForest.createtree(myForest.forest, myForest.mybin, 0);
+			myForest.createbintree(myForest.forest, myForest.mybin, 0);
 			myForest.printtree(myForest.mybin);
 			myForest.print2D(myForest.mybin);
 		}
