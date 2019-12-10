@@ -1,7 +1,7 @@
 #include "HashTable.h"
 
 HashTable::HashTable() :arr(new std::forward_list<std::string>[DEFAULT_LEN]), len(DEFAULT_LEN), realLen(0), coeffs(new unsigned long long[COEFFS_COUNT]) { //высчитываем коэффициенты для хэша
-	for (int i = 0; i < COEFFS_COUNT; i++) {
+	for (int i = 0; i < static_cast<int>(COEFFS_COUNT); i++) {
 		coeffs[i] = (i > 0) ? coeffs[i - 1] * COEFF : COEFF;
 	}
 }
@@ -14,7 +14,7 @@ HashTable::~HashTable() {
 unsigned long long HashTable::hash(std::string elem) {//полиномиальная функция хэширования (s1*a^1 + s2*a^2 + ... + sn*a^n) mod len
 
 	unsigned long long myHash = 0;
-	for (int i = 0; i < elem.length(); i++) {
+	for (int i = 0; i < static_cast<int>(elem.length()); i++) {
 		myHash += elem[i] * coeffs[i%COEFFS_COUNT];//если нужно больше коэффициентов, то и так сойдет
 	}
 	myHash %= len;
@@ -58,7 +58,7 @@ void HashTable::insert(std::string elem) {
 void HashTable::checkCollisions() const {
 
 	std::cout << "Проверка коллизий...\n";
-	for (int i = 0; i < len; i++) {
+	for (int i = 0; i < static_cast<int>(len); i++) {
 		if (!arr[i].empty()) {
 			std::cout << "Занятая ячейка " << i <<"\n";
 			auto current = arr[i].begin();
@@ -83,12 +83,12 @@ void HashTable::expandTable() {
 
 	std::cout << "Расширение таблицы!\n";
 	size_t oldLen = len;
-	for (int i = 0; i < PRIMES_COUNT; i++) {
-		if ((PRIMES[i] == oldLen) && (i + 1) < PRIMES_COUNT) {
+	for (int i = 0; i < static_cast<int>(PRIMES_COUNT); i++) {
+		if ((PRIMES[i] == oldLen) && (i + 1) < static_cast<int>(PRIMES_COUNT)) {
 			len = PRIMES[i + 1]; //за новую длину берем следующее простое число из заданных
 			break;
 		}
-		else if ((i + 1) >= PRIMES_COUNT)
+		else if ((i + 1) >= static_cast<int>(PRIMES_COUNT))
 			len += DEFAULT_LEN; //если кончились, что поделать
 	}
 
@@ -96,7 +96,7 @@ void HashTable::expandTable() {
 	auto oldArr = arr;
 	arr = new std::forward_list<std::string>[len];
 
-	for (int i = 0; i < oldLen; i++) {
+	for (int i = 0; i < static_cast<int>(oldLen); i++) {
 		if (!oldArr[i].empty()) {
 			auto current = oldArr[i].begin();
 			auto end = oldArr[i].end();

@@ -41,6 +41,7 @@ int main(int argc, char* argv[]) {
 	std::string nextLine;
 
 	while (std::getline(inputF, nextLine) && (nextLine != "0")) { //0 - разделитель между стартовыми данными и данными, которые надо проверить
+		std::cout << "Введена строка: " << nextLine << "\n";
 		hashTable.insert(nextLine);
 	}
 
@@ -48,8 +49,8 @@ int main(int argc, char* argv[]) {
 	std::cout << "\n\n";
 
 	while (std::getline(inputF, nextLine)) {
-		std::cout << "Введена строка " << nextLine << "\nПоиск в таблице...";
-		outputF << "Введена строка " << nextLine << "\nПоиск в таблице...";
+		std::cout << "Введена строка: " << nextLine << "\nПоиск в таблице...";
+		outputF << "Введена строка: " << nextLine << "\nПоиск в таблице...";
 		if (hashTable.find(nextLine, hashTable.getLen())) {
 			std::cout << " Найдено.\n";
 			outputF << " Найдено.\n";

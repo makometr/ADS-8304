@@ -4,5 +4,5 @@ all: main.o HashTable.o
 main.o: Source/main.cpp
 	g++ -c -Wall -Werror Source/main.cpp
 
-queue.o: Source/HashTable.cpp
+HashTable.o: Source/HashTable.cpp
 	g++ -c -Wall -Werror Source/HashTable.cpp
