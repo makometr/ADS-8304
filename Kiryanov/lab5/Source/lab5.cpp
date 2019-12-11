@@ -5,7 +5,6 @@
 #include <ctime>
 #include <memory>
 #include <climits>
-#include <istream>
 
 template<typename elem, typename priority>
 class Node;
