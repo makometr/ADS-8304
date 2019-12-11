@@ -1,0 +1,140 @@
+\hypertarget{_static___hafman_8cpp}{}\doxysection{Static\+\_\+\+Hafman/\+Static\+\_\+\+Hafman.cpp File Reference}
+\label{_static___hafman_8cpp}\index{Static\_Hafman/Static\_Hafman.cpp@{Static\_Hafman/Static\_Hafman.cpp}}
+{\ttfamily \#include \char`\"{}Static\+\_\+\+Hafman.\+h\char`\"{}}\newline
+Include dependency graph for Static\+\_\+\+Hafman.\+cpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_static___hafman_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{_static___hafman_8cpp_a13d5b2c16613225bce415946b5ec038d}{get\+\_\+list\+\_\+count\+\_\+letter}} (const std\+::string \&local\+\_\+string)
+\begin{DoxyCompactList}\small\item\em Функция, которая подсчитывает количество вхождений каждого символа в переданную ей строку. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::pair$<$ std\+::string, int $>$ $>$\+::iterator \mbox{\hyperlink{_static___hafman_8cpp_adb49c9a2d4679c6c0fbe5de96a4e58fa}{decision}} (std\+::vector$<$ std\+::pair$<$ std\+::string, int $>$$>$ \&arr, int b)
+\begin{DoxyCompactList}\small\item\em Функция поиска нужного места для вставки слитых символов \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_static___hafman_8cpp_a9fdcddb5285698ae28f2bd7234f3d170}{decode}} (const std\+::unordered\+\_\+map$<$ char, std\+::string $>$ \&result, std\+::fstream \&coding\+\_\+message, int i)
+\begin{DoxyCompactList}\small\item\em Функция декодирования закодированной строки. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_static___hafman_8cpp_a46a54a02fcda9d2ebcc29ed370717adf}{use\+\_\+static}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Функция запускающая процедуру статического кодирования и декодирования \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{_static___hafman_8cpp_adb49c9a2d4679c6c0fbe5de96a4e58fa}\label{_static___hafman_8cpp_adb49c9a2d4679c6c0fbe5de96a4e58fa}} 
+\index{Static\_Hafman.cpp@{Static\_Hafman.cpp}!decision@{decision}}
+\index{decision@{decision}!Static\_Hafman.cpp@{Static\_Hafman.cpp}}
+\doxysubsubsection{\texorpdfstring{decision()}{decision()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::pair$<$std\+::string, int$>$ $>$\+::iterator decision (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::pair$<$ std\+::string, int $>$$>$ \&}]{arr,  }\item[{int}]{b }\end{DoxyParamCaption})}
+
+
+
+Функция поиска нужного места для вставки слитых символов 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arr} & вектор, в котором должна произойти вставка \\
+\hline
+{\em b} & вес, который сравнивается с остальными весами в векторе \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+если такого места нет, возвращается итератор на end(), в противном случае на элемент, перед которым произойдёт вставка 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=305pt]{_static___hafman_8cpp_adb49c9a2d4679c6c0fbe5de96a4e58fa_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{_static___hafman_8cpp_a9fdcddb5285698ae28f2bd7234f3d170}\label{_static___hafman_8cpp_a9fdcddb5285698ae28f2bd7234f3d170}} 
+\index{Static\_Hafman.cpp@{Static\_Hafman.cpp}!decode@{decode}}
+\index{decode@{decode}!Static\_Hafman.cpp@{Static\_Hafman.cpp}}
+\doxysubsubsection{\texorpdfstring{decode()}{decode()}}
+{\footnotesize\ttfamily void decode (\begin{DoxyParamCaption}\item[{const std\+::unordered\+\_\+map$<$ char, std\+::string $>$ \&}]{result,  }\item[{std\+::fstream \&}]{coding\+\_\+message,  }\item[{int}]{i }\end{DoxyParamCaption})}
+
+
+
+Функция декодирования закодированной строки. 
+
+Декодирование происходит до тех пор, пока мы не пройдёмся по закодированной строке полностью. В цикле перебирая все пары из словаря result мы ищем ключ-\/символ, строка-\/значение которого будет началом закодированной строки. В виду того, что все коды символов обладают свойством префиксности, проход по закодированной строке будет однозначным. 
+\begin{DoxyParams}{Parameters}
+{\em result} & словарь $<$char, std\+::string$>$, ключ является символом, а значение по ключу кодированием этого символа \\
+\hline
+{\em coding\+\_\+message} & закодированное сообщение \\
+\hline
+{\em i} & порядковый номер аргумента командной строки, нужен для создания очередного файлы вывода \\
+\hline
+\end{DoxyParams}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=300pt]{_static___hafman_8cpp_a9fdcddb5285698ae28f2bd7234f3d170_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{_static___hafman_8cpp_a13d5b2c16613225bce415946b5ec038d}\label{_static___hafman_8cpp_a13d5b2c16613225bce415946b5ec038d}} 
+\index{Static\_Hafman.cpp@{Static\_Hafman.cpp}!get\_list\_count\_letter@{get\_list\_count\_letter}}
+\index{get\_list\_count\_letter@{get\_list\_count\_letter}!Static\_Hafman.cpp@{Static\_Hafman.cpp}}
+\doxysubsubsection{\texorpdfstring{get\_list\_count\_letter()}{get\_list\_count\_letter()}}
+{\footnotesize\ttfamily std\+::map$<$std\+::string, int$>$ get\+\_\+list\+\_\+count\+\_\+letter (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{local\+\_\+string }\end{DoxyParamCaption})}
+
+
+
+Функция, которая подсчитывает количество вхождений каждого символа в переданную ей строку. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em local\+\_\+string} & строка, в которой надо подсчитать количество вхождений её символов \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+словарь $<$std\+::string, int$>$, содержащий символ и его количество 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_static___hafman_8cpp_a13d5b2c16613225bce415946b5ec038d_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{_static___hafman_8cpp_a46a54a02fcda9d2ebcc29ed370717adf}\label{_static___hafman_8cpp_a46a54a02fcda9d2ebcc29ed370717adf}} 
+\index{Static\_Hafman.cpp@{Static\_Hafman.cpp}!use\_static@{use\_static}}
+\index{use\_static@{use\_static}!Static\_Hafman.cpp@{Static\_Hafman.cpp}}
+\doxysubsubsection{\texorpdfstring{use\_static()}{use\_static()}}
+{\footnotesize\ttfamily int use\+\_\+static (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Функция запускающая процедуру статического кодирования и декодирования 
+
+
+\begin{DoxyParams}{Parameters}
+{\em argс} & количество аргументов командной строки \\
+\hline
+{\em argv} & массив имён этих элементов \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0, если всё хорошо, иначе быть не может 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=282pt]{_static___hafman_8cpp_a46a54a02fcda9d2ebcc29ed370717adf_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=216pt]{_static___hafman_8cpp_a46a54a02fcda9d2ebcc29ed370717adf_icgraph}
+\end{center}
+\end{figure}

@@ -1,0 +1,75 @@
+\hypertarget{struct_node}{}\doxysection{Node Struct Reference}
+\label{struct_node}\index{Node@{Node}}
+
+
+{\ttfamily \#include $<$tree.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_node_a082d5efb0be81faaeb35dc02b2a4fc76}{Node}} ()=default
+\begin{DoxyCompactList}\small\item\em Структура {\itshape (родитель -\/ левый ребёнок -\/ правый ребёнок)} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_node}{Node}} $>$ \mbox{\hyperlink{struct_node_a0c951408cd646d37a4c73b378a0fdf1a}{parent}} = nullptr
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_node}{Node}} $>$ \mbox{\hyperlink{struct_node_a0b1b43f9bebedaed0d2f3ae2845aee54}{left}} = nullptr
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_node}{Node}} $>$ \mbox{\hyperlink{struct_node_a05c5c1d1a7db28769728a6bf1deda04e}{right}} = nullptr
+\item 
+int \mbox{\hyperlink{struct_node_ac2e28d6f802044a9330b8b23c21e7d94}{weight}} = 0
+\item 
+char \mbox{\hyperlink{struct_node_a92796ea8dd71d6bb29e0e6f5c099cd5a}{symbol}} = \textquotesingle{}\textbackslash{}0\textquotesingle{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{struct_node_a082d5efb0be81faaeb35dc02b2a4fc76}\label{struct_node_a082d5efb0be81faaeb35dc02b2a4fc76}} 
+\index{Node@{Node}!Node@{Node}}
+\index{Node@{Node}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{Node()}{Node()}}
+{\footnotesize\ttfamily Node\+::\+Node (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+Структура {\itshape (родитель -\/ левый ребёнок -\/ правый ребёнок)} 
+
+Используется при кодировании и дальнейнем декодировании инфорамции с помощью адаптивного (динамического) алгоритма Хаффмана, играет роль единичной структуры в построении дерева Хаффмана. 
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{struct_node_a0b1b43f9bebedaed0d2f3ae2845aee54}\label{struct_node_a0b1b43f9bebedaed0d2f3ae2845aee54}} 
+\index{Node@{Node}!left@{left}}
+\index{left@{left}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{left}{left}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_node}{Node}}$>$ Node\+::left = nullptr}
+
+\mbox{\Hypertarget{struct_node_a0c951408cd646d37a4c73b378a0fdf1a}\label{struct_node_a0c951408cd646d37a4c73b378a0fdf1a}} 
+\index{Node@{Node}!parent@{parent}}
+\index{parent@{parent}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{parent}{parent}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_node}{Node}}$>$ Node\+::parent = nullptr}
+
+\mbox{\Hypertarget{struct_node_a05c5c1d1a7db28769728a6bf1deda04e}\label{struct_node_a05c5c1d1a7db28769728a6bf1deda04e}} 
+\index{Node@{Node}!right@{right}}
+\index{right@{right}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{right}{right}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_node}{Node}}$>$ Node\+::right = nullptr}
+
+\mbox{\Hypertarget{struct_node_a92796ea8dd71d6bb29e0e6f5c099cd5a}\label{struct_node_a92796ea8dd71d6bb29e0e6f5c099cd5a}} 
+\index{Node@{Node}!symbol@{symbol}}
+\index{symbol@{symbol}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{symbol}{symbol}}
+{\footnotesize\ttfamily char Node\+::symbol = \textquotesingle{}\textbackslash{}0\textquotesingle{}}
+
+\mbox{\Hypertarget{struct_node_ac2e28d6f802044a9330b8b23c21e7d94}\label{struct_node_ac2e28d6f802044a9330b8b23c21e7d94}} 
+\index{Node@{Node}!weight@{weight}}
+\index{weight@{weight}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{weight}{weight}}
+{\footnotesize\ttfamily int Node\+::weight = 0}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Dinamic\+\_\+\+Hafman/\mbox{\hyperlink{tree_8h}{tree.\+h}}\end{DoxyCompactItemize}

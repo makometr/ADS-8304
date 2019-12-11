@@ -1,0 +1,3 @@
+O:/ELTECH/AlgorithmsAndDataStructures/ADS-8304/Mukhin/cmake-build-debug/CMakeFiles/edit_cache.dir
+O:/ELTECH/AlgorithmsAndDataStructures/ADS-8304/Mukhin/cmake-build-debug/CMakeFiles/Course_Work.dir
+O:/ELTECH/AlgorithmsAndDataStructures/ADS-8304/Mukhin/cmake-build-debug/CMakeFiles/rebuild_cache.dir
