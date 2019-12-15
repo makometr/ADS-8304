@@ -1,0 +1,5 @@
+#! /bin/bash
+make
+./lab5 Test/t
+rm -f lab5
+make clean
