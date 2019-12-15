@@ -1,0 +1,30 @@
+ABACABADABBCBBA
+Cтрока задана верно
+
+ABCBADABBCBBA
+Cтрока задана верно
+
+BBACABBDAAABCBAAA
+Cтрока задана верно
+
+BBBBACABBBBDABCBA
+Cтрока задана верно
+
+ABBACABBADBAABCBAAB
+Cтрока задана верно
+
+ABCBADABCBADABCBA
+Cтрока задана верно
+
+AABCBAADABCBA
+Cтрока задана верно
+
+AABACABAADABCBADABCBA
+Cтрока задана верно
+
+ABCBADABCBA
+Cтрока задана верно
+
+BACABDABCBA
+Cтрока задана верно
+
