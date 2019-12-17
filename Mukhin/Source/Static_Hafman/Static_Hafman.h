@@ -12,4 +12,4 @@
  * @param argv массив имён этих элементов
  * @return 0, если всё хорошо, иначе быть не может
  */
-int use_static(int argc, char* argv[]);
+int use_static(std::string);

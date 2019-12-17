@@ -21,7 +21,7 @@
  * @param argv массив имён этих элементов
  * @return 0, если всё хорошо, иначе быть не может
  */
-int use_dinamic(int argc, char* argv[]);
+int use_dinamic(std::string);
 
 /*!
  * @brief Структура <i>(родитель - левый ребёнок - правый ребёнок)</i>

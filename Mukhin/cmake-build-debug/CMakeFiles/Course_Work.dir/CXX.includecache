@@ -6,14 +6,6 @@
 
 #IncludeRegexTransform: 
 
-O:/ELTECH/AlgorithmsAndDataStructures/ADS-8304/Mukhin/Source/Dinamic_Hafman/Dinamic_Hafman.cpp
-tree.h
-O:/ELTECH/AlgorithmsAndDataStructures/ADS-8304/Mukhin/Source/Dinamic_Hafman/tree.h
-
-O:/ELTECH/AlgorithmsAndDataStructures/ADS-8304/Mukhin/Source/Dinamic_Hafman/tree.cpp
-tree.h
-O:/ELTECH/AlgorithmsAndDataStructures/ADS-8304/Mukhin/Source/Dinamic_Hafman/tree.h
-
 O:/ELTECH/AlgorithmsAndDataStructures/ADS-8304/Mukhin/Source/Dinamic_Hafman/tree.h
 memory
 -
@@ -45,10 +37,6 @@ set
 -
 vector
 -
-
-O:/ELTECH/AlgorithmsAndDataStructures/ADS-8304/Mukhin/Source/Static_Hafman/Static_Hafman.cpp
-Static_Hafman.h
-O:/ELTECH/AlgorithmsAndDataStructures/ADS-8304/Mukhin/Source/Static_Hafman/Static_Hafman.h
 
 O:/ELTECH/AlgorithmsAndDataStructures/ADS-8304/Mukhin/Source/Static_Hafman/Static_Hafman.h
 iostream
