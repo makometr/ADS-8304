@@ -2,6 +2,7 @@
 
 void code(std::ifstream& in, std::ofstream& out, std::ofstream& dem);
 bool decode(std::ifstream& in, std::ofstream& out, std::ofstream& dem);
+void readFile(std::string&, std::ifstream&);
 
 int main(int argc, char* argv[])
 {
@@ -44,18 +45,23 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+void readFile(std::string& str, std::ifstream& in) {
+		std::string cur_str;
+		while (std::getline(in, cur_str)) {
+			str += cur_str;
+			str += '\n';
+		}
+		if(str.size()) {
+			str.pop_back();
+		}
+}
+
 void code(std::ifstream& in, std::ofstream& out, std::ofstream& dem) {
 		bin_tree my_tree;
 		dem << "Начальное состояние дерева" << std::endl;
 		my_tree.print(0, 0, dem);
-		std::string cur_text, cur_str;
-		while (std::getline(in, cur_str)) {
-			cur_text += cur_str;
-			cur_text += '\n';
-		}
-		if(cur_text.size()) {
-			cur_text.pop_back();
-		}
+		std::string cur_text;
+		readFile(cur_text, in);
 		int cur_parent, num;
 
 		for(char ch: cur_text) {
@@ -96,16 +102,10 @@ bool decode(std::ifstream& in, std::ofstream& out, std::ofstream& dem) {
 		bin_tree my_tree;
 		dem << "Начальное состояние дерева" << std::endl;
 		my_tree.print(0, 0, dem);
-		std::string cur_text, cur_str;
-		while (std::getline(in, cur_str)) {
-			cur_text += cur_str;
-			cur_text += '\n';
-		}
-		if(cur_text.size()) {
-			cur_text.pop_back();
-		}
-
+		std::string cur_text;
+		readFile(cur_text, in);
 		int num;
+
 		for(size_t i = 0; i < cur_text.size(); ++i) {
 			num = 0;
 			while(my_tree.get(num).symbol == '\0') {
