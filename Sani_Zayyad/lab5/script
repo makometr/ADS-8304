@@ -1,0 +1,4 @@
+#!/bin/bash
+make
+./lab5 Test/avltrees.txt Test/test.txt
+rm -rf *.o
