@@ -3,26 +3,26 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
-#include "SecondaryFunctions.h"
 #include "BinTreeSearch.h"
 
 int main(){
-	srand(time(0));
-	int arrayNumber = 0;
-	std::ofstream foutViz;
-	foutViz.open("ResultVizualizeWorst.txt", std::ios::app);
-	std::ofstream foutRoots;
-	foutRoots.open("ResultRootsWorst.txt", std::ios::app);
-	std::ofstream foutHeights;
-	foutHeights.open("ResultHeightsWorst.txt", std::ios::app);
-	std::ifstream fenter("Tests/TestDataWorst.txt");
-	std::string Expr;
-	int* arrayNum = new int[200];
 	
-	while(std::getline(fenter, Expr)){
+	srand(time(0));
+	std::ofstream foutViz;
+	foutViz.open("ResultVizualizeWorst.txt", std::ios_base::out | std::ios_base::trunc);
+	std::ofstream foutRoots;
+	foutRoots.open("ResultRootsWorst.txt", std::ios_base::out | std::ios_base::trunc);
+	std::ofstream foutHeights;
+	foutHeights.open("ResultHeightsWorst.txt", std::ios_base::out | std::ios_base::trunc);
+	
+	int arrayNum[10];
+	for(int i = 10; i > 0; i--){
+		arrayNum[10-i] = i;
+	}
+
+	for(int j = 0; j < 1332; j++){
 		BinSearchTree h = NULL;
-		arrayNumber = getNumbers(arrayNum, Expr);
-		for(int i = 0; i < arrayNumber; i++){
+		for(int i = 0; i < 10; i++){
 			h = Insert(h, arrayNum[i]);
 		}
 		foutRoots << h->key << " ";
@@ -33,11 +33,10 @@ int main(){
 		destroy(h);
 	}
 
-	delete arrayNum;
-	fenter.close();
 	foutRoots.close();
 	foutViz.close();
 	foutHeights.close();
+	
 	return 0;
 }
 

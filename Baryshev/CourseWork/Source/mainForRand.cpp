@@ -10,13 +10,13 @@ int main(){
 	srand(time(0));
 	int arrayNumber = 0;
 	std::ofstream foutViz;
-	foutViz.open("ResultVizualize.txt", std::ios::app);
+	foutViz.open("ResultVizualize.txt", std::ios_base::out | std::ios_base::trunc);
 	std::ofstream foutRoots;
-	foutRoots.open("ResultRoots.txt", std::ios::app);
+	foutRoots.open("ResultRoots.txt", std::ios_base::out | std::ios_base::trunc);
 	std::ofstream foutHeights;
-	foutHeights.open("ResultHeights.txt", std::ios::app);
+	foutHeights.open("ResultHeights.txt", std::ios_base::out | std::ios_base::trunc);
 	std::ofstream foutTimeFind;
-	foutTimeFind.open("ResultTimeFind.txt", std::ios::app);
+	foutTimeFind.open("ResultTimeFind.txt", std::ios_base::out | std::ios_base::trunc);
 	std::ifstream fenter("Tests/TestDataRandom.txt");
 	std::string Expr;
 	int* arrayNum = new int[200];
