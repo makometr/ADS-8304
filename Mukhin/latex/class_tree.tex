@@ -1,0 +1,173 @@
+\hypertarget{class_tree}{}\doxysection{Tree Class Reference}
+\label{class_tree}\index{Tree@{Tree}}
+
+
+{\ttfamily \#include $<$tree.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_tree_ad376a7c639d857312f5de2ef47482f68}{Tree}} ()
+\begin{DoxyCompactList}\small\item\em Конструктор \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_tree_a1e33ed28006e548ae3dafd1f797ed2db}{insert}} (char)
+\begin{DoxyCompactList}\small\item\em Осуществляет всатвку структуры \mbox{\hyperlink{struct_node}{Node}} в дерево \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_tree_a46a74b5571087f5cac80484c40dc7ef7}{check\+\_\+ascending}} (std\+::vector$<$ std\+::pair$<$ int, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_node}{Node}} $>$$>$$>$)
+\begin{DoxyCompactList}\small\item\em Проверка на не возрастание полученной последовательности \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_tree_a40ee5b4bdf03047c80db36d25def510b}{restructure}} ()
+\begin{DoxyCompactList}\small\item\em Перестроение дерева \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_tree_af03005ddec2bb5d3aa76546150e17efc}{decode}} ()
+\begin{DoxyCompactList}\small\item\em Декодирование данных \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::pair$<$ int, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_node}{Node}} $>$ $>$ $>$ \mbox{\hyperlink{class_tree_a7e436be2c18c088695bd62d1abf3f9ff}{get\+\_\+order}} ()
+\begin{DoxyCompactList}\small\item\em Генерация последовательности хранения элементов в дереве \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{class_tree_a665e0928454c1b89aa8afefe58afa3a7}{decode\+\_\+string}} = \{\}
+\item 
+std\+::string \mbox{\hyperlink{class_tree_ae545eda83f6f207585807561bb7de9a2}{code\+\_\+string}} = \{\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_tree_ad376a7c639d857312f5de2ef47482f68}\label{class_tree_ad376a7c639d857312f5de2ef47482f68}} 
+\index{Tree@{Tree}!Tree@{Tree}}
+\index{Tree@{Tree}!Tree@{Tree}}
+\doxysubsubsection{\texorpdfstring{Tree()}{Tree()}}
+{\footnotesize\ttfamily Tree\+::\+Tree (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Конструктор 
+
+Создаёт словарь $<$char, std\+::string$>$, другими словами алфавит, который будут использовать кодировщик и декодировщик. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_tree_a46a74b5571087f5cac80484c40dc7ef7}\label{class_tree_a46a74b5571087f5cac80484c40dc7ef7}} 
+\index{Tree@{Tree}!check\_ascending@{check\_ascending}}
+\index{check\_ascending@{check\_ascending}!Tree@{Tree}}
+\doxysubsubsection{\texorpdfstring{check\_ascending()}{check\_ascending()}}
+{\footnotesize\ttfamily bool Tree\+::check\+\_\+ascending (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::pair$<$ int, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_node}{Node}} $>$$>$$>$}]{order }\end{DoxyParamCaption})}
+
+
+
+Проверка на не возрастание полученной последовательности 
+
+Проверяем, существует ли нарушение в нашей последовательности. Все веса должны стоять в порядке невозрастания. Если порядок нарушен, переменным Tree\+::first и \mbox{\hyperlink{class_tree}{Tree}}\+:second присваивается значение указателей на эти переменные. 
+\begin{DoxyParams}{Parameters}
+{\em order} & сгенерированный в \mbox{\hyperlink{class_tree_a7e436be2c18c088695bd62d1abf3f9ff}{Tree\+::get\+\_\+order()}} вектор обхода дерева с размеченными листьями \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true если порядок не нарушен, false -\/ в противном случае 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_tree_a46a74b5571087f5cac80484c40dc7ef7_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_tree_af03005ddec2bb5d3aa76546150e17efc}\label{class_tree_af03005ddec2bb5d3aa76546150e17efc}} 
+\index{Tree@{Tree}!decode@{decode}}
+\index{decode@{decode}!Tree@{Tree}}
+\doxysubsubsection{\texorpdfstring{decode()}{decode()}}
+{\footnotesize\ttfamily void Tree\+::decode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Декодирование данных 
+
+Идея заключается в постепенном построении такого же как и закодированное дерево дерева. Пока закодированная строка не пуста будем сравнивать её начало с путём до листа\+: в случае, если она не начинается с путя до листа мы идём по новому дереву, постепенно удаляя в закодированной строке символы, пока не встретим элемент со значением символа отличным от \textbackslash{}0, иначе ищем эту букву в алфавите, который предоставлен и кодировщику и декодировщику. В любом случае, мы получим букву, которую следует добавить в новое дерево, для кодировщика и повторить итерацию, пока закодированная строка не окажется пустой. Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=306pt]{class_tree_af03005ddec2bb5d3aa76546150e17efc_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=334pt]{class_tree_af03005ddec2bb5d3aa76546150e17efc_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_tree_a7e436be2c18c088695bd62d1abf3f9ff}\label{class_tree_a7e436be2c18c088695bd62d1abf3f9ff}} 
+\index{Tree@{Tree}!get\_order@{get\_order}}
+\index{get\_order@{get\_order}!Tree@{Tree}}
+\doxysubsubsection{\texorpdfstring{get\_order()}{get\_order()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::pair$<$ int, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_node}{Node}} $>$ $>$ $>$ Tree\+::get\+\_\+order (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Генерация последовательности хранения элементов в дереве 
+
+С помощью обхода в ширину (справа налево) генерируем вектор из указателей на элементы в дереве. \begin{DoxyReturn}{Returns}
+вектор типа std\+::pair$<$int, std\+::shared\+\_\+ptr$<$\+Node$>$$>$, где первый элемент это вес, а второй ссылка на этот элемент 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_tree_a7e436be2c18c088695bd62d1abf3f9ff_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_tree_a1e33ed28006e548ae3dafd1f797ed2db}\label{class_tree_a1e33ed28006e548ae3dafd1f797ed2db}} 
+\index{Tree@{Tree}!insert@{insert}}
+\index{insert@{insert}!Tree@{Tree}}
+\doxysubsubsection{\texorpdfstring{insert()}{insert()}}
+{\footnotesize\ttfamily void Tree\+::insert (\begin{DoxyParamCaption}\item[{char}]{symbol }\end{DoxyParamCaption})}
+
+
+
+Осуществляет всатвку структуры \mbox{\hyperlink{struct_node}{Node}} в дерево 
+
+Есть три возможных случая вставки элемента в дерево. Когда дерево полностью пустое, когда дерево не пустое и текущего символа в дереве нет, и когда дерево не пустое и текущий символ в дереве есть. 
+\begin{DoxyParams}{Parameters}
+{\em symbol} & очередной символ, который необходимо вставить в структуру дерева с размеченными листьями \\
+\hline
+\end{DoxyParams}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_tree_a1e33ed28006e548ae3dafd1f797ed2db_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_tree_a40ee5b4bdf03047c80db36d25def510b}\label{class_tree_a40ee5b4bdf03047c80db36d25def510b}} 
+\index{Tree@{Tree}!restructure@{restructure}}
+\index{restructure@{restructure}!Tree@{Tree}}
+\doxysubsubsection{\texorpdfstring{restructure()}{restructure()}}
+{\footnotesize\ttfamily void Tree\+::restructure (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Перестроение дерева 
+
+Меняем местами указатели на родителей найденных элементов, а также обновляем указатели на детей этих родителей. Тут же сразу пересчитываем веса, после всех замен. Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_tree_a40ee5b4bdf03047c80db36d25def510b_icgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_tree_ae545eda83f6f207585807561bb7de9a2}\label{class_tree_ae545eda83f6f207585807561bb7de9a2}} 
+\index{Tree@{Tree}!code\_string@{code\_string}}
+\index{code\_string@{code\_string}!Tree@{Tree}}
+\doxysubsubsection{\texorpdfstring{code\_string}{code\_string}}
+{\footnotesize\ttfamily std\+::string Tree\+::code\+\_\+string = \{\}}
+
+\mbox{\Hypertarget{class_tree_a665e0928454c1b89aa8afefe58afa3a7}\label{class_tree_a665e0928454c1b89aa8afefe58afa3a7}} 
+\index{Tree@{Tree}!decode\_string@{decode\_string}}
+\index{decode\_string@{decode\_string}!Tree@{Tree}}
+\doxysubsubsection{\texorpdfstring{decode\_string}{decode\_string}}
+{\footnotesize\ttfamily std\+::string Tree\+::decode\+\_\+string = \{\}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Dinamic\+\_\+\+Hafman/\mbox{\hyperlink{tree_8h}{tree.\+h}}\item 
+Dinamic\+\_\+\+Hafman/\mbox{\hyperlink{tree_8cpp}{tree.\+cpp}}\end{DoxyCompactItemize}
