@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/docs">
+        <file>doc/file.htm</file>
+        <file>doc/func.htm</file>
+        <file>doc/index.htm</file>
+        <file>doc/open.htm</file>
+        <file>doc/save.htm</file>
+    </qresource>
+</RCC>
