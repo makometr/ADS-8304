@@ -29,7 +29,7 @@ void printtree(nodePtr<elem, priority>& head) {
 
 
 int main(int argc, char* argv[]) {
-	bool test(true);
+	bool test(false);
 
 	if ((argc == 2) && (*(argv[1]) == 't'))
 		test = true;
