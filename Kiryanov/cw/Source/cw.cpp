@@ -5,6 +5,7 @@
 #include <ctime>
 #include <memory>
 #include <climits>
+#include <algorithm>
 #define COUNT 10 
 
 template<typename elem, typename priority>
@@ -75,6 +76,7 @@ void create_int_vec(std::vector<nodePtr<int, int>>& mypairs, std::string& array)
 		nodePtr<int, int> el = std::make_shared<Node<int, int>>();
 		el->key = std::stoi(array.substr(index));
 		el->prior = rand() % INT_MAX;
+		std::cout << "Key - " << el->key << "   Generated Priority - " << el->prior << std::endl;
 		mypairs.push_back(el);
 		while (isdigit(array[index]))
 			++index;
@@ -94,6 +96,7 @@ void dialog(nodePtr<elem, priority>& head, int flag) {
 		std::cout << "Please, enter a key" << std::endl;
 		std::cin >> new_el->key;
 		new_el->prior = rand() % INT_MAX;
+		std::cout << "Key - " << new_el->key << "   Generated Priority - " << new_el->prior << std::endl;
 		Node<int, int>::insert(head, new_el);
 		std::cout << "This is a tree after inserting new element:" << std::endl;
 		printtree(head, 0);
@@ -136,17 +139,31 @@ void printtree(nodePtr<elem, priority>& root, int space) {
 	std::cout << "(" << root->key << ";" << root->prior << ")\n";
 	printtree(root->left, space);
 }
+bool check_input(std::string str) {
+	str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
+	for (unsigned long int i = 0; i < str.length(); i++)
+		if (!isdigit(str[i]))
+			return false;
+	return true;
+}
 
 int main(int argc, char* argv[]) {
 	std::cout << "Hello! Please enter elements of tree." << std::endl;
+	std::cout << "The demonstration takes place with integers. So please enter only integers." << std::endl;
 	std::string array;
 	if (argc == 1) {
 		std::getline(std::cin, array);
+		if (!check_input(array)) {
+			std::cout << "Wrong input!" << std::endl;
+			return 0;
+		}
 		std::vector<nodePtr<int, int>> mypairs;
 		create_int_vec(mypairs, array);
 		nodePtr<int, int> head = nullptr;
 		for (size_t i = 0; i < mypairs.size(); ++i) {
+			std::cout << "Step " << i + 1 << ": Inserting the (" << mypairs[i]->key << ";" << mypairs[i]->prior << ")--------------------------------------" << std::endl;
 			Node<int, int>::insert(head, mypairs[i]);
+			printtree(head, 0);
 		}
 		std::cout << "This is your written tree:" << std::endl;
 		printtree(head, 0);
@@ -165,12 +182,18 @@ int main(int argc, char* argv[]) {
 			return 0;
 		}
 		while (std::getline(in, array)) {
+			if (!check_input(array)) {
+				std::cout << "Wrong input" << std::endl;
+				continue;
+			}
 			std::cout << array << "\n";
 			std::vector<nodePtr<int, int>> mypairs;
 			create_int_vec(mypairs, array);
 			nodePtr<int, int> head = nullptr;
 			for (size_t i = 0; i < mypairs.size(); ++i) {
+				std::cout << "Step " << i + 1 << ": Inserting the ("<< mypairs[i]->key<<";"<< mypairs[i]->prior << ")--------------------------------------" << std::endl;
 				Node<int, int>::insert(head, mypairs[i]);
+				printtree(head, 0);
 			}
 			std::cout << "This is your written tree:" << std::endl;
 			printtree(head, 0);
