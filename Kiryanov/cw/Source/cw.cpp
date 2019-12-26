@@ -107,7 +107,7 @@ void dialog(nodePtr<elem, priority>& head, int flag) {
 	}
 
 	nodePtr<int, int> new_el = std::make_shared<Node<int, int>>();
-	elem element=0;
+	elem element;
 	switch (flag){
 	case(1):
 		std::cout << "Please, enter a key" << std::endl;
