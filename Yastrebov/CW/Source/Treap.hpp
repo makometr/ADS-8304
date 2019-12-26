@@ -35,7 +35,7 @@ public:
 	static bool erase(nodePtr<elem, priority> &, elem);
 
 	static bool search(nodePtr<elem, priority> &, elem);
-	
+
 	static int depth(nodePtr<elem, priority> &);
 };
 
@@ -49,7 +49,7 @@ bool Node<elem, priority>::search(nodePtr<elem, priority>& head, elem key)
 		return false;
 
 
-	if (head->key == key) 
+	if (head->key == key)
 		return true;
 
 	return search(head->key < key ? head->right : head->left, key);
@@ -105,7 +105,7 @@ void Node<elem, priority>::merge(nodePtr<elem, priority> & t, nodePtr<elem, prio
 		t = l ? l : r;
 
 	else if (l->prior > r->prior) {
-		merge(l->right, l->right, r); 
+		merge(l->right, l->right, r);
 		t = l;
 	}
 
@@ -129,7 +129,7 @@ bool Node<elem, priority>::erase(nodePtr<elem, priority> & t, elem key) {
 	}
 
 	return erase(key < t->key ? t->left : t->right, key);
-			
+
 }
 
 
@@ -138,6 +138,6 @@ int Node<elem, priority>::depth(nodePtr<elem, priority> &head)
 {
 	if (!head)
 		return 0;
-	
+
 	return std::max(depth(head->left), depth(head->right)) + 1;
 }
