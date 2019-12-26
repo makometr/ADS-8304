@@ -8,6 +8,12 @@
 #include <algorithm>
 #define COUNT 10 
 
+bool check_with_spaces(std::string str){
+	for (unsigned long int i = 0; i < str.length(); i++)
+		if (!isdigit(str[i]))
+			return false;
+	return true;
+}
 template<typename elem, typename priority>
 class Node;
 template<typename elem, typename priority>
@@ -87,14 +93,33 @@ void create_int_vec(std::vector<nodePtr<int, int>>& mypairs, std::string& array)
 
 template<typename elem, typename priority>
 void dialog(nodePtr<elem, priority>& head, int flag) {
-	if (flag==0)
-		std::cin >> flag;
+	std::string check;
+	if (flag == 0) {
+		std::getline(std::cin, check);
+		if (check_with_spaces(check)) {
+			flag = std::stoi(check);
+		}
+		else {
+			std::cout << "Wrong input, please enter again." << std::endl;
+			dialog(head, 0);
+			return;
+		}
+	}
+
 	nodePtr<int, int> new_el = std::make_shared<Node<int, int>>();
-	elem element;
+	elem element=0;
 	switch (flag){
 	case(1):
 		std::cout << "Please, enter a key" << std::endl;
-		std::cin >> new_el->key;
+		std::getline(std::cin, check);
+		if (check_with_spaces(check)) {
+			new_el->key = std::stoi(check);
+		}
+		else {
+			std::cout << "Wrong input, please enter again." << std::endl;
+			dialog(head, 1);
+			return;
+		}
 		new_el->prior = rand() % INT_MAX;
 		std::cout << "Key - " << new_el->key << "   Generated Priority - " << new_el->prior << std::endl;
 		Node<int, int>::insert(head, new_el);
@@ -107,7 +132,15 @@ void dialog(nodePtr<elem, priority>& head, int flag) {
 		break;
 	case(2):
 		std::cout << "Please, enter a key" << std::endl;
-		std::cin >> element;
+		std::getline(std::cin, check);
+		if (check_with_spaces(check)) {
+			element = std::stoi(check);
+		}
+		else {
+			std::cout << "Wrong input, please enter again." << std::endl;
+			dialog(head, 2);
+			return;
+		}
 		if (Node<int, int>::erase(head, element)) {
 			std::cout << "This is a tree after erasing element:" << std::endl;
 			printtree(head, 0);
