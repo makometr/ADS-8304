@@ -1,4 +1,4 @@
-﻿#include "lab.h"
+﻿#include "bin_tree.h"
 
 
 template<typename T>
@@ -23,13 +23,16 @@ void dialogue(BinTree<T> tree) {
 
 	char option;
 	T unit;
-	tree.print_tree();
+
+	tree.printTree();
+
 	std::cout << "to add element enter \"1\"\nto quit the dialogue enter any other character\n";
 
 	option = getchar();
 	getchar();
 	switch (option){
 	case '1':
+		std::cout << "Enter element you want to insert" << std::endl;
 		if(str_to_t(unit))
 			tree.task(unit);
 		getchar();
@@ -81,5 +84,5 @@ int main(int argc, char** argv) {
 	if (argc == 1) {
 		std::cout<<"Please check you entered test file name";
 	}
-	else file_input<int>(argv[1]);
+	else file_input<double>(argv[1]);
 }
