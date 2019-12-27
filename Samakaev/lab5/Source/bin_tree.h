@@ -8,6 +8,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <map>
+#include <stack>
 
 
 template<typename T> 
@@ -45,6 +46,16 @@ public:
 		}
 
 		return 1;
+	}
+
+	void update_height(std::shared_ptr<Branch<T>> temp, size_t cur_height) {
+
+		height = std::max(height, cur_height);
+
+		if (temp->left)
+			update_height(temp->left, cur_height + 1);
+		if(temp->right)
+			update_height(temp->right, cur_height + 1);
 	}
 
 	//returns TRUE if tree already has unit and FALSE if it has not 
@@ -118,67 +129,74 @@ public:
 		return true;
 	}
 
-	void fill_map(std::shared_ptr<Branch<T>> temporary, size_t depth, std::map<size_t, std::string>& depth_root_map) {
+	void fill_tree(std::vector<T> units) {
 
-		depth++;
+		for (size_t i = 0; i < units.size(); i++)
+			Random_add_root(units.at(i), head);
 
-		/*if (!temporary->left && !temporary->right) {
-			if (depth_root_map.find(depth) != depth_root_map.end())
-				depth_root_map[depth] += std::to_string(*(temporary->root));
-			else depth_root_map.insert(std::make_pair(depth, std::to_string(*(temporary->root))));
-			return;
-		}*/
-		if (temporary->left)
-			fill_map(temporary->left, depth, depth_root_map);
-		else depth_root_map[depth + 1] += "     ";
-		if(temporary->right)
-			fill_map(temporary->right, depth, depth_root_map);
-		else depth_root_map[depth + 1] += "     ";
-
-		if ((depth_root_map.find(depth) != depth_root_map.end()) && (temporary->root))
-			depth_root_map[depth] += std::to_string(*(temporary->root)) + "     ";
-		else if (temporary->root) {
-			depth_root_map.insert(make_pair(depth, std::to_string(*(temporary->root))));
-			depth_root_map[depth] += "     ";
-		}
-	}
-
-	
-	void beauty_print_tree(std::map<size_t, std::string>& depth_root_map) {
-		size_t j = 0;
-		for (auto it = depth_root_map.begin(); it != depth_root_map.end(); it++) {
-			for (int i = 0; i < depth_root_map.size() - j; i++)
-				std::cout << "    ";
-			std::cout << it->second << std::endl;
-			j++;
-		}
-	}
-
-	//возвращает количество успешно добавленных элементов
-	void fill_tree(std::vector<T> numbers) {
-
-		for (size_t i = 0; i < numbers.size(); i++)
-			Random_add_root(numbers.at(i), head);
-		size++;
+		update_height(head, 1);
 	}
 
 	void task(T unit) {
 		if (Random_add_root(unit, head))
 			std::cout << "add element " << unit << std::endl;
 		else std::cout << "stucture already has element "<< unit << std::endl;
+
+		update_height(head, 1);
 	}
 
-	void print_tree() {
+	void printTree()
+	{
+		image.clear();
 
-	/*	if(temp->root)
-			std::cout << *(temp->root) << std::endl;
-		if (temp->left)
-			print_tree(temp->left);
-		if(temp->right)
-			print_tree(temp->right);*/
-		fill_map(head, 0, depth_root_map);
-		beauty_print_tree(depth_root_map);
-		depth_root_map.clear();
+		std::string line(std::pow(2, height + 1) * 2, ' ');
+
+		std::stack<std::shared_ptr<Branch<T> > > st;
+		st.push(head);
+		size_t cur_height = 0;
+
+		while (cur_height != height)
+		{
+			std::vector<std::shared_ptr<Branch<T> > > nodes;
+			size_t step = std::pow(2, height - cur_height + 1);
+			size_t ind = std::pow(2, height - cur_height);
+
+			while (!st.empty())
+			{
+				std::shared_ptr<Branch<T>> insertElem = st.top();
+				st.pop();
+				if (typeid(T) == typeid('c') && insertElem) {
+					line.insert(ind, 1, *(insertElem->root));
+				}
+				else if (insertElem)
+					line.insert(ind, std::to_string((*(insertElem->root))));
+				else line.insert(ind, "#");
+				ind += step + 6;
+
+				nodes.push_back(insertElem);
+			}
+			for (int i = nodes.size() - 1; i >= 0; --i)
+			{
+				if (nodes[i] == nullptr)
+				{
+					st.push(nullptr);
+					st.push(nullptr);
+					continue;
+				}
+				st.push(nodes[i]->right);
+				st.push(nodes[i]->left);
+			}
+			image.push_back(line);
+
+			std::fill(line.begin(), line.end(), ' ');
+
+			++cur_height;
+		}
+
+		for (auto line : image) {
+			std::cout << line << std::endl;
+		}
+
 	}
 
 	std::shared_ptr<Branch<T>>getHead() {
@@ -188,5 +206,6 @@ public:
 private:
 	std::shared_ptr<Branch<T>> head;
 	size_t size = 0;
-	std::map<size_t, std::string> depth_root_map;
+	size_t height = 0;
+	std::vector<std::string> image;
 };
