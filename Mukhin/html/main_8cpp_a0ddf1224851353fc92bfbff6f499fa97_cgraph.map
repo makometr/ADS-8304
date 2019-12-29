@@ -1,0 +1,13 @@
+<map id="main" name="main">
+<area shape="rect" id="node1" title=" " alt="" coords="5,189,56,216"/>
+<area shape="rect" id="node2" href="$_dinamic___hafman_8cpp.html#a25e5506b1d2db17b9e4d5752f3869099" title="Функция запускающая процедуру динамического кодирования и декодирования" alt="" coords="104,125,199,152"/>
+<area shape="rect" id="node8" href="$_static___hafman_8cpp.html#a46a54a02fcda9d2ebcc29ed370717adf" title="Функция запускающая процедуру статического кодирования и декодирования" alt="" coords="110,277,193,304"/>
+<area shape="rect" id="node3" href="$class_tree.html#a46a74b5571087f5cac80484c40dc7ef7" title="Проверка на не возрастание полученной последовательности" alt="" coords="433,144,589,171"/>
+<area shape="rect" id="node4" href="$class_tree.html#af03005ddec2bb5d3aa76546150e17efc" title="Декодирование данных" alt="" coords="267,100,365,127"/>
+<area shape="rect" id="node5" href="$class_tree.html#a7e436be2c18c088695bd62d1abf3f9ff" title="Генерация последовательности хранения элементов в дереве" alt="" coords="457,201,566,228"/>
+<area shape="rect" id="node6" href="$class_tree.html#a1e33ed28006e548ae3dafd1f797ed2db" title="Осуществляет всатвку структуры Node в дерево" alt="" coords="468,5,555,32"/>
+<area shape="rect" id="node7" href="$class_tree.html#a40ee5b4bdf03047c80db36d25def510b" title="Перестроение дерева" alt="" coords="453,81,570,108"/>
+<area shape="rect" id="node9" href="$_static___hafman_8cpp.html#adb49c9a2d4679c6c0fbe5de96a4e58fa" title="Функция поиска нужного места для вставки слитых символов" alt="" coords="281,252,351,279"/>
+<area shape="rect" id="node10" href="$_static___hafman_8cpp.html#a9fdcddb5285698ae28f2bd7234f3d170" title="Функция декодирования закодированной строки." alt="" coords="284,303,348,329"/>
+<area shape="rect" id="node11" href="$_static___hafman_8cpp.html#a13d5b2c16613225bce415946b5ec038d" title="Функция, которая подсчитывает количество вхождений каждого символа в переданную ей строку." alt="" coords="247,353,385,380"/>
+</map>

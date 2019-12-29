@@ -1,0 +1,23 @@
+#!/bin/bash
+make
+echo "test№1 "
+./lab2 " (a(b(c)))"
+echo  "test№2"
+./lab2 "(a(b))"
+echo  "test№3"
+./lab2 "((c))"
+echo  "test№4"
+./lab2 "((((cd)"
+echo "test№5"
+./lab2 "(a(b(cdef)sfd(eww)))"
+echo "test№6"
+./lab2 "(d(ds(()()()d)))"
+echo "test№7 "
+./lab2 "(((SDF)SDF))"
+echo "test№8 "
+./lab2 "(a(ab(cd())(d()(fgs)())))"
+echo "test№9 "
+./lab2 "(a(b(((C)))defsgs()))"
+echo "test№10"
+./lab2 ")a(bc(((de))er)()df))"
+rm lab2

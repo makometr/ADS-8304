@@ -1,0 +1,1 @@
+g++ ./Source/lab1.cpp -Wall -Werror -o lab1
