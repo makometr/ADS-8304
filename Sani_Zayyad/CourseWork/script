@@ -1,0 +1,4 @@
+#!/bin/bash
+make
+./cw Test/test.txt Test/output.txt
+rm -rf *.o
