@@ -1,0 +1,8 @@
+<map id="use_dinamic" name="use_dinamic">
+<area shape="rect" id="node1" title="Функция запускающая процедуру динамического кодирования и декодирования" alt="" coords="5,100,100,127"/>
+<area shape="rect" id="node2" href="$class_tree.html#a46a74b5571087f5cac80484c40dc7ef7" title="Проверка на не возрастание полученной последовательности" alt="" coords="293,5,449,32"/>
+<area shape="rect" id="node3" href="$class_tree.html#af03005ddec2bb5d3aa76546150e17efc" title="Декодирование данных" alt="" coords="148,100,245,127"/>
+<area shape="rect" id="node4" href="$class_tree.html#a7e436be2c18c088695bd62d1abf3f9ff" title="Генерация последовательности хранения элементов в дереве" alt="" coords="317,81,426,108"/>
+<area shape="rect" id="node5" href="$class_tree.html#a1e33ed28006e548ae3dafd1f797ed2db" title="Осуществляет всатвку структуры Node в дерево" alt="" coords="328,144,415,171"/>
+<area shape="rect" id="node6" href="$class_tree.html#a40ee5b4bdf03047c80db36d25def510b" title="Перестроение дерева" alt="" coords="313,195,430,221"/>
+</map>

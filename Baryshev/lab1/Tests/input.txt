@@ -1,0 +1,12 @@
+and(not(false),or(false,false,false,not(true),true),not(false),true)
+or(false,false,false,false,false)
+and(true,true,true,true)
+not(false)
+true
+false
+not(true)
+and(true,false)
+not(and(or(true,(and(or(and(not(true),not(false),true)))))))
+or(not(true),false,and(true,and(false,and(true,or(false,true,false)))),false,and(true,true,false),not(true),not(false))
+or(false,false,false,false,false,false,false,not(false))
+END

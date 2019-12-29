@@ -1,0 +1,6 @@
+<map id="use_static" name="use_static">
+<area shape="rect" id="node1" title="Функция запускающая процедуру статического кодирования и декодирования" alt="" coords="5,56,88,83"/>
+<area shape="rect" id="node2" href="$_static___hafman_8cpp.html#adb49c9a2d4679c6c0fbe5de96a4e58fa" title="Функция поиска нужного места для вставки слитых символов" alt="" coords="170,5,241,32"/>
+<area shape="rect" id="node3" href="$_static___hafman_8cpp.html#a9fdcddb5285698ae28f2bd7234f3d170" title="Функция декодирования закодированной строки." alt="" coords="173,56,237,83"/>
+<area shape="rect" id="node4" href="$_static___hafman_8cpp.html#a13d5b2c16613225bce415946b5ec038d" title="Функция, которая подсчитывает количество вхождений каждого символа в переданную ей строку." alt="" coords="136,107,275,133"/>
+</map>

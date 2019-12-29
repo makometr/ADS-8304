@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/HTML">
+        <file>GUI/HTML/HuffmanAlgorithm.html</file>
+        <file>GUI/HTML/AboutTheProgram.html</file>
+        <file>GUI/HTML/Fano-ShannonAlgorithm.html</file>
+        <file>GUI/HTML/DecodeAlgorithm.html</file>
+        <file>GUI/HTML/AboutTheAuthor.html</file>
+    </qresource>
+</RCC>

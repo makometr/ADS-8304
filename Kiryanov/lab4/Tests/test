@@ -1,0 +1,8 @@
+(a(b)(c(e))(d)) (f(g(i))(h(j)(k)(l))) (m(n))
+(a(b)(c(f))(d(g)(h))(e))(i(j)(k(m)(n))(l))(o(p))
+(a(b(d)(h(n))(o))(e(i))(j(p)))(c(f(k(q))(r)))(g(l(s)))(m)
+(a)
+(a(b))(c(d))
+(a(b(c)))
+(a(b(c(d(e(f))))))
+(a(u)(e))

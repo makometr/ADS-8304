@@ -1,0 +1,5 @@
+<map id="get_list_count_letter" name="get_list_count_letter">
+<area shape="rect" id="node1" title="Функция, которая подсчитывает количество вхождений каждого символа в переданную ей строку." alt="" coords="235,5,373,32"/>
+<area shape="rect" id="node2" href="$_static___hafman_8h.html#a46a54a02fcda9d2ebcc29ed370717adf" title="Функция запускающая процедуру статического кодирования и декодирования" alt="" coords="104,5,187,32"/>
+<area shape="rect" id="node3" href="$main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,56,32"/>
+</map>

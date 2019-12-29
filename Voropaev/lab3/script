@@ -1,0 +1,19 @@
+#! /bin/bash
+make
+echo "Test #1"
+./lab3 Tests/t1
+echo "###############"
+echo "Test #2"
+./lab3 Tests/t2
+echo "###############"
+echo "Test #3"
+./lab3 Tests/t3
+echo "###############"
+echo "Test #4"
+./lab3 Tests/t4
+echo "###############"
+echo "Test #5"
+./lab3 Tests/t5
+echo "###############"
+rm -f lab3
+make clean

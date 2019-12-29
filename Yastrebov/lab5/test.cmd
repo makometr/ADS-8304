@@ -1,0 +1,1 @@
+lab5.exe Tests/Test.txt 

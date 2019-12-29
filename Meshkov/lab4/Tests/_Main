@@ -1,0 +1,62 @@
+# Format:
+# The bracket expression of the tree
+# Correct result
+# ; - the symbol of the end of the result
+#
+# Test 1
+(a (b(c   ))(d ))
+The tree by layers: a b d c
+;
+# Test 2
+( a(b (c#( d)) )(e(f (g)( h) )(i))  )
+The tree by layers: a b e c f i d g h
+;
+# Test 3
+(1 (   2(4) (5 ))( 3(6 )) )
+The tree by layers: 1 2 3 4 5 6
+;
+# Test 4
+(aa ( j8(b (di))(c(e)( fk)))( g #(h# (i )) ))
+The tree by layers: aa j8 g b c h di e fk i
+;
+# Test 5
+(a# #)
+The tree by layers: a
+;
+# Test 6
+  ( a (b(d)(e#(h)))( c(f (i)( j(m)(n (q)(r ))))(g   (k#(o))(l(p))) ))
+The tree by layers: a b c d e f g h i j k l m n o p q r
+;
+# Test 7
+()
+The tree by layers: 
+;
+# Test 8
+)
+Error: expected the opening bracket at the position 1.
+;
+# Test 9
+
+Error: unexpected the end of the tree expression.
+;
+# Test 10
+(a###)
+Error: expected the closing bracket at the position 5.
+;
+# Test 11
+(a(b)))))))
+Warning: extra characters after the tree expression.
+The tree by layers: a b
+;
+# Test 12
+)(
+Error: expected the opening bracket at the position 1.
+;
+# Test 13
+(a(b
+Error: unexpected the end of the tree expression.
+;
+# Test 14
+dfjdkj
+Error: expected the opening bracket at the position 1.
+;

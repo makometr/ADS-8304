@@ -1,0 +1,62 @@
+# Format:
+# Left border
+# Right border
+# Numbers
+# Correct result
+#
+# Test 1
+2
+4
+6 5 4 3 2 1 0
+Result: 1 0 4 3 2 6 5
+# Test 2 
+-1
+4
+9  4 8 1 -6 5 -2 -1
+Result: -6 -2 4 1 -1 9 8 5
+# Test 3
+4
+2
+9 3 0 1   
+Result: 0 1 3 9
+# Test 4
+-1
+0
+ -3 6 -2  7
+Result: -3 -2 6 7
+# Test 5
+1
+4
+ 9  3  8  9
+Result: 3 9 8 9
+# Test 6
+2
+2
+8 1 0 2 4
+Result: 1 0 2 8 4
+# Test 7
+1
+2
+
+Error: You should enter numbers.
+# Test 8
+ r
+
+
+Error: You should enter a number.
+# Test 9
+0
+
+
+Error: You should enter a number.
+# Test 10
+1
+2
+7 tuui
+Error: You should enter numbers.
+# Test 11
+3
+1
+
+Error: You should enter numbers.
+#

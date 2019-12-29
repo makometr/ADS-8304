@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "75071857655",
+    "firebase_url": "https://mycourseworkavltrees.firebaseio.com",
+    "project_id": "mycourseworkavltrees",
+    "storage_bucket": "mycourseworkavltrees.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:75071857655:android:eb5f5576a1b88c88e9c4f2",
+        "android_client_info": {
+          "package_name": "com.artex.mycourseworkavltrees"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "75071857655-1di4s1kd3pp8oa38gv0h468sp7jo7ef4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.artex.mycourseworkavltrees",
+            "certificate_hash": "41c94cb1753b0e8d6702325f113e2370507d0d79"
+          }
+        },
+        {
+          "client_id": "75071857655-ke68na3gsuftv4bphvbcg712kq85q269.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCB7856gXaUeHVOTHy2HyXG3QZa9Y_GGYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "75071857655-ke68na3gsuftv4bphvbcg712kq85q269.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
