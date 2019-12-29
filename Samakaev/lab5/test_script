@@ -1,4 +1,4 @@
 #!/bin/bash
 make
-./lab4 Tests/test.txt
+./lab5 Tests/Test.txt
 rm -rf *.o
